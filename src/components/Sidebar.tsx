@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Home, FileText, Users, Settings } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { HackerModeToggle } from './HackerModeToggle';
 
 interface SidebarProps {
   activeTab: string;
@@ -28,9 +29,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
       {/* Logo */}
       <div className="mb-12">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00F0FF] to-[#00FF9D] flex items-center justify-center">
-            <div className="w-5 h-5 border-2 border-[#050505] rounded-md" />
-          </div>
+          <HackerModeToggle />
           <div>
             <h2 className="text-[#00F0FF] tracking-wide">{t('appName')}</h2>
             <p className="text-white/30 text-xs">{t('version')}2.4.1</p>

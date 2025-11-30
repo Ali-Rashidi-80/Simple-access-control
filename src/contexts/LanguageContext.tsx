@@ -57,11 +57,34 @@ const translations = {
     
     // Settings
     systemSettings: 'تنظیمات سیستم',
-    autoLockTimeout: 'زمان قفل خودکار',
+    autoLockTimeout: 'قفل خودکار شبانه',
+    autoLockDesc: 'تنظیم ساعات قفل اضطراری',
     accessNotifications: 'اعلان‌های دسترسی',
     auditMode: 'حالت ممیزی',
     biometricAuth: 'احراز هویت بیومتریک',
+    biometricDesc: 'نیاز به FaceID/TouchID',
+    biometricPrompt: 'لطفاً هویت خود را تأیید کنید',
+    biometricFailed: 'احراز هویت ناموفق بود',
     language: 'زبان',
+    
+    // Duress Mode
+    duressMode: 'حالت اجبار (پنیک)',
+    duressDesc: 'هشدار مخفی هنگام فشار',
+    duressWarning: '⚠️ هشدار مخفی برای مدیران ارسال می‌شود',
+    duressAlert: 'اجبار',
+    duressAlertSent: '🚨 هشدار اجباری ارسال شد!',
+    duressAlertDetailed: 'این دسترسی تحت فشار انجام شده است',
+    
+    // Secure Mode
+    secureModeActive: '🛡️ حالت امنیتی فعال است',
+    secureModeDesc: 'دسترسی در ساعات شبانه محدود شده',
+    
+    // Time
+    startTime: 'ساعت شروع',
+    endTime: 'ساعت پایان',
+    timestamp: 'زمان',
+    location: 'موقعیت',
+    device: 'دستگاه',
     
     // System Info
     systemStatus: 'وضعیت سیستم',
@@ -115,11 +138,34 @@ const translations = {
     
     // Settings
     systemSettings: 'System Settings',
-    autoLockTimeout: 'Auto-lock Timeout',
+    autoLockTimeout: 'Auto-Lock Schedule',
+    autoLockDesc: 'Set emergency lockdown hours',
     accessNotifications: 'Access Notifications',
     auditMode: 'Audit Mode',
-    biometricAuth: 'Biometric Auth',
+    biometricAuth: 'Biometric Authentication',
+    biometricDesc: 'Require FaceID/TouchID',
+    biometricPrompt: 'Please verify your identity',
+    biometricFailed: 'Authentication failed',
     language: 'Language',
+    
+    // Duress Mode
+    duressMode: 'Duress Mode (Panic)',
+    duressDesc: 'Silent alert under coercion',
+    duressWarning: '⚠️ Silent alert will be sent to administrators',
+    duressAlert: 'Duress',
+    duressAlertSent: '🚨 Duress alert sent!',
+    duressAlertDetailed: 'This access was performed under duress',
+    
+    // Secure Mode
+    secureModeActive: '🛡️ Secure Mode Active',
+    secureModeDesc: 'Access restricted during night hours',
+    
+    // Time
+    startTime: 'Start Time',
+    endTime: 'End Time',
+    timestamp: 'Time',
+    location: 'Location',
+    device: 'Device',
     
     // System Info
     systemStatus: 'System Status',

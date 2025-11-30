@@ -291,3 +291,94 @@ html {
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 240, 255, 0.5);
 }
+
+/* Hacker Mode Styles */
+body.hacker-mode {
+  background: #000000 !important;
+}
+
+body.hacker-mode * {
+  font-family: 'Courier New', 'Consolas', monospace !important;
+}
+
+body.hacker-mode .glass-card {
+  background: rgba(0, 255, 0, 0.03) !important;
+  border-color: rgba(0, 255, 0, 0.2) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.1) !important;
+}
+
+body.hacker-mode h1,
+body.hacker-mode h2,
+body.hacker-mode h3,
+body.hacker-mode p,
+body.hacker-mode span,
+body.hacker-mode div {
+  color: #00FF00 !important;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5) !important;
+}
+
+body.hacker-mode button {
+  border-color: rgba(0, 255, 0, 0.3) !important;
+}
+
+/* Hacker Mode Matrix Grid */
+.hacker-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
+  animation: matrix-scan 20s linear infinite;
+}
+
+@keyframes matrix-scan {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 50px 50px, 50px 50px;
+  }
+}
+
+/* Hacker Mode Scanline Effect */
+body.hacker-mode::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 255, 0, 0) 50%,
+    rgba(0, 255, 0, 0.02) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+
+/* Hacker Mode Text Flicker */
+body.hacker-mode h1 {
+  animation: text-flicker 3s linear infinite;
+}
+
+@keyframes text-flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 1;
+  }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+    opacity: 0.8;
+  }
+}

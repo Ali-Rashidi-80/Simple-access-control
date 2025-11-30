@@ -1,23 +1,63 @@
 import { useState, useEffect } from 'react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+import { AppSettingsProvider, useAppSettings } from './contexts/AppSettingsContext';
 import { Sidebar } from './components/Sidebar';
 import { BottomNavigation } from './components/BottomNavigation';
 import { ConnectionStatus } from './components/ConnectionStatus';
 import { LiquidUnlockButton } from './components/LiquidUnlockButton';
 import { StatsCard } from './components/StatsCard';
-import { LogFeed } from './components/LogFeed';
+import { LogFeedInteractive } from './components/LogFeedInteractive';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
-import { Thermometer, Droplets, Activity, Users, Settings } from 'lucide-react';
+import { SettingsPanel } from './components/SettingsPanel';
+import { HackerModeToggle } from './components/HackerModeToggle';
+import { Thermometer, Droplets, Activity, Users } from 'lucide-react';
 
 function AppContent() {
   const { t, isRTL } = useLanguage();
+  const { isHackerMode } = useAppSettings();
   const [activeTab, setActiveTab] = useState('home');
   const [isConnected, setIsConnected] = useState(true);
   const [logs, setLogs] = useState([
-    { id: 1, user: 'سارا احمدی', action: 'accessGranted', timestamp: '14:32:45', status: 'success' as const },
-    { id: 2, user: 'محمد رضایی', action: 'accessGranted', timestamp: '14:28:12', status: 'success' as const },
-    { id: 3, user: 'ناشناس', action: 'accessDenied', timestamp: '14:15:03', status: 'error' as const },
-    { id: 4, user: 'علی کریمی', action: 'accessGranted', timestamp: '13:58:27', status: 'success' as const },
+    { 
+      id: 1, 
+      user: 'سارا احمدی', 
+      action: 'accessGranted', 
+      timestamp: '14:32:45', 
+      status: 'success' as const,
+      location: 'اتاق سرور آلفا-۷',
+      device: 'iPhone 14 Pro',
+      isDuress: false,
+    },
+    { 
+      id: 2, 
+      user: 'محمد رضایی', 
+      action: 'accessGranted', 
+      timestamp: '14:28:12', 
+      status: 'success' as const,
+      location: 'اتاق سرور آلفا-۷',
+      device: 'Android Phone',
+      isDuress: false,
+    },
+    { 
+      id: 3, 
+      user: 'ناشناس', 
+      action: 'accessDenied', 
+      timestamp: '14:15:03', 
+      status: 'error' as const,
+      location: 'اتاق سرور آلفا-۷',
+      device: 'Unknown',
+      isDuress: false,
+    },
+    { 
+      id: 4, 
+      user: 'علی کریمی', 
+      action: 'accessGranted', 
+      timestamp: '13:58:27', 
+      status: 'success' as const,
+      location: 'اتاق سرور آلفا-۷',
+      device: 'Samsung Galaxy',
+      isDuress: true, // Duress entry example
+    },
   ]);
 
   const [stats, setStats] = useState({
@@ -36,6 +76,15 @@ function AppContent() {
       document.body.classList.remove('rtl');
     }
   }, [isRTL]);
+
+  // Apply Hacker Mode styles
+  useEffect(() => {
+    if (isHackerMode) {
+      document.body.classList.add('hacker-mode');
+    } else {
+      document.body.classList.remove('hacker-mode');
+    }
+  }, [isHackerMode]);
 
   // Simulate real-time updates
   useEffect(() => {
@@ -59,13 +108,16 @@ function AppContent() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleUnlock = () => {
+  const handleUnlock = (isDuress?: boolean) => {
     const newLog = {
       id: Date.now(),
       user: 'کاربر فعلی',
       action: 'accessGranted',
       timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
       status: 'success' as const,
+      location: 'اتاق سرور آلفا-۷',
+      device: 'Web App',
+      isDuress: isDuress || false,
     };
     setLogs(prev => [newLog, ...prev]);
   };
@@ -107,7 +159,7 @@ function AppContent() {
 
             {/* Recent Logs Preview */}
             <div className="block md:hidden">
-              <LogFeed logs={logs.slice(0, 3)} compact />
+              <LogFeedInteractive logs={logs.slice(0, 3)} compact />
             </div>
           </div>
         );
@@ -116,7 +168,7 @@ function AppContent() {
         return (
           <div className="space-y-4">
             <h2 className="text-[#00F0FF] tracking-wide">{t('accessLogs')}</h2>
-            <LogFeed logs={logs} />
+            <LogFeedInteractive logs={logs} />
           </div>
         );
 
@@ -146,28 +198,7 @@ function AppContent() {
         );
 
       case 'settings':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-[#00F0FF] tracking-wide">{t('systemSettings')}</h2>
-            <div className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/10">
-              <div className="space-y-4">
-                {[
-                  t('autoLockTimeout'),
-                  t('accessNotifications'),
-                  t('auditMode'),
-                  t('biometricAuth')
-                ].map((setting, idx) => (
-                  <div key={idx} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
-                    <span className="text-white/70">{setting}</span>
-                    <div className="w-12 h-6 bg-[#00F0FF]/20 rounded-full flex items-center px-1 cursor-pointer hover:bg-[#00F0FF]/30 transition-colors">
-                      <div className="w-4 h-4 bg-[#00F0FF] rounded-full shadow-lg shadow-[#00F0FF]/50" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
+        return <SettingsPanel />;
 
       default:
         return null;
@@ -175,13 +206,22 @@ function AppContent() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${isHackerMode ? 'hacker-mode' : ''}`}>
       {/* Aurora Background */}
-      <div className="fixed inset-0 opacity-30">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00FF9D] rounded-full blur-[150px] animate-aurora-2" />
-        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-500 rounded-full blur-[150px] animate-aurora-3" />
-      </div>
+      {!isHackerMode && (
+        <div className="fixed inset-0 opacity-30">
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
+          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00FF9D] rounded-full blur-[150px] animate-aurora-2" />
+          <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-500 rounded-full blur-[150px] animate-aurora-3" />
+        </div>
+      )}
+
+      {/* Hacker Mode Matrix Rain */}
+      {isHackerMode && (
+        <div className="fixed inset-0 opacity-20 pointer-events-none">
+          <div className="hacker-grid" />
+        </div>
+      )}
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
@@ -193,9 +233,16 @@ function AppContent() {
         {/* Header */}
         <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 md:px-8 md:py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-[#00F0FF] tracking-wide text-xl md:text-2xl">{t('appName')}</h1>
-              <p className="text-white/40 text-sm mt-1">{t('serverRoom')}</p>
+            <div className="flex items-center gap-4">
+              <HackerModeToggle />
+              <div>
+                <h1 className={`tracking-wide text-xl md:text-2xl ${isHackerMode ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
+                  {isHackerMode ? '> ' : ''}{t('appName')}
+                </h1>
+                <p className={`text-sm mt-1 ${isHackerMode ? 'text-[#00FF00]/60 font-mono' : 'text-white/40'}`}>
+                  {isHackerMode ? '// ' : ''}{t('serverRoom')}
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <LanguageSwitcher />
@@ -221,7 +268,9 @@ function AppContent() {
 export default function App() {
   return (
     <LanguageProvider>
-      <AppContent />
+      <AppSettingsProvider>
+        <AppContent />
+      </AppSettingsProvider>
     </LanguageProvider>
   );
 }
