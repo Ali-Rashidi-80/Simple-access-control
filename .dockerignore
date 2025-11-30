@@ -1,0 +1,8 @@
+node_modules
+dist
+backend
+.git
+.env
+.DS_Store
+package-lock.json
+coverage

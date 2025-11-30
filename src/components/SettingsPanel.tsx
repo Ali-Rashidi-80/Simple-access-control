@@ -114,7 +114,7 @@ export function SettingsPanel() {
           className="glass-card p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 cursor-pointer"
           style={{
             borderColor: isDuressMode ? 'rgba(255, 46, 46, 0.3)' : 'rgba(255, 255, 255, 0.1)',
-            background: isDuressMode 
+            background: isDuressMode
               ? 'linear-gradient(135deg, rgba(255, 46, 46, 0.1) 0%, rgba(255, 46, 46, 0.02) 100%)'
               : undefined,
           }}
@@ -124,7 +124,7 @@ export function SettingsPanel() {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div 
+              <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center"
                 style={{
                   backgroundColor: isDuressMode ? 'rgba(255, 46, 46, 0.2)' : 'rgba(255, 184, 0, 0.1)',
@@ -139,7 +139,7 @@ export function SettingsPanel() {
             </div>
             <ToggleSwitch isOn={isDuressMode} color="#FF2E2E" />
           </div>
-          
+
           {isDuressMode && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -180,12 +180,16 @@ export function SettingsPanel() {
   );
 }
 
+
+
 interface ToggleSwitchProps {
   isOn: boolean;
   color: string;
 }
 
 function ToggleSwitch({ isOn, color }: ToggleSwitchProps) {
+  const { isRTL } = useLanguage();
+
   return (
     <motion.div
       className="w-12 h-6 rounded-full flex items-center px-1 cursor-pointer"
@@ -203,7 +207,7 @@ function ToggleSwitch({ isOn, color }: ToggleSwitchProps) {
           boxShadow: `0 0 10px ${color}`,
         }}
         animate={{
-          x: isOn ? 24 : 0,
+          x: isOn ? (isRTL ? -24 : 24) : 0,
         }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       />
