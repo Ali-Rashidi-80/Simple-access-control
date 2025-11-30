@@ -16,7 +16,7 @@ const translations = {
     serverRoom: 'اتاق سرور آلفا-۷',
     connected: 'متصل',
     offline: 'آفلاین',
-    
+
     // Navigation
     dashboard: 'داشبورد',
     accessLogs: 'گزارش دسترسی',
@@ -24,7 +24,7 @@ const translations = {
     settings: 'تنظیمات',
     home: 'خانه',
     logs: 'گزارش‌ها',
-    
+
     // Unlock Button
     pressAndHold: 'نگه دارید تا باز شود',
     holdToUnlock: 'نگه‌داری برای باز کردن قفل...',
@@ -32,12 +32,12 @@ const translations = {
     unlocked: 'باز شد',
     lockingIn: 'قفل در',
     seconds: 'ثانیه',
-    
+
     // Stats
     temperature: 'دما',
     humidity: 'رطوبت',
     ping: 'پینگ',
-    
+
     // Status
     good: 'عالی',
     warning: 'هشدار',
@@ -45,16 +45,16 @@ const translations = {
     success: 'موفق',
     error: 'خطا',
     pending: 'در انتظار',
-    
+
     // Logs
     accessGranted: 'دسترسی داده شد',
     accessDenied: 'دسترسی رد شد',
     unknown: 'ناشناس',
-    
+
     // Users
     authorizedUsers: 'کاربران مجاز',
     levelClearance: 'سطح دسترسی',
-    
+
     // Settings
     systemSettings: 'تنظیمات سیستم',
     autoLockTimeout: 'قفل خودکار شبانه',
@@ -66,7 +66,7 @@ const translations = {
     biometricPrompt: 'لطفاً هویت خود را تأیید کنید',
     biometricFailed: 'احراز هویت ناموفق بود',
     language: 'زبان',
-    
+
     // Duress Mode
     duressMode: 'حالت اجبار (پنیک)',
     duressDesc: 'هشدار مخفی هنگام فشار',
@@ -74,22 +74,28 @@ const translations = {
     duressAlert: 'اجبار',
     duressAlertSent: '🚨 هشدار اجباری ارسال شد!',
     duressAlertDetailed: 'این دسترسی تحت فشار انجام شده است',
-    
+
     // Secure Mode
     secureModeActive: '🛡️ حالت امنیتی فعال است',
     secureModeDesc: 'دسترسی در ساعات شبانه محدود شده',
-    
+
     // Time
     startTime: 'ساعت شروع',
     endTime: 'ساعت پایان',
     timestamp: 'زمان',
     location: 'موقعیت',
     device: 'دستگاه',
-    
+
     // System Info
     systemStatus: 'وضعیت سیستم',
     uptime: 'زمان فعالیت',
     version: 'نسخه',
+    recentActivity: 'فعالیت های اخیر',
+    last24Hours: '۲۴ ساعت گذشته',
+    systemHealth: 'سلامت سیستم',
+    cpu: 'پردازنده',
+    memory: 'حافظه',
+    network: 'شبکه',
   },
   en: {
     // Header
@@ -97,7 +103,7 @@ const translations = {
     serverRoom: 'Server Room Alpha-7',
     connected: 'Connected',
     offline: 'Offline',
-    
+
     // Navigation
     dashboard: 'Dashboard',
     accessLogs: 'Access Logs',
@@ -105,7 +111,7 @@ const translations = {
     settings: 'Settings',
     home: 'Home',
     logs: 'Logs',
-    
+
     // Unlock Button
     pressAndHold: 'Press and hold to unlock',
     holdToUnlock: 'Hold to unlock...',
@@ -113,12 +119,12 @@ const translations = {
     unlocked: 'Unlocked',
     lockingIn: 'Locking in',
     seconds: 'seconds',
-    
+
     // Stats
     temperature: 'Temperature',
     humidity: 'Humidity',
     ping: 'Ping',
-    
+
     // Status
     good: 'good',
     warning: 'warning',
@@ -126,16 +132,16 @@ const translations = {
     success: 'success',
     error: 'error',
     pending: 'pending',
-    
+
     // Logs
     accessGranted: 'Access Granted',
     accessDenied: 'Access Denied',
     unknown: 'Unknown',
-    
+
     // Users
     authorizedUsers: 'Authorized Users',
     levelClearance: 'Level Clearance',
-    
+
     // Settings
     systemSettings: 'System Settings',
     autoLockTimeout: 'Auto-Lock Schedule',
@@ -147,7 +153,7 @@ const translations = {
     biometricPrompt: 'Please verify your identity',
     biometricFailed: 'Authentication failed',
     language: 'Language',
-    
+
     // Duress Mode
     duressMode: 'Duress Mode (Panic)',
     duressDesc: 'Silent alert under coercion',
@@ -155,22 +161,28 @@ const translations = {
     duressAlert: 'Duress',
     duressAlertSent: '🚨 Duress alert sent!',
     duressAlertDetailed: 'This access was performed under duress',
-    
+
     // Secure Mode
     secureModeActive: '🛡️ Secure Mode Active',
     secureModeDesc: 'Access restricted during night hours',
-    
+
     // Time
     startTime: 'Start Time',
     endTime: 'End Time',
     timestamp: 'Time',
     location: 'Location',
     device: 'Device',
-    
+
     // System Info
     systemStatus: 'System Status',
     uptime: 'Uptime',
     version: 'v',
+    recentActivity: 'Recent Activity',
+    last24Hours: 'Last 24 Hours',
+    systemHealth: 'System Health',
+    cpu: 'CPU',
+    memory: 'Memory',
+    network: 'Network',
   },
 };
 

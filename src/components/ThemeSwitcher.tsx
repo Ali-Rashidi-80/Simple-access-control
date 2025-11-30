@@ -8,7 +8,6 @@ export function ThemeSwitcher() {
     const themes: { id: Theme; icon: React.ReactNode; label: string }[] = [
         { id: 'neon', icon: <Monitor className="w-4 h-4" />, label: 'Neon' },
         { id: 'matrix', icon: <Terminal className="w-4 h-4" />, label: 'Matrix' },
-        { id: 'light', icon: <Sun className="w-4 h-4" />, label: 'Light' },
     ];
 
     const cycleTheme = () => {

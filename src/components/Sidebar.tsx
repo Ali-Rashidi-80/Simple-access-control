@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { Home, FileText, Users, Settings } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface SidebarProps {
     activeTab: string;
@@ -20,19 +19,15 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
     return (
         <aside
-            className="fixed top-0 h-screen w-64 glass-card backdrop-blur-xl border-white/10 p-6 z-20"
-            style={{
-                [isRTL ? 'right' : 'left']: 0,
-                [isRTL ? 'borderLeft' : 'borderRight']: '1px solid rgba(255, 255, 255, 0.1)',
-            }}
+            className={`fixed top-0 h-screen w-64 glass-card backdrop-blur-xl border-white/10 p-6 z-20 transition-all duration-300 ${isRTL ? 'right-0 border-l' : 'left-0 border-r'
+                }`}
         >
             {/* Logo */}
             <div className="mb-12">
                 <div className="flex items-center gap-3">
-                    <ThemeSwitcher />
                     <div>
-                        <h2 className="text-[#00F0FF] tracking-wide">{t('appName')}</h2>
-                        <p className="text-white/30 text-xs">{t('version')}2.4.1</p>
+                        <h2 className="text-[#00F0FF] tracking-wide text-xl font-bold">{t('appName')}</h2>
+                        <p className="text-white/30 text-xs mt-1">{t('version')}2.4.1</p>
                     </div>
                 </div>
             </div>
@@ -47,8 +42,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                         <motion.button
                             key={item.id}
                             onClick={() => onTabChange(item.id)}
-                            className="relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors overflow-hidden group"
-                            style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+                            className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors overflow-hidden group ${isRTL ? 'flex-row-reverse' : 'flex-row'
+                                }`}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >
@@ -82,9 +77,10 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
                             {/* Label */}
                             <span
-                                className="relative z-10 transition-colors"
+                                className="relative z-10 transition-colors flex-1"
                                 style={{
                                     color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.6)',
+                                    textAlign: isRTL ? 'right' : 'left'
                                 }}
                             >
                                 {t(item.labelKey)}
@@ -93,11 +89,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                             {/* Active Indicator */}
                             {isActive && (
                                 <motion.div
-                                    className="absolute top-1/2 -translate-y-1/2 w-1 h-8 bg-[#00F0FF] rounded-full"
+                                    className={`absolute top-1/2 -translate-y-1/2 w-1 h-8 bg-[#00F0FF] rounded-full ${isRTL ? 'left-0 rounded-r-none rounded-l-full' : 'right-0 rounded-l-none rounded-r-full'
+                                        }`}
                                     style={{
-                                        [isRTL ? 'left' : 'right']: 0,
-                                        [isRTL ? 'borderTopRightRadius' : 'borderTopLeftRadius']: '9999px',
-                                        [isRTL ? 'borderBottomRightRadius' : 'borderBottomLeftRadius']: '9999px',
                                         boxShadow: '0 0 10px #00F0FF',
                                     }}
                                     layoutId="sidebar-active-indicator"
@@ -112,10 +106,10 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             {/* Bottom Info */}
             <div className="absolute bottom-6 left-6 right-6">
                 <div className="glass-card backdrop-blur-xl border border-white/10 rounded-xl p-4">
-                    <p className="text-white/40 text-xs">{t('systemStatus')}</p>
-                    <div className="flex items-center justify-between mt-2">
+                    <p className="text-white/40 text-xs mb-2 text-start">{t('systemStatus')}</p>
+                    <div className="flex items-center justify-between">
                         <span className="text-white/70 text-sm">{t('uptime')}</span>
-                        <span className="text-[#00FF9D] text-sm">99.8%</span>
+                        <span className="text-[#00FF9D] text-sm font-mono">99.8%</span>
                     </div>
                 </div>
             </div>

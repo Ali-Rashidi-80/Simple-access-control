@@ -370,10 +370,10 @@ export function LiquidUnlockButton({ onUnlock }: LiquidUnlockButtonProps) {
                     }}
                   >
                     <span
-                      className="block text-6xl md:text-7xl tracking-wider"
+                      className="block text-6xl md:text-7xl tracking-wider font-bold force-text-black"
                       style={{
-                        color: 'var(--liquid-text-contrast)',
-                        textShadow: `0 0 20px ${drainProgress > 80 ? 'var(--liquid-danger)' : drainProgress > 50 ? 'var(--liquid-warning)' : 'var(--liquid-success)'}`,
+                        color: '#000000',
+                        textShadow: 'none',
                         fontVariantNumeric: 'tabular-nums',
                       }}
                     >
@@ -381,10 +381,10 @@ export function LiquidUnlockButton({ onUnlock }: LiquidUnlockButtonProps) {
                     </span>
                   </motion.div>
                   <span
-                    className="text-sm tracking-wide opacity-80"
+                    className="text-sm tracking-wide opacity-80 font-bold force-text-black"
                     style={{
-                      color: 'var(--liquid-text-contrast)',
-                      textShadow: `0 0 10px ${drainProgress > 80 ? 'var(--liquid-danger)' : drainProgress > 50 ? 'var(--liquid-warning)' : 'var(--liquid-success)'}`,
+                      color: '#000000',
+                      textShadow: 'none',
                     }}
                   >
                     {t('seconds')}
@@ -483,23 +483,25 @@ export function LiquidUnlockButton({ onUnlock }: LiquidUnlockButtonProps) {
       </motion.div>
 
       {/* Countdown Message */}
-      {isCountingDown && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="text-center"
-        >
-          <p
-            className="text-sm tracking-wide"
-            style={{
-              color: drainProgress > 80 ? 'var(--liquid-danger)' : drainProgress > 50 ? 'var(--liquid-warning)' : 'var(--liquid-success)',
-            }}
+      {
+        isCountingDown && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="text-center"
           >
-            {t('lockingIn')} {displayCountdown} {t('seconds')}
-          </p>
-        </motion.div>
-      )}
-    </div>
+            <p
+              className="text-sm tracking-wide"
+              style={{
+                color: drainProgress > 80 ? 'var(--liquid-danger)' : drainProgress > 50 ? 'var(--liquid-warning)' : 'var(--liquid-success)',
+              }}
+            >
+              {t('lockingIn')} {displayCountdown} {t('seconds')}
+            </p>
+          </motion.div>
+        )
+      }
+    </div >
   );
 }

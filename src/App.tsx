@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AppSettingsProvider, useAppSettings } from './contexts/AppSettingsContext';
 import { Sidebar } from './components/Sidebar';
@@ -8,7 +9,9 @@ import { LiquidUnlockButton } from './components/LiquidUnlockButton';
 import { StatsCard } from './components/StatsCard';
 import { LogFeedInteractive } from './components/LogFeedInteractive';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { SettingsPanel } from './components/SettingsPanel';
+import { ActivityTimeline } from './components/ActivityTimeline';
 import { Thermometer, Droplets, Activity, Users } from 'lucide-react';
 
 function AppContent() {
@@ -70,9 +73,13 @@ function AppContent() {
     if (isRTL) {
       document.body.classList.add('rtl');
       document.body.classList.remove('ltr');
+      document.documentElement.dir = 'rtl'; // Ensure global dir attribute
+      document.documentElement.lang = 'fa';
     } else {
       document.body.classList.add('ltr');
       document.body.classList.remove('rtl');
+      document.documentElement.dir = 'ltr';
+      document.documentElement.lang = 'en';
     }
   }, [isRTL]);
 
@@ -81,8 +88,6 @@ function AppContent() {
     document.body.classList.remove('hacker-mode', 'light');
     if (theme === 'matrix') {
       document.body.classList.add('hacker-mode');
-    } else if (theme === 'light') {
-      document.body.classList.add('light');
     }
   }, [theme]);
 
@@ -126,38 +131,106 @@ function AppContent() {
     switch (activeTab) {
       case 'home':
         return (
-          <div className="space-y-6">
-            {/* Hero Section */}
-            <div className="flex flex-col items-center justify-center py-8 md:py-12">
-              <LiquidUnlockButton onUnlock={handleUnlock} />
+          <div className="space-y-3 md:space-y-4">
+            {/* Hero Section - Compact */}
+            <div className="relative">
+              {/* Animated gradient background */}
+              <motion.div
+                className="absolute inset-0 opacity-20 rounded-3xl overflow-hidden -z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.2 }}
+                transition={{ duration: 1 }}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: 'radial-gradient(circle at 50% 50%, var(--liquid-primary)20 0%, transparent 70%)',
+                  }}
+                />
+              </motion.div>
+
+              <div className="flex flex-col items-center justify-center py-3 md:py-4">
+                <LiquidUnlockButton onUnlock={handleUnlock} />
+              </div>
             </div>
 
-            {/* Stats Grid - Bento Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              <StatsCard
-                icon={<Thermometer className="w-6 h-6" />}
-                label={t('temperature')}
-                value={`${stats.temperature}°C`}
-                status={stats.temperature > 20 ? 'warning' : 'normal'}
-                trend="stable"
-              />
-              <StatsCard
-                icon={<Droplets className="w-6 h-6" />}
-                label={t('humidity')}
-                value={`${stats.humidity}%`}
-                status={stats.humidity > 55 ? 'warning' : 'normal'}
-                trend="stable"
-              />
-              <StatsCard
-                icon={<Activity className="w-6 h-6" />}
-                label={t('ping')}
-                value={`${stats.ping}ms`}
-                status={stats.ping > 20 ? 'warning' : 'good'}
-                trend="stable"
-              />
-            </div>
+            {/* Stats Grid - Compact */}
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                  },
+                },
+              }}
+            >
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <StatsCard
+                  icon={<Thermometer className="w-6 h-6" />}
+                  label={t('temperature')}
+                  value={`${stats.temperature}°C`}
+                  status={stats.temperature > 20 ? 'warning' : 'normal'}
+                  trend="stable"
+                />
+              </motion.div>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <StatsCard
+                  icon={<Droplets className="w-6 h-6" />}
+                  label={t('humidity')}
+                  value={`${stats.humidity}%`}
+                  status={stats.humidity > 55 ? 'warning' : 'normal'}
+                  trend="down"
+                />
+              </motion.div>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <StatsCard
+                  icon={<Activity className="w-6 h-6" />}
+                  label={t('ping')}
+                  value={`${stats.ping}ms`}
+                  status={stats.ping > 20 ? 'warning' : 'good'}
+                  trend="up"
+                />
+              </motion.div>
+            </motion.div>
 
-            {/* Recent Logs Preview */}
+            {/* Activity Timeline Section - Compact */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <ActivityTimeline
+                activities={logs.slice(0, 3).map((log) => ({
+                  id: log.id,
+                  type: log.status === 'success' ? 'success' : log.status === 'error' ? 'error' : 'warning',
+                  message: `${log.user} - ${t(log.action)} • ${log.location}`,
+                  timestamp: log.timestamp,
+                }))}
+                maxItems={3}
+              />
+            </motion.div>
+
+            {/* Recent Logs Preview - Mobile Only */}
             <div className="block md:hidden">
               <LogFeedInteractive logs={logs.slice(0, 3)} compact />
             </div>
@@ -206,7 +279,7 @@ function AppContent() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''} ${theme === 'light' ? 'light' : ''}`}>
+    <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''}`}>
       {/* Aurora Background (Neon Theme) */}
       {theme === 'neon' && (
         <div className="fixed inset-0 opacity-30">
@@ -223,10 +296,7 @@ function AppContent() {
         </div>
       )}
 
-      {/* Light Theme Background */}
-      {theme === 'light' && (
-        <div className="fixed inset-0 bg-gray-100 -z-10" />
-      )}
+
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
@@ -234,21 +304,17 @@ function AppContent() {
       </div>
 
       {/* Main Content */}
-      <div className={`relative z-10 ${isRTL ? 'md:mr-64' : 'md:ml-64'}`}>
+      <div className={`relative z-10 ${isRTL ? 'md:mr-64' : 'md:ml-64'} transition-all duration-300`}>
         {/* Header */}
-        <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 md:px-8 md:py-6">
+        <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 sticky top-0 z-50">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div>
-                <h1 className={`tracking-wide text-xl md:text-2xl ${theme === 'matrix' ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
-                  {theme === 'matrix' ? '> ' : ''}{t('appName')}
-                </h1>
-                <p className={`text-sm mt-1 ${theme === 'matrix' ? 'text-[#00FF00]/60 font-mono' : 'text-white/40'}`}>
-                  {theme === 'matrix' ? '// ' : ''}{t('serverRoom')}
-                </p>
-              </div>
+            <div>
+              <h1 className={`tracking-wide text-lg md:text-xl font-bold ${theme === 'matrix' ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
+                {theme === 'matrix' ? '> ' : ''}{t('appName')}
+              </h1>
             </div>
             <div className="flex items-center gap-3">
+              <ThemeSwitcher />
               <LanguageSwitcher />
               <ConnectionStatus isConnected={isConnected} />
             </div>
@@ -256,7 +322,7 @@ function AppContent() {
         </header>
 
         {/* Content Area */}
-        <main className="p-6 md:p-8 pb-24 md:pb-8">
+        <main className="p-4 md:p-5 pb-20 md:pb-6">
           {renderContent()}
         </main>
       </div>
