@@ -1,34 +1,44 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useLanguage } from './LanguageContext';
+
+export type Theme = 'neon' | 'matrix' | 'light';
 
 interface AppSettingsContextType {
   isSecureMode: boolean;
   requireBiometric: boolean;
   isDuressMode: boolean;
-  isHackerMode: boolean;
+  theme: Theme;
+  timerDuration: number;
   autoLockStart: number;
   autoLockEnd: number;
+  defaultLanguage: string;
   setRequireBiometric: (value: boolean) => void;
   setIsDuressMode: (value: boolean) => void;
-  setIsHackerMode: (value: boolean) => void;
+  setTheme: (value: Theme) => void;
+  setTimerDuration: (value: number) => void;
   setAutoLockTimes: (start: number, end: number) => void;
+  setDefaultLanguage: (value: string) => void;
 }
 
 const AppSettingsContext = createContext<AppSettingsContextType | undefined>(undefined);
 
 export function AppSettingsProvider({ children }: { children: ReactNode }) {
-  const [requireBiometric, setRequireBiometric] = useState(true);
+  const { setLanguage } = useLanguage();
+  const [requireBiometric, setRequireBiometric] = useState(false); // Default false per request
   const [isDuressMode, setIsDuressMode] = useState(false);
-  const [isHackerMode, setIsHackerMode] = useState(false);
+  const [theme, setTheme] = useState<Theme>('neon');
+  const [timerDuration, setTimerDuration] = useState(5);
   const [autoLockStart, setAutoLockStart] = useState(0); // 12 AM (midnight)
   const [autoLockEnd, setAutoLockEnd] = useState(6); // 6 AM
   const [isSecureMode, setIsSecureMode] = useState(false);
+  const [defaultLanguage, setDefaultLanguage] = useState('fa');
 
   // Check if current time is within secure mode hours
   useEffect(() => {
     const checkSecureMode = () => {
       const now = new Date();
       const currentHour = now.getHours();
-      
+
       // Check if current hour is between autoLockStart and autoLockEnd
       const inSecureMode = currentHour >= autoLockStart && currentHour < autoLockEnd;
       setIsSecureMode(inSecureMode);
@@ -43,6 +53,11 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(interval);
   }, [autoLockStart, autoLockEnd]);
 
+  // Apply default language on mount
+  useEffect(() => {
+    setLanguage(defaultLanguage as 'fa' | 'en');
+  }, [defaultLanguage, setLanguage]);
+
   const setAutoLockTimes = (start: number, end: number) => {
     setAutoLockStart(start);
     setAutoLockEnd(end);
@@ -54,13 +69,17 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
         isSecureMode,
         requireBiometric,
         isDuressMode,
-        isHackerMode,
+        theme,
+        timerDuration,
         autoLockStart,
         autoLockEnd,
+        defaultLanguage,
         setRequireBiometric,
         setIsDuressMode,
-        setIsHackerMode,
+        setTheme,
+        setTimerDuration,
         setAutoLockTimes,
+        setDefaultLanguage,
       }}
     >
       {children}

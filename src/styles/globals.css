@@ -3,25 +3,15 @@
 
 @font-face {
   font-family: 'IRANSansX';
-  src: url('https://cdn.fontcdn.ir/Font/Persian/IRANSansX/IRANSansX-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
+  src: local('Vazir'), url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2') format('woff2');
+  font-weight: 100 900;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IRANSansX';
-  src: url('https://cdn.fontcdn.ir/Font/Persian/IRANSansX/IRANSansX-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IRANSansX';
-  src: url('https://cdn.fontcdn.ir/Font/Persian/IRANSansX/IRANSansX-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
+  font-family: 'IranNastaliq';
+  src: local('IranNastaliq'),
+    url('https://cdn.fontcdn.ir/Font/Persian/IranNastaliq/IranNastaliq.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -235,27 +225,36 @@ html {
 
 /* Aurora Animations */
 @keyframes aurora-1 {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(50px, -50px) scale(1.1);
   }
 }
 
 @keyframes aurora-2 {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(-30px, 30px) scale(1.15);
   }
 }
 
 @keyframes aurora-3 {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     transform: translate(-45%, -55%) scale(1.08);
   }
@@ -325,7 +324,7 @@ body.hacker-mode button {
 .hacker-grid {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent),
     linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent);
   background-size: 50px 50px;
@@ -336,6 +335,7 @@ body.hacker-mode button {
   0% {
     background-position: 0 0, 0 0;
   }
+
   100% {
     background-position: 50px 50px, 50px 50px;
   }
@@ -349,11 +349,9 @@ body.hacker-mode::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 255, 0, 0) 50%,
-    rgba(0, 255, 0, 0.02) 50%
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 255, 0, 0) 50%,
+      rgba(0, 255, 0, 0.02) 50%);
   background-size: 100% 4px;
   pointer-events: none;
   z-index: 9999;
@@ -364,6 +362,7 @@ body.hacker-mode::after {
   0% {
     background-position: 0 0;
   }
+
   100% {
     background-position: 0 100%;
   }
@@ -375,10 +374,24 @@ body.hacker-mode h1 {
 }
 
 @keyframes text-flicker {
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+
+  0%,
+  19.999%,
+  22%,
+  62.999%,
+  64%,
+  64.999%,
+  70%,
+  100% {
     opacity: 1;
   }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+
+  20%,
+  21.999%,
+  63%,
+  63.999%,
+  65%,
+  69.999% {
     opacity: 0.8;
   }
 }

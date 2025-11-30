@@ -58,7 +58,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
 
   return (
     <>
-      <div className={`space-y-3 ${compact ? '' : 'max-h-[600px] overflow-y-auto pr-2 scrollbar-thin'}`}>
+      <div className={`space-y-3 ${compact ? '' : 'max-h-[600px] overflow-y-auto pr-2 custom-scrollbar'}`}>
         <AnimatePresence mode="popLayout">
           {logs.map((log, index) => {
             const statusColor = getStatusColor(log.status);
@@ -67,9 +67,9 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
             return (
               <motion.div
                 key={log.id}
-                initial={{ opacity: 0, x: isRTL ? -50 : 50, scale: 0.9 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: isRTL ? 50 : -50, scale: 0.9 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
                 transition={{
                   type: 'spring',
                   stiffness: 300,
@@ -77,7 +77,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                   delay: index * 0.05,
                 }}
                 className="glass-card backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all duration-300 group relative overflow-hidden cursor-pointer"
-                whileHover={{ scale: 1.01, x: isRTL ? -4 : 4 }}
+                whileHover={{ scale: 1.02 }}
                 onClick={() => setSelectedLog(log)}
               >
                 {/* Duress Alert Badge */}
@@ -137,9 +137,9 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                     ) : (
                       <span className="text-lg">{log.user.charAt(0)}</span>
                     )}
-                    
+
                     {/* Status Badge on Avatar */}
-                    <div 
+                    <div
                       className="absolute bottom-0 w-3 h-3 rounded-full border-2 border-[#050505]"
                       style={{
                         [isRTL ? 'left' : 'right']: 0,

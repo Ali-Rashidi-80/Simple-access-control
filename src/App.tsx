@@ -9,50 +9,49 @@ import { StatsCard } from './components/StatsCard';
 import { LogFeedInteractive } from './components/LogFeedInteractive';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { SettingsPanel } from './components/SettingsPanel';
-import { HackerModeToggle } from './components/HackerModeToggle';
 import { Thermometer, Droplets, Activity, Users } from 'lucide-react';
 
 function AppContent() {
   const { t, isRTL } = useLanguage();
-  const { isHackerMode } = useAppSettings();
+  const { theme } = useAppSettings();
   const [activeTab, setActiveTab] = useState('home');
   const [isConnected, setIsConnected] = useState(true);
   const [logs, setLogs] = useState([
-    { 
-      id: 1, 
-      user: 'سارا احمدی', 
-      action: 'accessGranted', 
-      timestamp: '14:32:45', 
+    {
+      id: 1,
+      user: 'سارا احمدی',
+      action: 'accessGranted',
+      timestamp: '14:32:45',
       status: 'success' as const,
       location: 'اتاق سرور آلفا-۷',
       device: 'iPhone 14 Pro',
       isDuress: false,
     },
-    { 
-      id: 2, 
-      user: 'محمد رضایی', 
-      action: 'accessGranted', 
-      timestamp: '14:28:12', 
+    {
+      id: 2,
+      user: 'محمد رضایی',
+      action: 'accessGranted',
+      timestamp: '14:28:12',
       status: 'success' as const,
       location: 'اتاق سرور آلفا-۷',
       device: 'Android Phone',
       isDuress: false,
     },
-    { 
-      id: 3, 
-      user: 'ناشناس', 
-      action: 'accessDenied', 
-      timestamp: '14:15:03', 
+    {
+      id: 3,
+      user: 'ناشناس',
+      action: 'accessDenied',
+      timestamp: '14:15:03',
       status: 'error' as const,
       location: 'اتاق سرور آلفا-۷',
       device: 'Unknown',
       isDuress: false,
     },
-    { 
-      id: 4, 
-      user: 'علی کریمی', 
-      action: 'accessGranted', 
-      timestamp: '13:58:27', 
+    {
+      id: 4,
+      user: 'علی کریمی',
+      action: 'accessGranted',
+      timestamp: '13:58:27',
       status: 'success' as const,
       location: 'اتاق سرور آلفا-۷',
       device: 'Samsung Galaxy',
@@ -77,14 +76,15 @@ function AppContent() {
     }
   }, [isRTL]);
 
-  // Apply Hacker Mode styles
+  // Apply Theme styles
   useEffect(() => {
-    if (isHackerMode) {
+    document.body.classList.remove('hacker-mode', 'light');
+    if (theme === 'matrix') {
       document.body.classList.add('hacker-mode');
-    } else {
-      document.body.classList.remove('hacker-mode');
+    } else if (theme === 'light') {
+      document.body.classList.add('light');
     }
-  }, [isHackerMode]);
+  }, [theme]);
 
   // Simulate real-time updates
   useEffect(() => {
@@ -206,9 +206,9 @@ function AppContent() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${isHackerMode ? 'hacker-mode' : ''}`}>
-      {/* Aurora Background */}
-      {!isHackerMode && (
+    <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''} ${theme === 'light' ? 'light' : ''}`}>
+      {/* Aurora Background (Neon Theme) */}
+      {theme === 'neon' && (
         <div className="fixed inset-0 opacity-30">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
           <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00FF9D] rounded-full blur-[150px] animate-aurora-2" />
@@ -216,11 +216,16 @@ function AppContent() {
         </div>
       )}
 
-      {/* Hacker Mode Matrix Rain */}
-      {isHackerMode && (
+      {/* Matrix Rain Background (Matrix Theme) */}
+      {theme === 'matrix' && (
         <div className="fixed inset-0 opacity-20 pointer-events-none">
           <div className="hacker-grid" />
         </div>
+      )}
+
+      {/* Light Theme Background */}
+      {theme === 'light' && (
+        <div className="fixed inset-0 bg-gray-100 -z-10" />
       )}
 
       {/* Desktop Sidebar */}
@@ -234,13 +239,12 @@ function AppContent() {
         <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 md:px-8 md:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <HackerModeToggle />
               <div>
-                <h1 className={`tracking-wide text-xl md:text-2xl ${isHackerMode ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
-                  {isHackerMode ? '> ' : ''}{t('appName')}
+                <h1 className={`tracking-wide text-xl md:text-2xl ${theme === 'matrix' ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
+                  {theme === 'matrix' ? '> ' : ''}{t('appName')}
                 </h1>
-                <p className={`text-sm mt-1 ${isHackerMode ? 'text-[#00FF00]/60 font-mono' : 'text-white/40'}`}>
-                  {isHackerMode ? '// ' : ''}{t('serverRoom')}
+                <p className={`text-sm mt-1 ${theme === 'matrix' ? 'text-[#00FF00]/60 font-mono' : 'text-white/40'}`}>
+                  {theme === 'matrix' ? '// ' : ''}{t('serverRoom')}
                 </p>
               </div>
             </div>
