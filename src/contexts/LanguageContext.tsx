@@ -65,7 +65,18 @@ const translations = {
     biometricDesc: 'نیاز به FaceID/TouchID',
     biometricPrompt: 'لطفاً هویت خود را تأیید کنید',
     biometricFailed: 'احراز هویت ناموفق بود',
+
     language: 'زبان',
+    defaultConfiguration: 'تنظیمات پیش‌فرض',
+    defaultConfigDesc: 'تنظیمات اولیه سیستم',
+    defaultTheme: 'تم پیش‌فرض',
+    selectTheme: 'انتخاب تم',
+    defaultLanguage: 'زبان پیش‌فرض',
+    selectLanguage: 'انتخاب زبان',
+    timerDuration: 'مدت زمان تایمر',
+    theme_neon: 'نئون',
+    theme_matrix: 'ماتریکس',
+    theme_light: 'روشن',
 
     // Duress Mode
     duressMode: 'حالت اجبار (پنیک)',
@@ -152,7 +163,18 @@ const translations = {
     biometricDesc: 'Require FaceID/TouchID',
     biometricPrompt: 'Please verify your identity',
     biometricFailed: 'Authentication failed',
+
     language: 'Language',
+    defaultConfiguration: 'Default Configuration',
+    defaultConfigDesc: 'Initial system settings',
+    defaultTheme: 'Default Theme',
+    selectTheme: 'Select Theme',
+    defaultLanguage: 'Default Language',
+    selectLanguage: 'Select Language',
+    timerDuration: 'Timer Duration',
+    theme_neon: 'Neon',
+    theme_matrix: 'Matrix',
+    theme_light: 'Light',
 
     // Duress Mode
     duressMode: 'Duress Mode (Panic)',

@@ -204,14 +204,14 @@ export function SettingsPanel() {
             {/* Default Theme */}
             <div>
               <label className="text-white/60 text-sm mb-2 block">{t('defaultTheme')}</label>
-              <Select value={theme} onValueChange={(v) => setTheme(v as any)}>
+              <Select value={theme} onValueChange={(v: string) => setTheme(v as any)}>
                 <SelectTrigger className="w-full glass-card backdrop-blur-xl border border-white/10 rounded-xl px-4 py-2 text-white bg-transparent focus:ring-[#00F0FF]/50 outline-none">
                   <SelectValue placeholder={t('selectTheme')} />
                 </SelectTrigger>
                 <SelectContent className="bg-[#050505]/90 backdrop-blur-xl border border-white/10 text-white">
                   {['neon', 'matrix', 'light'].map((tOption) => (
                     <SelectItem key={tOption} value={tOption} className="focus:bg-[#00F0FF]/20 focus:text-[#00F0FF] cursor-pointer">
-                      {tOption.charAt(0).toUpperCase() + tOption.slice(1)}
+                      {t('theme_' + tOption)}
                     </SelectItem>
                   ))}
                 </SelectContent>
