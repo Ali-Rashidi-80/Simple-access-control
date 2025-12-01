@@ -12,6 +12,8 @@ export function UserProfile() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    console.log('UserProfile: user =', user, 'isDropdownOpen =', isDropdownOpen);
+
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -30,7 +32,16 @@ export function UserProfile() {
         return date.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    if (!user) return null;
+    const handleLogout = () => {
+        console.log('Logout clicked');
+        setIsDropdownOpen(false);
+        logout();
+    };
+
+    if (!user) {
+        console.log('UserProfile: No user, returning null');
+        return null;
+    }
 
     return (
         <div className="relative" ref={dropdownRef}>
@@ -38,7 +49,10 @@ export function UserProfile() {
             <Tooltip content={user?.fullName || user?.username || ''}>
                 <motion.div
                     className="cursor-pointer"
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    onClick={() => {
+                        console.log('Avatar clicked, toggling dropdown');
+                        setIsDropdownOpen(!isDropdownOpen);
+                    }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
@@ -128,10 +142,7 @@ export function UserProfile() {
                                 <motion.button
                                     className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#FF2E2E]/90 hover:bg-[#FF2E2E]/10 transition-colors duration-200"
                                     whileHover={{ x: isRTL ? -3 : 3 }}
-                                    onClick={() => {
-                                        setIsDropdownOpen(false);
-                                        logout();
-                                    }}
+                                    onClick={handleLogout}
                                 >
                                     <LogOut className="w-4 h-4" />
                                     <span>{t('logout') || 'خروج'}</span>
