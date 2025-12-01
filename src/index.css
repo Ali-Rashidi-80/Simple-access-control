@@ -1,4 +1,4 @@
-@font-face {
+﻿@font-face {
   font-family: 'Vazirmatn';
   src: url('/fonts/Vazirmatn-Regular.woff2') format('woff2');
   font-weight: 400;
@@ -3023,4 +3023,17 @@ body.hacker-mode .force-text-black,
   color: #000000 !important;
   text-shadow: none !important;
   -webkit-text-fill-color: #000000 !important;
+}
+
+@layer utilities {
+  .bg-radial-gradient {
+    background-image: radial-gradient(var(--tw-gradient-stops));
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }

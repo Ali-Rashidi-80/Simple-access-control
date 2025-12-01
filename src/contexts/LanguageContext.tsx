@@ -107,6 +107,67 @@ const translations = {
     cpu: 'پردازنده',
     memory: 'حافظه',
     network: 'شبکه',
+
+    // Authentication
+    login: 'ورود',
+    logout: 'خروج',
+    username: 'نام کاربری',
+    password: 'رمز عبور',
+    rememberMe: 'مرا به خاطر بسپار',
+    forgotPassword: 'فراموشی رمز عبور؟',
+    loginSuccess: 'ورود موفقیت‌آمیز!',
+    invalidCredentials: 'نام کاربری یا رمز عبور اشتباه است',
+    loginError: 'خطا در ورود به سیستم',
+    usernamePlaceholder: 'نام کاربری را وارد کنید',
+    passwordPlaceholder: 'رمز عبور را وارد کنید',
+    role: 'نقش',
+    clearanceLevel: 'سطح دسترسی',
+    lastLogin: 'آخرین ورود',
+    profileSettings: 'تنظیمات پروفایل',
+
+    // OTP
+    otpLogin: 'ورود با کد یکبار مصرف',
+    otpDescription: 'کد یکبار مصرف به شماره شما ارسال می‌شود',
+    phone: 'شماره موبایل',
+    phonePlaceholder: '09123456789',
+    sendOTP: 'ارسال کد',
+    otpSent: 'کد یکبار مصرف ارسال شد',
+    otpError: 'خطا در ارسال کد',
+    invalidOTP: 'کد وارد شده نامعتبر است',
+    otpVerifyError: 'خطا در تأیید کد',
+    otpExpires: 'زمان باقی‌مانده',
+    resendOTP: 'ارسال مجدد کد',
+    loginWithOTP: 'ورود با کد یکبار مصرف',
+    sending: 'در حال ارسال...',
+
+    // 2FA
+    '2faVerification': 'تأیید دو مرحله‌ای',
+    '2faDescription': 'کد تأیید را از برنامه احراز هویت خود وارد کنید',
+    '2faInstruction': 'کد ۶ رقمی را از برنامه احراز هویت خود وارد کنید',
+    invalid2FA: 'کد تأیید نامعتبر است',
+    '2faError': 'خطا در تأیید دو مرحله‌ای',
+
+    // Password Recovery
+    passwordRecovery: 'بازیابی رمز عبور',
+    recoveryDescription: 'رمز عبور جدید خود را وارد کنید',
+    verificationCode: 'کد تأیید',
+    newPassword: 'رمز عبور جدید',
+    confirmPassword: 'تأیید رمز عبور',
+    passwordMismatch: 'رمز عبور و تأیید آن یکسان نیستند',
+    passwordResetSuccess: 'رمز عبور با موفقیت تغییر یافت',
+    passwordResetError: 'خطا در تغییر رمز عبور',
+    resetPassword: 'تغییر رمز عبور',
+    resetting: 'در حال تغییر...',
+
+    // Register
+    register: 'ثبت‌نام',
+
+    // Common
+    or: 'یا',
+    backToLogin: 'بازگشت به ورود',
+    loading: 'در حال ورود...',
+    defaultCredentials: 'اطلاعات ورود پیش‌فرض',
+    loginDescription: 'لطفاً اطلاعات خود را وارد کنید',
   },
   en: {
     // Header
@@ -205,6 +266,67 @@ const translations = {
     cpu: 'CPU',
     memory: 'Memory',
     network: 'Network',
+
+    // Authentication
+    login: 'Login',
+    logout: 'Logout',
+    username: 'Username',
+    password: 'Password',
+    rememberMe: 'Remember me',
+    forgotPassword: 'Forgot password?',
+    loginSuccess: 'Login successful!',
+    invalidCredentials: 'Invalid username or password',
+    loginError: 'Login error',
+    usernamePlaceholder: 'Enter username',
+    passwordPlaceholder: 'Enter password',
+    role: 'Role',
+    clearanceLevel: 'Clearance Level',
+    lastLogin: 'Last Login',
+    profileSettings: 'Profile Settings',
+
+    // OTP
+    otpLogin: 'Login with OTP',
+    otpDescription: 'One-time password will be sent to your number',
+    phone: 'Phone Number',
+    phonePlaceholder: '09123456789',
+    sendOTP: 'Send Code',
+    otpSent: 'OTP sent successfully',
+    otpError: 'Error sending OTP',
+    invalidOTP: 'Invalid OTP code',
+    otpVerifyError: 'Error verifying OTP',
+    otpExpires: 'Time remaining',
+    resendOTP: 'Resend code',
+    loginWithOTP: 'Login with OTP',
+    sending: 'Sending...',
+
+    // 2FA
+    '2faVerification': '2FA Verification',
+    '2faDescription': 'Enter the code from your authenticator app',
+    '2faInstruction': 'Enter the 6-digit code from your authenticator app',
+    invalid2FA: 'Invalid verification code',
+    '2faError': 'Two-factor authentication error',
+
+    // Password Recovery
+    passwordRecovery: 'Password Recovery',
+    recoveryDescription: 'Enter your new password',
+    verificationCode: 'Verification Code',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password',
+    passwordMismatch: 'Passwords do not match',
+    passwordResetSuccess: 'Password changed successfully',
+    passwordResetError: 'Error changing password',
+    resetPassword: 'Reset Password',
+    resetting: 'Resetting...',
+
+    // Register
+    register: 'Register',
+
+    // Common
+    or: 'or',
+    backToLogin: 'Back to login',
+    loading: 'Loading...',
+    defaultCredentials: 'Default Credentials',
+    loginDescription: 'Please enter your credentials',
   },
 };
 
