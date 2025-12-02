@@ -1,13 +1,8 @@
 import { motion } from 'motion/react';
 import { CheckCircle2, XCircle, AlertCircle, Clock } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 
-interface Activity {
-    id: number;
-    type: 'success' | 'error' | 'warning' | 'pending';
-    message: string;
-    timestamp: string;
-}
+import { Activity } from '../types';
 
 interface ActivityTimelineProps {
     activities: Activity[];

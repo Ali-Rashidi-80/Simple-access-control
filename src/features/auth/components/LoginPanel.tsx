@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useAppSettings } from '../contexts/AppSettingsContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
 import { OTPInput } from './OTPInput';
 import {
     X, Mail, Lock, User, Phone, Key, ArrowLeft, ArrowRight,

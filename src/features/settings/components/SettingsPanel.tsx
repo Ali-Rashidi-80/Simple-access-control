@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Shield, Fingerprint, AlertOctagon, Clock, Terminal } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 import { useAppSettings } from '../contexts/AppSettingsContext';
 import {
   Select,
@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
+} from '../../../components/ui/select';
 
 export function SettingsPanel() {
   const { t } = useLanguage();

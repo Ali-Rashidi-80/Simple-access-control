@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
-import { useAuth } from '../contexts/AuthContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../../auth/contexts/AuthContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 import { UserAvatar } from './UserAvatar';
 import { LogOut, Settings, User, Clock, ChevronDown } from 'lucide-react';
 

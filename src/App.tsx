@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { AppSettingsProvider, useAppSettings } from './contexts/AppSettingsContext';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { Sidebar } from './components/Sidebar';
-import { BottomNavigation } from './components/BottomNavigation';
-import { LiquidUnlockButton } from './components/LiquidUnlockButton';
-import { StatsCard } from './components/StatsCard';
-import { LogFeedInteractive } from './components/LogFeedInteractive';
-import { LanguageSwitcher } from './components/LanguageSwitcher';
-import { ThemeSwitcher } from './components/ThemeSwitcher';
-import { SettingsPanel } from './components/SettingsPanel';
-import { ActivityTimeline } from './components/ActivityTimeline';
-import { UserProfile } from './components/UserProfile';
-import { ProfileSettings } from './components/ProfileSettings';
-import { LoginPanel } from './components/LoginPanel';
+import { AuthProvider, useAuth } from './features/auth/contexts/AuthContext';
+import { AppSettingsProvider, useAppSettings } from './features/settings/contexts/AppSettingsContext';
+import { Sidebar } from './layouts/Sidebar';
+import { BottomNavigation } from './layouts/BottomNavigation';
+import { LiquidUnlockButton } from './features/auth/components/LiquidUnlockButton';
+import { StatsCard } from './features/dashboard/components/StatsCard';
+import { LogFeedInteractive } from './features/logs/components/LogFeedInteractive';
+import { LanguageSwitcher } from './features/settings/components/LanguageSwitcher';
+import { ThemeSwitcher } from './features/settings/components/ThemeSwitcher';
+import { SettingsPanel } from './features/settings/components/SettingsPanel';
+import { ActivityTimeline } from './features/dashboard/components/ActivityTimeline';
+import { UserProfile } from './features/user/components/UserProfile';
+import { ProfileSettings } from './features/settings/components/ProfileSettings';
+import { LoginPanel } from './features/auth/components/LoginPanel';
 import { Thermometer, Droplets, Activity, Users } from 'lucide-react';
 
 function AppContent() {

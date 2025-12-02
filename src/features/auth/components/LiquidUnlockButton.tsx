@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Lock, Check, Shield, AlertTriangle } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useAppSettings } from '../contexts/AppSettingsContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
 
 interface LiquidUnlockButtonProps {
   onUnlock: (isDuressMode?: boolean) => void;

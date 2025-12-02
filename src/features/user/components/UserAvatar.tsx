@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { useAppSettings } from '../contexts/AppSettingsContext';
+import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
 
 interface UserAvatarProps {
     src?: string;

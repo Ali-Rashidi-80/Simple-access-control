@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { useAuth } from '../contexts/AuthContext';
-import { useLanguage } from '../contexts/LanguageContext';
-import { UserAvatar } from './UserAvatar';
+import { useAuth } from '../../auth/contexts/AuthContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import { UserAvatar } from '../../user/components/UserAvatar';
 import { User, Mail, Shield, Key, Save, Camera } from 'lucide-react';
 
 export function ProfileSettings() {

@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Palette, Monitor, Terminal, Sun } from 'lucide-react';
+import { Monitor, Terminal } from 'lucide-react';
 import { useAppSettings, Theme } from '../contexts/AppSettingsContext';
 
 export function ThemeSwitcher() {

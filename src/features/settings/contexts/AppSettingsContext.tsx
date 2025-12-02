@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 
 export type Theme = 'neon' | 'matrix' | 'light';
 

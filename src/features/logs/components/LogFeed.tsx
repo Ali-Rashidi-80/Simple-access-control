@@ -1,20 +1,3 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, XCircle, Clock } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
-
-interface Log {
-    id: number;
-    user: string;
-    action: string;
-    timestamp: string;
-    status: 'success' | 'error' | 'pending';
-}
-
-interface LogFeedProps {
-    logs: Log[];
-    compact?: boolean;
-}
-
 export function LogFeed({ logs, compact = false }: LogFeedProps) {
     const { t, isRTL } = useLanguage();
 

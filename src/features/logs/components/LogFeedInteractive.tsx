@@ -1,20 +1,10 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, XCircle, Clock, MapPin, Smartphone, X, SortDesc, Search, RefreshCw, Activity, AlertTriangle, ChevronDown } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useAppSettings } from '../contexts/AppSettingsContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
 
-interface Log {
-  id: number;
-  user: string;
-  action: string;
-  timestamp: string;
-  status: 'success' | 'error' | 'pending';
-  avatar?: string;
-  location?: string;
-  device?: string;
-  isDuress?: boolean;
-}
+import { Log } from '../types';
 
 interface LogFeedInteractiveProps {
   logs: Log[];

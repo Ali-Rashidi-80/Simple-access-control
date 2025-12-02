@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Languages } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
