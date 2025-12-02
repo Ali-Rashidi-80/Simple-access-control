@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useAppSettings } from '../contexts/AppSettingsContext';
 
 interface UserAvatarProps {
     src?: string;
@@ -7,9 +8,12 @@ interface UserAvatarProps {
     status?: 'online' | 'offline' | 'busy';
     initials?: string;
     onClick?: () => void;
+    className?: string;
 }
 
-export function UserAvatar({ src, alt, size = 'medium', status, initials, onClick }: UserAvatarProps) {
+export function UserAvatar({ src, alt, size = 'medium', status, initials, onClick, className = '' }: UserAvatarProps) {
+    const { theme } = useAppSettings();
+
     const sizes = {
         small: 'w-8 h-8',
         medium: 'w-10 h-10',
@@ -28,6 +32,14 @@ export function UserAvatar({ src, alt, size = 'medium', status, initials, onClic
         busy: '#FF2E2E',
     };
 
+    // Theme-aware text color for initials
+    const getInitialsTextColor = () => {
+        if (theme === 'matrix') {
+            return '#000000'; // Black for Matrix theme for better readability
+        }
+        return '#050505'; // Dark color for other themes
+    };
+
     const getInitials = () => {
         if (initials) return initials;
         if (alt) {
@@ -43,7 +55,7 @@ export function UserAvatar({ src, alt, size = 'medium', status, initials, onClic
 
     return (
         <motion.div
-            className={`relative ${sizes[size]} ${onClick ? 'cursor-pointer' : ''}`}
+            className={`relative ${sizes[size]} ${onClick ? 'cursor-pointer' : ''} ${className}`}
             whileHover={onClick ? { scale: 1.05 } : {}}
             whileTap={onClick ? { scale: 0.95 } : {}}
             onClick={onClick}
@@ -57,7 +69,10 @@ export function UserAvatar({ src, alt, size = 'medium', status, initials, onClic
                 {src ? (
                     <img src={src} alt={alt} className="w-full h-full object-cover" />
                 ) : (
-                    <div className={`${textSizes[size]} font-bold text-[#050505]`}>
+                    <div
+                        className={`${textSizes[size]} font-bold`}
+                        style={{ color: getInitialsTextColor() }}
+                    >
                         {getInitials()}
                     </div>
                 )}

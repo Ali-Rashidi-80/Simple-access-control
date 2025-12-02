@@ -116,13 +116,14 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                     initials={user?.fullName?.slice(0, 2)}
                     status={user?.isOnline ? 'online' : 'offline'}
                     size="medium"
+                    className="mr-1"
                 />
                 <div className="hidden md:block text-right" style={{ pointerEvents: 'none' }}>
-                    <div className="text-xs font-bold text-white leading-tight">{user?.fullName}</div>
-                    <div className="text-[10px] text-white/60 leading-tight">@{user?.username}</div>
+                    <div className="text-[11px] font-bold text-white leading-tight">{user?.fullName}</div>
+                    <div className="text-[9px] text-white/60 leading-tight">@{user?.username}</div>
                 </div>
                 <ChevronDown
-                    className={`w-4 h-4 text-white/50 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                    className={`w-3 h-3 text-white/50 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
                     style={{ pointerEvents: 'none' }}
                 />
             </button>
