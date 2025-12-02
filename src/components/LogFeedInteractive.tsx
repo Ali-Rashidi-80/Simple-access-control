@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, XCircle, Clock, User, MapPin, Smartphone, X, Filter, SortAsc, Search, RefreshCw } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, MapPin, Smartphone, X, SortDesc, Search, RefreshCw, Activity, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppSettings } from '../contexts/AppSettingsContext';
 
@@ -29,11 +29,18 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Filtered and sorted logs
+  const stats = useMemo(() => {
+    const total = logs.length;
+    const success = logs.filter(l => l.status === 'success').length;
+    const errors = logs.filter(l => l.status === 'error').length;
+    const pending = logs.filter(l => l.status === 'pending').length;
+    const duress = logs.filter(l => l.isDuress).length;
+    return { total, success, errors, pending, duress };
+  }, [logs]);
+
   const filteredLogs = useMemo(() => {
     let result = [...logs];
 
-    // Apply search filter
     if (searchQuery) {
       result = result.filter(log =>
         log.user.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -42,481 +49,402 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
       );
     }
 
-    // Apply status filter
     if (filterStatus !== 'all') {
       result = result.filter(log => log.status === filterStatus);
     }
 
-    // Apply sorting
-    result.sort((a, b) => {
-      if (sortBy === 'newest') {
-        return b.id - a.id;
-      } else {
-        return a.id - b.id;
-      }
-    });
-
+    result.sort((a, b) => sortBy === 'newest' ? b.id - a.id : a.id - b.id);
     return result;
   }, [logs, filterStatus, sortBy, searchQuery]);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'success':
-        return <CheckCircle className="w-5 h-5 text-[#00FF9D]" />;
-      case 'error':
-        return <XCircle className="w-5 h-5 text-[#FF2E2E]" />;
-      case 'pending':
-        return <Clock className="w-5 h-5 text-[#FFB800]" />;
-      default:
-        return <CheckCircle className="w-5 h-5 text-[#00FF9D]" />;
-    }
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'success':
-        return '#00FF9D';
-      case 'error':
-        return '#FF2E2E';
-      case 'pending':
-        return '#FFB800';
-      default:
-        return '#00F0FF';
+      case 'success': return theme === 'matrix' ? '#00FF00' : '#00FF9D';
+      case 'error': return '#FF2E2E';
+      case 'pending': return '#FFB800';
+      default: return theme === 'matrix' ? '#00FF00' : '#00F0FF';
     }
   };
 
   const getAvatarColor = (name: string) => {
-    const colors = ['#00F0FF', '#00FF9D', '#a855f7', '#FFB800', '#FF2E2E'];
-    const index = name.length % colors.length;
-    return colors[index];
+    const colors = theme === 'matrix'
+      ? ['#00FF00', '#00DD00', '#00BB00', '#009900']
+      : ['#00F0FF', '#00FF9D', '#a855f7', '#FFB800'];
+    return colors[name.length % colors.length];
   };
 
+  const primaryColor = theme === 'matrix' ? '#00FF00' : '#00F0FF';
+
   return (
-    <>
-      {/* Premium Control Panel */}
+    <div className="space-y-4 overflow-x-hidden pb-24">
+      {/* Grid Statistics - Fixed Layout */}
       {!compact && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-3xl mb-5"
-        >
-          {/* Gradient Border Effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00F0FF]/20 via-[#00FF9D]/20 to-[#a855f7]/20 rounded-3xl"
-            style={{
-              background: theme === 'matrix'
-                ? 'linear-gradient(90deg, rgba(0,255,0,0.2), rgba(0,255,0,0.1), rgba(0,255,0,0.2))'
-                : undefined
-            }}
-          />
-
-          <div className="relative glass-card backdrop-blur-2xl border border-white/20 rounded-3xl p-5 m-[1px]"
-            style={{
-              background: theme === 'matrix'
-                ? 'linear-gradient(135deg, rgba(0, 20, 0, 0.6), rgba(0, 10, 0, 0.4))'
-                : 'linear-gradient(135deg, rgba(10, 10, 10, 0.8), rgba(20, 20, 20, 0.6))',
-            }}
-          >
-            {/* Title Bar */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#00F0FF] to-[#00FF9D]"
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+          {[
+            { key: 'total', label: t('total') || 'total', value: stats.total, icon: Activity, color: primaryColor },
+            { key: 'success', label: t('success') || 'موفق', value: stats.success, icon: CheckCircle, color: '#00FF9D' },
+            { key: 'error', label: t('error') || 'خطا', value: stats.errors, icon: XCircle, color: '#FF2E2E' },
+            { key: 'pending', label: t('pending') || 'در انتظار', value: stats.pending, icon: Clock, color: '#FFB800' },
+            { key: 'duress', label: t('duress') || 'duress', value: stats.duress, icon: AlertTriangle, color: '#FF2E2E' },
+          ].map((stat) => (
+            <motion.div
+              key={stat.key}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex items-center gap-2 md:gap-3 rounded-2xl px-3 md:px-4 py-2.5 md:py-3 border border-white/5"
+              style={{
+                background: theme === 'matrix'
+                  ? 'rgba(0, 15, 0, 0.3)'
+                  : 'rgba(10, 10, 20, 0.3)',
+              }}
+            >
+              <div
+                className="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{
-                  background: theme === 'matrix' ? 'linear-gradient(to bottom, #00FF00, #00DD00)' : undefined
+                  background: `${stat.color}15`,
+                  border: `1px solid ${stat.color}30`,
                 }}
-              />
-              <h3 className="text-sm font-bold text-white/90 tracking-wide">
-                {t('filterControls') || 'کنترل‌های فیلتر'}
-              </h3>
-              <div className="flex-1" />
-              <motion.div
-                className="text-xs text-white/40 font-mono"
-                animate={{ opacity: [0.4, 0.7, 0.4] }}
-                transition={{ duration: 2, repeat: Infinity }}
               >
-                {filteredLogs.length}/{logs.length}
-              </motion.div>
-            </div>
-
-            <div className="space-y-4">
-              {/* Search Input - Enhanced */}
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00F0FF]/10 to-[#00FF9D]/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: theme === 'matrix' ? 'linear-gradient(to right, rgba(0,255,0,0.1), rgba(0,200,0,0.1))' : undefined
-                  }}
-                />
-                <div className="relative flex items-center">
-                  <Search className={`absolute w-5 h-5 text-white/50 transition-colors group-focus-within:text-[#00F0FF]`}
-                    style={{
-                      [isRTL ? 'right' : 'left']: '16px',
-                      color: theme === 'matrix' ? '#00FF00' : undefined
-                    }}
-                  />
-                  <input
-                    type="text"
-                    placeholder={t('searchLogs') || 'جستجو در گزارش‌ها...'}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`w-full bg-black/20 border-2 border-white/10 rounded-2xl ${isRTL ? 'pr-12 pl-12' : 'pl-12 pr-12'} py-3.5 text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#00F0FF]/50 focus:bg-black/30 transition-all`}
-                    style={{
-                      fontFamily: isRTL ? 'Vazirmatn, sans-serif' : 'inherit',
-                      borderColor: theme === 'matrix' && searchQuery ? 'rgba(0, 255, 0, 0.5)' : undefined,
-                    }}
-                  />
-                  {searchQuery && (
-                    <motion.button
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      onClick={() => setSearchQuery('')}
-                      className="absolute w-7 h-7 rounded-full bg-gradient-to-br from-[#FF2E2E]/20 to-[#FF2E2E]/10 border border-[#FF2E2E]/30 hover:from-[#FF2E2E]/30 hover:to-[#FF2E2E]/20 flex items-center justify-center transition-all group"
-                      style={{ [isRTL ? 'left' : 'right']: '12px' }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <X className="w-4 h-4 text-[#FF2E2E]" />
-                    </motion.button>
-                  )}
-                </div>
+                <stat.icon className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color: stat.color }} />
               </div>
-
-              {/* Filters Row */}
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Status Filter Pills */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs text-white/50 font-medium">{t('status') || 'وضعیت'}:</span>
-                  {(['all', 'success', 'error', 'pending'] as const).map((status) => {
-                    const isActive = filterStatus === status;
-                    const colors = {
-                      all: { bg: '#00F0FF', text: '#00F0FF' },
-                      success: { bg: '#00FF9D', text: '#00FF9D' },
-                      error: { bg: '#FF2E2E', text: '#FF2E2E' },
-                      pending: { bg: '#FFB800', text: '#FFB800' },
-                    };
-                    const matrixColor = '#00FF00';
-
-                    return (
-                      <motion.button
-                        key={status}
-                        onClick={() => setFilterStatus(status)}
-                        className="relative px-4 py-2 rounded-xl text-xs font-bold transition-all overflow-hidden"
-                        style={{
-                          background: isActive
-                            ? theme === 'matrix'
-                              ? `linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 255, 0, 0.1))`
-                              : `linear-gradient(135deg, ${colors[status].bg}20, ${colors[status].bg}10)`
-                            : 'rgba(255, 255, 255, 0.03)',
-                          border: `2px solid ${isActive ? (theme === 'matrix' ? matrixColor : colors[status].bg) + '40' : 'rgba(255, 255, 255, 0.1)'}`,
-                          color: isActive ? (theme === 'matrix' ? matrixColor : colors[status].text) : 'rgba(255, 255, 255, 0.6)',
-                          boxShadow: isActive ? `0 0 20px ${theme === 'matrix' ? matrixColor : colors[status].bg}30` : 'none',
-                        }}
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        {isActive && (
-                          <motion.div
-                            className="absolute inset-0"
-                            style={{
-                              background: theme === 'matrix'
-                                ? `radial-gradient(circle at center, ${matrixColor}15, transparent)`
-                                : `radial-gradient(circle at center, ${colors[status].bg}15, transparent)`,
-                            }}
-                            animate={{
-                              scale: [1, 1.5, 1],
-                              opacity: [0.5, 0.2, 0.5],
-                            }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                          />
-                        )}
-                        <span className="relative z-10">
-                          {status === 'all' ? (t('all') || 'همه') : t(status)}
-                        </span>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-
-                {/* Divider */}
-                <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
-
-                {/* Sort Control - Enhanced */}
-                <motion.button
-                  onClick={() => setSortBy(sortBy === 'newest' ? 'oldest' : 'newest')}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border-2 border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all"
-                  style={{
-                    color: theme === 'matrix' ? '#00FF00' : '#00F0FF',
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <SortAsc className={`w-4 h-4 transition-transform duration-300 ${sortBy === 'oldest' ? 'rotate-180' : ''}`} />
-                  {sortBy === 'newest' ? (t('newest') || 'جدید→قدیم') : (t('oldest') || 'قدیم→جدید')}
-                </motion.button>
-
-                {/* Reset Button - Enhanced */}
-                <motion.button
-                  onClick={() => {
-                    setSearchQuery('');
-                    setFilterStatus('all');
-                    setSortBy('newest');
-                  }}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium border-2 border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all ml-auto"
-                  whileHover={{ scale: 1.05, rotate: 180 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  {t('reset') || 'بازنشانی'}
-                </motion.button>
+              <div className="flex-1 min-w-0">
+                <p className="text-[8px] md:text-[9px] text-white/30 uppercase tracking-wider mb-0.5 truncate">{stat.label}</p>
+                <p className="text-lg md:text-xl font-bold leading-none" style={{ color: stat.color }}>{stat.value}</p>
               </div>
-            </div>
-          </div>
-        </motion.div>
+            </motion.div>
+          ))}
+        </div>
       )}
 
-      <div className={`space-y-3 ${compact ? '' : 'max-h-[600px] overflow-y-auto pr-2 custom-scrollbar'}`}>
-        <AnimatePresence mode="popLayout">
-          {filteredLogs.map((log, index) => {
+      {/* Fixed Search Field - Proper Spacing */}
+      {!compact && (
+        <div className="relative">
+          <Search
+            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none z-10"
+            style={{
+              [isRTL ? 'right' : 'left']: '16px',
+              color: 'rgba(255,255,255,0.3)',
+            }}
+          />
+          <input
+            type="text"
+            placeholder="searchLogs"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={`w-full bg-black/20 border border-white/10 rounded-2xl ${isRTL ? 'pr-14 pl-12' : 'pl-14 pr-12'} py-3.5 text-sm text-white/80 placeholder-white/20 focus:outline-none focus:border-white/20 focus:bg-black/30 transition-all`}
+            style={{
+              fontFamily: 'monospace',
+            }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-white/10 transition-all"
+              style={{ [isRTL ? 'left' : 'right']: '14px' }}
+            >
+              <X className="w-3.5 h-3.5 text-white/40" />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Counter + Filters Row */}
+      {!compact && (
+        <div className="flex items-center gap-3">
+          {/* Smart Counter */}
+          <div className="flex items-center gap-2 text-sm flex-shrink-0">
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: primaryColor }}
+            />
+            <span className="font-bold" style={{ color: primaryColor }}>
+              {filteredLogs.length}
+            </span>
+            <span className="text-white/20">/</span>
+            <span className="text-white/40">{logs.length}</span>
+          </div>
+
+          {/* Pill Filters - Scrollable */}
+          <div className="flex-1 flex items-center gap-2 overflow-x-auto hide-scrollbar">
+            {(['all', 'success', 'error', 'pending'] as const).map((status) => {
+              const isActive = filterStatus === status;
+              const colors = {
+                all: primaryColor,
+                success: '#00FF9D',
+                error: '#FF2E2E',
+                pending: '#FFB800',
+              };
+              const labels = {
+                all: t('all') || 'all',
+                success: t('success') || 'success',
+                error: t('error') || 'error',
+                pending: t('pending') || 'pending',
+              };
+
+              return (
+                <button
+                  key={status}
+                  onClick={() => setFilterStatus(status)}
+                  className="px-4 py-2 rounded-full text-xs font-medium transition-all whitespace-nowrap flex-shrink-0"
+                  style={{
+                    background: isActive ? colors[status] : 'rgba(255, 255, 255, 0.05)',
+                    color: isActive ? '#000' : 'rgba(255, 255, 255, 0.4)',
+                    border: `1px solid ${isActive ? colors[status] : 'rgba(255, 255, 255, 0.1)'}`,
+                  }}
+                >
+                  {labels[status]}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Icon Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => setSortBy(sortBy === 'newest' ? 'oldest' : 'newest')}
+              className="w-9 h-9 rounded-xl flex items-center justify-center border border-white/10 bg-black/20 hover:bg-black/30 transition-all"
+              title={sortBy === 'newest' ? 'Oldest First' : 'Newest First'}
+            >
+              <SortDesc className={`w-4 h-4 text-white/50 transition-transform ${sortBy === 'oldest' ? 'rotate-180' : ''}`} />
+            </button>
+
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setFilterStatus('all');
+                setSortBy('newest');
+              }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center border border-white/10 bg-black/20 hover:bg-black/30 transition-all"
+              title="Reset Filters"
+            >
+              <RefreshCw className="w-4 h-4 text-white/50" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Minimal Clean Cards with Bottom Padding */}
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-3 ${compact ? '' : 'max-h-[550px] overflow-y-auto pr-1 custom-scrollbar'}`}>
+        <AnimatePresence mode="sync">
+          {filteredLogs.map((log) => {
             const statusColor = getStatusColor(log.status);
             const avatarColor = getAvatarColor(log.user);
 
             return (
               <motion.div
                 key={log.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 25,
-                  delay: index * 0.05,
-                }}
-                className="glass-card backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all duration-300 group relative overflow-hidden cursor-pointer"
-                whileHover={{ scale: 1.02 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 40 }}
                 onClick={() => setSelectedLog(log)}
+                className="group cursor-pointer"
               >
-                {/* Glare Effect on Hover */}
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  className="relative rounded-2xl p-4 border border-white/5 hover:border-white/10 transition-all"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%)',
-                    pointerEvents: 'none',
+                    background: theme === 'matrix'
+                      ? 'linear-gradient(135deg, rgba(0, 20, 0, 0.2), rgba(0, 10, 0, 0.4))'
+                      : 'linear-gradient(135deg, rgba(10, 10, 20, 0.2), rgba(5, 5, 15, 0.4))',
                   }}
-                />
-
-                {/* Status Color Bar */}
-                <motion.div
-                  className="absolute top-0 bottom-0 w-1 rounded-full"
-                  style={{
-                    [isRTL ? 'right' : 'left']: 0,
-                    backgroundColor: statusColor,
-                    boxShadow: `0 0 10px ${statusColor}`,
-                    [isRTL ? 'borderTopLeftRadius' : 'borderTopRightRadius']: '9999px',
-                    [isRTL ? 'borderBottomLeftRadius' : 'borderBottomRightRadius']: '9999px',
-                  }}
-                  initial={{ scaleY: 0 }}
-                  animate={{ scaleY: 1 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 + 0.2 }}
-                />
-
-                <div className={`relative z-10 flex items-center gap-4 ${isRTL ? 'mr-2' : 'ml-2'}`}>
-                  {/* Avatar */}
-                  <motion.div
-                    className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-white relative overflow-hidden"
-                    style={{
-                      background: `linear-gradient(135deg, ${avatarColor} 0%, ${avatarColor}80 100%)`,
-                      boxShadow: `0 0 20px ${avatarColor}40`,
-                    }}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    {log.avatar ? (
-                      <img src={log.avatar} alt={log.user} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-lg">{log.user.charAt(0)}</span>
-                    )}
-
-                    {/* Status Badge on Avatar */}
-                    <div
-                      className="absolute bottom-0 w-3 h-3 rounded-full border-2 border-[#050505]"
-                      style={{
-                        [isRTL ? 'left' : 'right']: 0,
-                        backgroundColor: statusColor,
-                        boxShadow: `0 0 8px ${statusColor}`,
-                      }}
-                    />
-                  </motion.div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white/90 truncate">{log.user}</p>
-                        <p className="text-white/50 text-sm mt-0.5">{t(log.action)}</p>
-                        {/* Duress Alert - Repositioned below user info */}
-                        {log.isDuress && (
-                          <motion.div
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold mt-1 max-w-fit"
-                            style={{
-                              backgroundColor: 'rgba(255, 46, 46, 0.15)',
-                              border: '1px solid rgba(255, 46, 46, 0.4)',
-                              color: '#FF2E2E',
-                            }}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 }}
-                          >
-                            <span>⚠️</span>
-                            <span className="whitespace-nowrap">{t('duressAlert') || 'اجبار'}</span>
-                          </motion.div>
+                >
+                  {/* Header */}
+                  <div className="flex items-start gap-3 mb-3">
+                    {/* Avatar */}
+                    <div className="relative flex-shrink-0">
+                      <div
+                        className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+                        style={{
+                          background: `linear-gradient(135deg, ${avatarColor}DD, ${avatarColor})`,
+                        }}
+                      >
+                        {log.avatar ? (
+                          <img src={log.avatar} alt={log.user} className="w-full h-full object-cover rounded-xl" />
+                        ) : (
+                          <span>{log.user.charAt(0)}</span>
                         )}
                       </div>
-                      <div className="flex-shrink-0">
-                        <span className="text-white/40 text-xs tracking-wider">{log.timestamp}</span>
+
+                      {/* Status Dot */}
+                      <div
+                        className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center"
+                        style={{
+                          backgroundColor: statusColor,
+                          borderColor: theme === 'matrix' ? '#000' : '#0a0a14',
+                        }}
+                      >
+                        {log.status === 'success' && <CheckCircle className="w-2.5 h-2.5" />}
+                        {log.status === 'error' && <XCircle className="w-2.5 h-2.5" />}
+                        {log.status === 'pending' && <Clock className="w-2.5 h-2.5" />}
                       </div>
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-0.5">
+                        <h4 className="text-sm font-bold text-white truncate">
+                          {log.user}
+                        </h4>
+                        {/* Duress Badge - Better Position */}
+                        {log.isDuress && (
+                          <div
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-md flex-shrink-0"
+                            style={{
+                              background: 'rgba(255, 46, 46, 0.2)',
+                              border: '1px solid rgba(255, 46, 46, 0.4)',
+                            }}
+                          >
+                            <AlertTriangle className="w-3 h-3 text-red-400" />
+                            <span className="text-[9px] font-bold text-red-400">duress</span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs mb-1 truncate" style={{ color: statusColor }}>
+                        {t(log.action)}
+                      </p>
+                      <p className="text-[10px] font-mono text-white/30">
+                        {log.timestamp}
+                      </p>
                     </div>
                   </div>
 
-                  {/* Status Icon */}
-                  <motion.div
-                    className="flex-shrink-0"
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    {getStatusIcon(log.status)}
-                  </motion.div>
-                </div>
+                  {/* Meta Info */}
+                  <div className="flex items-center gap-4 text-[11px] text-white/40">
+                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                      <MapPin className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{log.location || 'اتاق سرور V-B آلفا ۷'}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <Smartphone className="w-3 h-3" />
+                      <span className="truncate">{log.device || 'Web App'}</span>
+                    </div>
+                  </div>
 
-                {/* Animated Accent */}
-                <motion.div
-                  className="absolute -top-10 w-32 h-32 rounded-full blur-3xl opacity-10"
-                  style={{
-                    [isRTL ? 'left' : 'right']: -40,
-                    backgroundColor: statusColor,
-                  }}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.1, 0.15, 0.1],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: index * 0.2,
-                  }}
-                />
+                  {/* Subtle Bottom Accent */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-[2px] rounded-b-2xl opacity-50"
+                    style={{
+                      background: `linear-gradient(90deg, ${statusColor}, transparent)`,
+                    }}
+                  />
+                </div>
               </motion.div>
             );
           })}
         </AnimatePresence>
       </div>
 
-      {/* Log Detail Modal */}
+      {/* Minimal Modal */}
       <AnimatePresence>
         {selectedLog && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/85 backdrop-blur-2xl z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedLog(null)}
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="glass-card backdrop-blur-xl border border-white/20 rounded-3xl p-8 max-w-md w-full relative"
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              className="relative max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
-              style={{
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-              }}
             >
-              {/* Close Button */}
-              <motion.button
-                className="absolute top-4 w-8 h-8 rounded-full glass-card border border-white/10 flex items-center justify-center hover:border-[#FF2E2E]/50 transition-colors"
+              <div
+                className="relative rounded-3xl border border-white/10 p-6"
                 style={{
-                  [isRTL ? 'left' : 'right']: 16,
+                  background: theme === 'matrix'
+                    ? 'linear-gradient(135deg, rgba(0, 25, 0, 0.95), rgba(0, 15, 0, 0.98))'
+                    : 'linear-gradient(135deg, rgba(15, 15, 30, 0.95), rgba(10, 10, 20, 0.98))',
+                  backdropFilter: 'blur(40px)',
                 }}
-                onClick={() => setSelectedLog(null)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
               >
-                <X className="w-4 h-4 text-white/60" />
-              </motion.button>
-
-              {/* Avatar */}
-              <div className="flex justify-center mb-6">
-                <motion.div
-                  className="w-24 h-24 rounded-full flex items-center justify-center text-white relative overflow-hidden"
-                  style={{
-                    background: `linear-gradient(135deg, ${getAvatarColor(selectedLog.user)} 0%, ${getAvatarColor(selectedLog.user)}80 100%)`,
-                    boxShadow: `0 0 40px ${getAvatarColor(selectedLog.user)}60`,
-                  }}
-                  animate={{
-                    scale: [1, 1.05, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
+                <button
+                  className="absolute top-5 w-9 h-9 rounded-xl flex items-center justify-center border border-white/10 hover:bg-white/5 transition-all"
+                  style={{ [isRTL ? 'left' : 'right']: 20 }}
+                  onClick={() => setSelectedLog(null)}
                 >
-                  {selectedLog.avatar ? (
-                    <img src={selectedLog.avatar} alt={selectedLog.user} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-4xl">{selectedLog.user.charAt(0)}</span>
-                  )}
-                </motion.div>
-              </div>
+                  <X className="w-4 h-4 text-white/50" />
+                </button>
 
-              {/* User Info */}
-              <h3 className="text-center text-xl text-white/90 mb-2">{selectedLog.user}</h3>
-              <p className="text-center text-[#00F0FF] mb-6">{t(selectedLog.action)}</p>
-
-              {/* Details */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 rounded-xl glass-card border border-white/5">
-                  <Clock className="w-5 h-5 text-[#00F0FF]" />
-                  <div className="flex-1">
-                    <p className="text-white/50 text-xs">{t('timestamp')}</p>
-                    <p className="text-white/90">{selectedLog.timestamp}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3 rounded-xl glass-card border border-white/5">
-                  <MapPin className="w-5 h-5 text-[#00FF9D]" />
-                  <div className="flex-1">
-                    <p className="text-white/50 text-xs">{t('location')}</p>
-                    <p className="text-white/90">{selectedLog.location || t('serverRoom')}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3 rounded-xl glass-card border border-white/5">
-                  <Smartphone className="w-5 h-5 text-[#a855f7]" />
-                  <div className="flex-1">
-                    <p className="text-white/50 text-xs">{t('device')}</p>
-                    <p className="text-white/90">{selectedLog.device || 'Mobile App'}</p>
-                  </div>
-                </div>
-
-                {selectedLog.isDuress && (
-                  <motion.div
-                    className="p-4 rounded-xl border"
+                <div className="flex justify-center mb-5">
+                  <div
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-3xl font-bold"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(255, 46, 46, 0.2) 0%, rgba(255, 46, 46, 0.05) 100%)',
-                      borderColor: 'rgba(255, 46, 46, 0.3)',
+                      background: `linear-gradient(135deg, ${getAvatarColor(selectedLog.user)}, ${getAvatarColor(selectedLog.user)}DD)`,
                     }}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
                   >
-                    <p className="text-[#FF2E2E] flex items-center gap-2">
-                      ⚠️ {t('duressAlertDetailed')}
-                    </p>
-                  </motion.div>
-                )}
+                    {selectedLog.avatar ? (
+                      <img src={selectedLog.avatar} alt={selectedLog.user} className="w-full h-full object-cover rounded-2xl" />
+                    ) : (
+                      <span>{selectedLog.user.charAt(0)}</span>
+                    )}
+                  </div>
+                </div>
+
+                <h3 className="text-center text-xl font-bold text-white mb-1">{selectedLog.user}</h3>
+                <p className="text-center text-sm mb-6" style={{ color: getStatusColor(selectedLog.status) }}>
+                  {t(selectedLog.action)}
+                </p>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                    <Clock className="w-5 h-5 flex-shrink-0" style={{ color: primaryColor }} />
+                    <div className="flex-1">
+                      <p className="text-[10px] text-white/30 mb-0.5">{t('timestamp') || 'زمان'}</p>
+                      <p className="text-sm text-white font-medium">{selectedLog.timestamp}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                    <MapPin className="w-5 h-5 flex-shrink-0" style={{ color: '#00FF9D' }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] text-white/30 mb-0.5">{t('location') || 'مکان'}</p>
+                      <p className="text-sm text-white font-medium truncate">{selectedLog.location || 'اتاق سرور V-B آلفا ۷'}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                    <Smartphone className="w-5 h-5 flex-shrink-0" style={{ color: '#a855f7' }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] text-white/30 mb-0.5">{t('device') || 'دستگاه'}</p>
+                      <p className="text-sm text-white font-medium truncate">{selectedLog.device || 'Web App'}</p>
+                    </div>
+                  </div>
+
+                  {selectedLog.isDuress && (
+                    <div
+                      className="p-4 rounded-xl border"
+                      style={{
+                        background: 'rgba(255, 46, 46, 0.1)',
+                        borderColor: 'rgba(255, 46, 46, 0.3)',
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                        <p className="text-sm font-bold text-red-400">
+                          {t('duressAlert') || 'هشدار ورود اجباری'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </div>
   );
 }
