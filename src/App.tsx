@@ -13,6 +13,7 @@ import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { SettingsPanel } from './components/SettingsPanel';
 import { ActivityTimeline } from './components/ActivityTimeline';
 import { UserProfile } from './components/UserProfile';
+import { ProfileSettings } from './components/ProfileSettings';
 import { LoginPanel } from './components/LoginPanel';
 import { Thermometer, Droplets, Activity, Users } from 'lucide-react';
 
@@ -138,7 +139,7 @@ function AppContent() {
       <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''}`}>
         {/* Aurora Background (Neon Theme) */}
         {theme === 'neon' && (
-          <div className="fixed inset-0 opacity-30">
+          <div className="fixed inset-0 opacity-30 pointer-events-none">
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
             <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00FF9D] rounded-full blur-[150px] animate-aurora-2" />
             <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-500 rounded-full blur-[150px] animate-aurora-3" />
@@ -304,6 +305,9 @@ function AppContent() {
       case 'settings':
         return <SettingsPanel />;
 
+      case 'profile':
+        return <ProfileSettings />;
+
       default:
         return null;
     }
@@ -313,7 +317,7 @@ function AppContent() {
     <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''}`}>
       {/* Aurora Background (Neon Theme) */}
       {theme === 'neon' && (
-        <div className="fixed inset-0 opacity-30">
+        <div className="fixed inset-0 opacity-30 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
           <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00FF9D] rounded-full blur-[150px] animate-aurora-2" />
           <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-500 rounded-full blur-[150px] animate-aurora-3" />
@@ -337,7 +341,7 @@ function AppContent() {
       {/* Main Content */}
       <div className={`relative z-10 ${isRTL ? 'md:mr-64' : 'md:ml-64'} transition-all duration-300`}>
         {/* Header */}
-        <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 sticky top-0 z-50">
+        <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 sticky top-0 z-[100]">
           <div className="flex items-center justify-between">
             <div>
               <h1 className={`tracking-wide text-lg md:text-xl font-bold ${theme === 'matrix' ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
@@ -347,7 +351,7 @@ function AppContent() {
             <div className="flex items-center gap-3">
               <ThemeSwitcher />
               <LanguageSwitcher />
-              <UserProfile />
+              <UserProfile onNavigate={setActiveTab} />
             </div>
           </div>
         </header>

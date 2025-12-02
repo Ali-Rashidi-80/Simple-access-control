@@ -200,8 +200,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Logout function
     const logout = () => {
+        console.log('AuthContext: logout called');
         setUser(null);
         localStorage.removeItem('sentry_gate_user');
+        console.log('AuthContext: user set to null');
     };
 
     const value: AuthContextType = {
