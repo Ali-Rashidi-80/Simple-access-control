@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { UserAvatar } from './UserAvatar';
@@ -17,7 +17,6 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Calculate dropdown position
     const getDropdownPosition = () => {
         if (!buttonRef.current) return { top: 0, left: 0, right: 0 };
 
@@ -31,34 +30,19 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
 
     const [dropdownPosition, setDropdownPosition] = useState(getDropdownPosition());
 
-    // Update position when needed
     useEffect(() => {
         if (isDropdownOpen) {
             setDropdownPosition(getDropdownPosition());
         }
 
         const handleResize = () => {
-            if (isDropdownOpen) {
-                setDropdownPosition(getDropdownPosition());
-            }
-        };
-
-        const handleScroll = () => {
-            if (isDropdownOpen) {
-                setDropdownPosition(getDropdownPosition());
-            }
+            if (isDropdownOpen) setDropdownPosition(getDropdownPosition());
         };
 
         window.addEventListener('resize', handleResize);
-        window.addEventListener('scroll', handleScroll, true);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('scroll', handleScroll, true);
-        };
+        return () => window.removeEventListener('resize', handleResize);
     }, [isDropdownOpen, isRTL]);
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         if (!isDropdownOpen) return;
 
@@ -75,7 +59,6 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
             }
         };
 
-        // Delay to prevent immediate closing
         const timeoutId = setTimeout(() => {
             document.addEventListener('mousedown', handleClickOutside, true);
         }, 100);
@@ -93,37 +76,27 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
     };
 
     const handleLogout = (e: React.MouseEvent) => {
-        e.preventDefault();
         e.stopPropagation();
-        console.log('Logout button clicked');
         setIsDropdownOpen(false);
         localStorage.removeItem('sentry_gate_user');
-        setTimeout(() => {
-            window.location.href = '/';
-        }, 100);
+        setTimeout(() => window.location.href = '/', 100);
     };
 
     const handleNavigate = (tab: string) => (e: React.MouseEvent) => {
-        e.preventDefault();
         e.stopPropagation();
         setIsDropdownOpen(false);
         onNavigate?.(tab);
     };
 
     const handleButtonClick = (e: React.MouseEvent) => {
-        e.preventDefault();
         e.stopPropagation();
-        console.log('Button clicked, current state:', isDropdownOpen);
         setIsDropdownOpen(prev => !prev);
     };
 
-    if (!user) {
-        return null;
-    }
+    if (!user) return null;
 
     return (
         <>
-            {/* User Avatar Button */}
             <button
                 ref={buttonRef}
                 className={`
@@ -131,7 +104,7 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                     transition-all duration-300
                     ${isDropdownOpen
                         ? 'bg-white/10 border border-white/20 shadow-[0_0_20px_rgba(0,240,255,0.4)]'
-                        : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)]'
+                        : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20'
                     }
                 `}
                 onClick={handleButtonClick}
@@ -154,12 +127,11 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                 />
             </button>
 
-            {/* Dropdown Menu - Rendered at document.body with maximum z-index */}
             {isDropdownOpen && createPortal(
                 <div
                     ref={dropdownRef}
-                    className="fixed"
                     style={{
+                        position: 'fixed',
                         width: '280px',
                         top: `${dropdownPosition.top}px`,
                         left: dropdownPosition.left !== 'auto' ? `${dropdownPosition.left}px` : 'auto',
@@ -173,29 +145,61 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                         initial={{ opacity: 0, scale: 0.95, y: -10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        transition={{ duration: 0.2 }}
                     >
-                        {/* Glassmorphism Card */}
-                        <div className="relative group">
-                            {/* Animated Gradient Border */}
-                            <div className="absolute -inset-[1px] bg-gradient-to-r from-[#00F0FF] via-[#00FF9D] to-[#00F0FF] rounded-2xl opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-300"
-                                style={{ pointerEvents: 'none' }} />
+                        <div style={{ position: 'relative' }}>
+                            {/* Gradient Border */}
+                            <div style={{
+                                position: 'absolute',
+                                inset: '-1px',
+                                background: 'linear-gradient(90deg, #00F0FF, #00FF9D, #00F0FF)',
+                                borderRadius: '16px',
+                                opacity: 0.5,
+                                filter: 'blur(4px)',
+                                pointerEvents: 'none'
+                            }} />
 
-                            {/* Main Card */}
-                            <div className="relative bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)]"
-                                style={{ pointerEvents: 'auto' }}>
-
-                                {/* Header Section */}
-                                <div className="relative p-5 border-b border-white/5 overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-[#00F0FF]/10 via-transparent to-[#00FF9D]/10 opacity-50"
-                                        style={{ pointerEvents: 'none' }} />
-
-                                    <div className="relative z-10 flex flex-col items-center text-center gap-3">
-                                        {/* Avatar */}
-                                        <div className="relative">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-[#00F0FF] to-[#00FF9D] rounded-full blur-md opacity-50"
-                                                style={{ pointerEvents: 'none' }} />
-                                            <div className="relative p-1 rounded-full border border-white/20 bg-black/30">
+                            {/* Main Card - WITH SOLID BACKGROUND */}
+                            <div style={{
+                                position: 'relative',
+                                background: 'rgba(10, 10, 10, 0.98)',
+                                backdropFilter: 'blur(40px)',
+                                WebkitBackdropFilter: 'blur(40px)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                borderRadius: '16px',
+                                overflow: 'hidden',
+                                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.9)',
+                                pointerEvents: 'auto'
+                            }}>
+                                {/* Header */}
+                                <div style={{
+                                    position: 'relative',
+                                    padding: '20px',
+                                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                                    background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.05), transparent, rgba(0, 255, 157, 0.05))'
+                                }}>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '12px'
+                                    }}>
+                                        <div style={{ position: 'relative' }}>
+                                            <div style={{
+                                                position: 'absolute',
+                                                inset: 0,
+                                                background: 'linear-gradient(90deg, #00F0FF, #00FF9D)',
+                                                borderRadius: '50%',
+                                                filter: 'blur(12px)',
+                                                opacity: 0.5
+                                            }} />
+                                            <div style={{
+                                                position: 'relative',
+                                                padding: '4px',
+                                                borderRadius: '50%',
+                                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                background: 'rgba(0, 0, 0, 0.3)'
+                                            }}>
                                                 <UserAvatar
                                                     alt={user?.fullName}
                                                     initials={user?.fullName?.slice(0, 2)}
@@ -205,10 +209,20 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                                             </div>
                                         </div>
 
-                                        {/* User Details */}
-                                        <div className="space-y-1">
-                                            <div className="text-white font-bold text-base">{user?.fullName}</div>
-                                            <div className="flex items-center gap-2 text-white/60 text-xs font-mono">
+                                        <div>
+                                            <div style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '16px', textAlign: 'center' }}>
+                                                {user?.fullName}
+                                            </div>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '8px',
+                                                color: 'rgba(255, 255, 255, 0.6)',
+                                                fontSize: '12px',
+                                                fontFamily: 'monospace',
+                                                justifyContent: 'center',
+                                                marginTop: '4px'
+                                            }}>
                                                 <span>{user?.role}</span>
                                                 <span>•</span>
                                                 <span>Lvl {user?.clearanceLevel}</span>
@@ -218,7 +232,7 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                                 </div>
 
                                 {/* Menu Items */}
-                                <div className="p-2 space-y-1">
+                                <div style={{ padding: '8px' }}>
                                     <MenuItem
                                         icon={<User className="w-4 h-4" />}
                                         label={t('profileSettings') || 'تنظیمات پروفایل'}
@@ -232,7 +246,11 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                                         isRTL={isRTL}
                                     />
 
-                                    <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-2" />
+                                    <div style={{
+                                        height: '1px',
+                                        background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+                                        margin: '8px 0'
+                                    }} />
 
                                     <MenuItem
                                         icon={<LogOut className="w-4 h-4" />}
@@ -244,10 +262,19 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                                 </div>
 
                                 {/* Footer */}
-                                <div className="px-4 py-3 bg-black/30 border-t border-white/5 text-[10px] text-white/40 flex justify-between items-center">
-                                    <span className="font-mono">v2.0.1</span>
+                                <div style={{
+                                    padding: '12px 16px',
+                                    background: 'rgba(0, 0, 0, 0.3)',
+                                    borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                                    fontSize: '10px',
+                                    color: 'rgba(255, 255, 255, 0.4)',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center'
+                                }}>
+                                    <span style={{ fontFamily: 'monospace' }}>v2.0.1</span>
                                     {user?.lastLogin && (
-                                        <span className="flex items-center gap-1">
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                             <Clock className="w-3 h-3" />
                                             {formatLastLogin(user.lastLogin)}
                                         </span>
@@ -277,89 +304,61 @@ function MenuItem({ icon, label, onClick, isRTL, variant = 'default' }: MenuItem
 
     return (
         <button
-            className={`
-                w-full flex items-center gap-3 px-4 py-3 rounded-xl
-                transition-all duration-300 relative overflow-hidden
-                border
-                ${isDanger
-                    ? 'bg-[#FF2E2E]/5 border-[#FF2E2E]/20 text-[#FF2E2E] hover:bg-[#FF2E2E]/15 hover:border-[#FF2E2E]/40 hover:shadow-[0_0_20px_rgba(255,46,46,0.2)]'
-                    : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-[#00F0FF]/30 hover:text-white hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]'
-                }
-            `}
             onClick={onClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                border: `1px solid ${isDanger ? 'rgba(255, 46, 46, 0.2)' : 'rgba(255, 255, 255, 0.1)'}`,
+                background: isDanger ? 'rgba(255, 46, 46, 0.05)' : 'rgba(255, 255, 255, 0.05)',
+                color: isDanger ? '#FF2E2E' : 'rgba(255, 255, 255, 0.8)',
                 cursor: 'pointer',
-                pointerEvents: 'auto',
-                transform: isHovered ? `scale(1.02) translateX(${isRTL ? -2 : 2}px)` : 'scale(1) translateX(0)'
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 300ms',
+                transform: isHovered ? `scale(1.02) translateX(${isRTL ? -2 : 2}px)` : 'scale(1)',
+                boxShadow: isHovered
+                    ? isDanger ? '0 0 20px rgba(255, 46, 46, 0.2)' : '0 0 20px rgba(0, 240, 255, 0.15)'
+                    : 'none',
+                marginBottom: '4px'
             }}
             type="button"
         >
-            {/* Background Gradient */}
-            <div className={`
-                absolute inset-0 transition-opacity duration-300
-                ${isDanger
-                    ? 'bg-gradient-to-r from-[#FF2E2E]/0 via-[#FF2E2E]/10 to-[#FF2E2E]/0'
-                    : 'bg-gradient-to-r from-[#00F0FF]/0 via-[#00F0FF]/10 to-[#00F0FF]/0'
-                }
-            `}
-                style={{
-                    opacity: isHovered ? 1 : 0,
-                    pointerEvents: 'none'
-                }} />
-
-            {/* Icon */}
-            <div className={`
-                relative z-10 transition-all duration-300
-                ${isDanger
-                    ? 'text-[#FF2E2E]'
-                    : 'text-white/60'
-                }
-            `}
-                style={{
-                    color: !isDanger && isHovered ? '#00F0FF' : undefined,
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                    pointerEvents: 'none'
-                }}>
+            <div style={{
+                position: 'relative',
+                zIndex: 10,
+                transition: 'transform 300ms',
+                transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                color: isHovered && !isDanger ? '#00F0FF' : undefined
+            }}>
                 {icon}
             </div>
 
-            {/* Label */}
-            <span className={`
-                relative z-10 text-sm font-medium transition-colors duration-300
-            `}
-                style={{
-                    color: !isDanger && isHovered ? '#00F0FF' : undefined,
-                    pointerEvents: 'none'
-                }}>
+            <span style={{
+                position: 'relative',
+                zIndex: 10,
+                fontSize: '14px',
+                fontWeight: 500,
+                flex: 1,
+                color: isHovered && !isDanger ? '#00F0FF' : undefined
+            }}>
                 {label}
             </span>
 
-            {/* Arrow Indicator */}
-            <div
-                className={`absolute ${isRTL ? 'left-4' : 'right-4'} transition-all duration-300`}
-                style={{
-                    opacity: isHovered ? 1 : 0,
-                    transform: isHovered
-                        ? 'translateX(0)'
-                        : `translateX(${isRTL ? '8px' : '-8px'})`,
-                    pointerEvents: 'none'
-                }}
-            >
-                <div className={`
-                    w-2 h-2 rounded-full
-                    ${isDanger
-                        ? 'bg-[#FF2E2E]'
-                        : 'bg-[#00F0FF]'
-                    }
-                `}
-                    style={{
-                        boxShadow: isDanger
-                            ? '0 0 8px #FF2E2E'
-                            : '0 0 8px #00F0FF'
-                    }} />
-            </div>
+            {isHovered && (
+                <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: isDanger ? '#FF2E2E' : '#00F0FF',
+                    boxShadow: isDanger ? '0 0 8px #FF2E2E' : '0 0 8px #00F0FF'
+                }} />
+            )}
         </button>
     );
 }
