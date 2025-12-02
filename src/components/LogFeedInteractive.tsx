@@ -264,7 +264,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                 onClick={() => setShowItemsDropdown(!showItemsDropdown)}
                 className="flex items-center gap-2 px-4 py-3 rounded-2xl border-2 border-white/10 bg-black/20 hover:bg-black/30 transition-all text-sm font-medium text-white/70"
               >
-                <span>{itemsPerPage} {t('items') || 'items'}</span>
+                <span>{itemsPerPage} {t('items') || 'مورد'}</span>
                 <ChevronDown className={`w-4 h-4 transition-transform ${showItemsDropdown ? 'rotate-180' : ''}`} />
               </button>
 
@@ -324,10 +324,10 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                 pending: '#FFB800',
               };
               const labels = {
-                all: t('all') || 'all',
-                success: t('success') || 'success',
-                error: t('error') || 'error',
-                pending: t('pending') || 'pending',
+                all: t('all') || 'همه',
+                success: t('success') || 'موفق',
+                error: t('error') || 'خطا',
+                pending: t('pending') || 'در انتظار',
               };
 
               return (
@@ -375,10 +375,10 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
         </div>
       )}
 
-      {/* Clean Cards Grid */}
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-3 ${compact ? '' : 'max-h-[520px] overflow-y-auto pr-1 custom-scrollbar'}`}>
+      {/* Premium Redesigned Cards Grid */}
+      <div className={`grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 ${compact ? '' : 'max-h-[520px] overflow-y-auto pr-1 custom-scrollbar'}`}>
         <AnimatePresence mode="sync">
-          {filteredLogs.map((log) => {
+          {filteredLogs.map((log, index) => {
             const statusColor = getStatusColor(log.status);
             const avatarColor = getAvatarColor(log.user);
 
@@ -386,87 +386,238 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
               <motion.div
                 key={log.id}
                 layout
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 25,
+                  delay: index * 0.05
+                }}
                 onClick={() => setSelectedLog(log)}
                 className="group cursor-pointer"
               >
                 <div
-                  className="relative rounded-2xl p-4 border border-white/5 hover:border-white/10 transition-all"
+                  className="relative rounded-3xl overflow-hidden border-2 hover:scale-[1.02] transition-all duration-300"
                   style={{
                     background: theme === 'matrix'
-                      ? 'linear-gradient(135deg, rgba(0, 20, 0, 0.3), rgba(0, 10, 0, 0.5))'
-                      : 'linear-gradient(135deg, rgba(10, 10, 20, 0.3), rgba(5, 5, 15, 0.5))',
+                      ? 'linear-gradient(135deg, rgba(0, 25, 0, 0.4), rgba(0, 15, 0, 0.6))'
+                      : 'linear-gradient(135deg, rgba(15, 15, 30, 0.4), rgba(10, 10, 25, 0.6))',
+                    borderColor: log.isDuress ? 'rgba(255, 46, 46, 0.4)' : 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(20px)',
+                    boxShadow: log.isDuress
+                      ? '0 8px 32px rgba(255, 46, 46, 0.2)'
+                      : `0 8px 32px ${statusColor}15`,
                   }}
                 >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="relative flex-shrink-0">
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-base"
-                        style={{
-                          background: `linear-gradient(135deg, ${avatarColor}, ${avatarColor}DD)`,
-                        }}
-                      >
-                        {log.avatar ? (
-                          <img src={log.avatar} alt={log.user} className="w-full h-full object-cover rounded-xl" />
-                        ) : (
-                          <span>{log.user.charAt(0)}</span>
-                        )}
-                      </div>
+                  {/* Animated Background Glow */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: `radial-gradient(circle at top right, ${statusColor}20, transparent 70%)`,
+                    }}
+                  />
 
-                      <div
-                        className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 flex items-center justify-center"
-                        style={{
-                          backgroundColor: statusColor,
-                          borderColor: theme === 'matrix' ? '#000' : '#0a0a14',
-                        }}
-                      >
-                        {log.status === 'success' && <CheckCircle className="w-3 h-3" />}
-                        {log.status === 'error' && <XCircle className="w-3 h-3" />}
-                        {log.status === 'pending' && <Clock className="w-3 h-3" />}
-                      </div>
-                    </div>
+                  {/* Duress Alert Banner */}
+                  {log.isDuress && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute top-0 left-0 right-0 px-4 py-2 flex items-center justify-center gap-2 z-10"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(255, 46, 46, 0.3), transparent)',
+                        borderBottom: '1px solid rgba(255, 46, 46, 0.4)',
+                      }}
+                    >
+                      <AlertTriangle className="w-4 h-4 text-red-400 animate-pulse" />
+                      <span className="text-xs font-bold text-red-400 uppercase tracking-wider">
+                        {t('duress') || 'اضطرار'}
+                      </span>
+                      <AlertTriangle className="w-4 h-4 text-red-400 animate-pulse" />
+                    </motion.div>
+                  )}
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <h4 className="text-sm font-bold text-white truncate">{log.user}</h4>
-                        {log.isDuress && (
+                  {/* Main Content */}
+                  <div className={`relative p-5 ${log.isDuress ? 'pt-12' : ''}`}>
+                    {/* Header Section with Avatar and Status */}
+                    <div className="flex items-start gap-4 mb-4">
+                      {/* Avatar with Status Ring */}
+                      <div className="relative flex-shrink-0">
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ type: 'spring', stiffness: 300 }}
+                          className="relative"
+                        >
+                          {/* Status Ring */}
                           <div
-                            className="flex items-center gap-1 px-2 py-0.5 rounded-md flex-shrink-0"
+                            className="absolute -inset-1.5 rounded-2xl"
                             style={{
-                              background: 'rgba(255, 46, 46, 0.2)',
-                              border: '1px solid rgba(255, 46, 46, 0.5)',
+                              background: `conic-gradient(from 0deg, ${statusColor}, ${statusColor}40, ${statusColor})`,
+                              filter: 'blur(8px)',
+                              opacity: 0.6,
+                            }}
+                          />
+
+                          {/* Avatar */}
+                          <div
+                            className="relative w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl border-3"
+                            style={{
+                              background: `linear-gradient(135deg, ${avatarColor}, ${avatarColor}CC)`,
+                              borderColor: statusColor,
+                              boxShadow: `0 0 20px ${statusColor}30`,
                             }}
                           >
-                            <AlertTriangle className="w-3 h-3 text-red-400" />
-                            <span className="text-[9px] font-bold text-red-400">duress</span>
+                            {log.avatar ? (
+                              <img src={log.avatar} alt={log.user} className="w-full h-full object-cover rounded-2xl" />
+                            ) : (
+                              <span>{log.user.charAt(0)}</span>
+                            )}
                           </div>
-                        )}
+
+                          {/* Status Badge */}
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.2, type: 'spring' }}
+                            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full border-3 flex items-center justify-center"
+                            style={{
+                              backgroundColor: statusColor,
+                              borderColor: theme === 'matrix' ? '#000' : '#0a0a14',
+                              boxShadow: `0 0 15px ${statusColor}60`,
+                            }}
+                          >
+                            {log.status === 'success' && <CheckCircle className="w-4 h-4 text-black" />}
+                            {log.status === 'error' && <XCircle className="w-4 h-4 text-black" />}
+                            {log.status === 'pending' && <Clock className="w-4 h-4 text-black" />}
+                          </motion.div>
+                        </motion.div>
                       </div>
-                      <p className="text-xs mb-1 truncate" style={{ color: statusColor }}>
-                        {t(log.action)}
-                      </p>
-                      <p className="text-[10px] font-mono text-white/30">{log.timestamp}</p>
+
+                      {/* User Info */}
+                      <div className="flex-1 min-w-0 pt-1">
+                        <h4
+                          className="text-base font-bold text-white mb-1 truncate"
+                          style={{
+                            textShadow: `0 0 20px ${avatarColor}40`,
+                          }}
+                        >
+                          {log.user}
+                        </h4>
+                        <p
+                          className="text-sm font-medium mb-2 truncate"
+                          style={{
+                            color: statusColor,
+                            textShadow: `0 0 10px ${statusColor}30`,
+                          }}
+                        >
+                          {t(log.action)}
+                        </p>
+
+                        {/* Time Badge */}
+                        <div
+                          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border"
+                          style={{
+                            background: `${primaryColor}10`,
+                            borderColor: `${primaryColor}30`,
+                          }}
+                        >
+                          <Clock className="w-3.5 h-3.5" style={{ color: primaryColor }} />
+                          <span
+                            className="text-xs font-mono font-medium"
+                            style={{ color: primaryColor }}
+                          >
+                            {log.timestamp}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div
+                      className="h-px mb-4"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${statusColor}40, transparent)`,
+                      }}
+                    />
+
+                    {/* Details Section */}
+                    <div className="space-y-2.5">
+                      {/* Location */}
+                      <div
+                        className="flex items-center gap-3 p-3 rounded-xl border transition-all group/item hover:scale-[1.02]"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.03)',
+                          borderColor: 'rgba(255, 255, 255, 0.05)',
+                        }}
+                      >
+                        <div
+                          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all group-hover/item:scale-110"
+                          style={{
+                            background: `${statusColor}15`,
+                            border: `1px solid ${statusColor}30`,
+                          }}
+                        >
+                          <MapPin className="w-4 h-4" style={{ color: statusColor }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[9px] uppercase tracking-wider text-white/30 mb-0.5 font-medium">
+                            {t('location') || 'موقعیت'}
+                          </p>
+                          <p className="text-xs text-white/80 font-medium truncate">
+                            {log.location || t('unknown') || 'نامشخص'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Device */}
+                      <div
+                        className="flex items-center gap-3 p-3 rounded-xl border transition-all group/item hover:scale-[1.02]"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.03)',
+                          borderColor: 'rgba(255, 255, 255, 0.05)',
+                        }}
+                      >
+                        <div
+                          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all group-hover/item:scale-110"
+                          style={{
+                            background: `${primaryColor}15`,
+                            border: `1px solid ${primaryColor}30`,
+                          }}
+                        >
+                          <Smartphone className="w-4 h-4" style={{ color: primaryColor }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[9px] uppercase tracking-wider text-white/30 mb-0.5 font-medium">
+                            {t('device') || 'دستگاه'}
+                          </p>
+                          <p className="text-xs text-white/80 font-medium truncate">
+                            {log.device || t('web') || 'وب'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-[11px] text-white/40">
-                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                      <MapPin className="w-3 h-3 flex-shrink-0" />
-                      <span className="truncate">{log.location || 'Unknown'}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <Smartphone className="w-3 h-3" />
-                      <span>{log.device || 'Web'}</span>
-                    </div>
-                  </div>
-
+                  {/* Bottom Accent Bar */}
                   <div
-                    className="absolute bottom-0 left-0 right-0 h-[2px] rounded-b-2xl"
+                    className="absolute bottom-0 left-0 right-0 h-1"
                     style={{
-                      background: `linear-gradient(90deg, ${statusColor}, transparent)`,
+                      background: `linear-gradient(90deg, transparent, ${statusColor}, transparent)`,
+                    }}
+                  />
+
+                  {/* Corner Accents */}
+                  <div
+                    className="absolute top-0 right-0 w-20 h-20 opacity-30 group-hover:opacity-50 transition-opacity"
+                    style={{
+                      background: `radial-gradient(circle at top right, ${statusColor}40, transparent)`,
+                    }}
+                  />
+                  <div
+                    className="absolute bottom-0 left-0 w-20 h-20 opacity-20 group-hover:opacity-40 transition-opacity"
+                    style={{
+                      background: `radial-gradient(circle at bottom left, ${avatarColor}30, transparent)`,
                     }}
                   />
                 </div>
@@ -538,7 +689,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                   <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
                     <Clock className="w-6 h-6 flex-shrink-0" style={{ color: primaryColor }} />
                     <div>
-                      <p className="text-[10px] text-white/30 mb-0.5">{t('timestamp') || 'Time'}</p>
+                      <p className="text-[10px] text-white/30 mb-0.5">{t('timestamp') || 'زمان'}</p>
                       <p className="text-sm text-white font-medium">{selectedLog.timestamp}</p>
                     </div>
                   </div>
@@ -546,16 +697,16 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                   <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
                     <MapPin className="w-6 h-6 flex-shrink-0" style={{ color: '#00FF9D' }} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-[10px] text-white/30 mb-0.5">{t('location') || 'Location'}</p>
-                      <p className="text-sm text-white font-medium truncate">{selectedLog.location || 'Unknown'}</p>
+                      <p className="text-[10px] text-white/30 mb-0.5">{t('location') || 'موقعیت'}</p>
+                      <p className="text-sm text-white font-medium truncate">{selectedLog.location || t('unknown') || 'نامشخص'}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
                     <Smartphone className="w-6 h-6 flex-shrink-0" style={{ color: '#a855f7' }} />
                     <div>
-                      <p className="text-[10px] text-white/30 mb-0.5">{t('device') || 'Device'}</p>
-                      <p className="text-sm text-white font-medium">{selectedLog.device || 'Web'}</p>
+                      <p className="text-[10px] text-white/30 mb-0.5">{t('device') || 'دستگاه'}</p>
+                      <p className="text-sm text-white font-medium">{selectedLog.device || t('web') || 'وب'}</p>
                     </div>
                   </div>
 
@@ -570,7 +721,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-6 h-6 text-red-400 flex-shrink-0" />
                         <p className="text-sm font-bold text-red-400">
-                          {t('duressAlert') || 'Duress Alert'}
+                          {t('duressAlert') || 'هشدار اضطرار'}
                         </p>
                       </div>
                     </div>
