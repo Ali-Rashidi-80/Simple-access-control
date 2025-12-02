@@ -34,7 +34,7 @@ export function SettingsPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-8 md:pt-0">
       <h2 className="text-[#00F0FF] tracking-wide">{t('systemSettings')}</h2>
 
       {/* Secure Mode Status */}
@@ -252,6 +252,9 @@ export function SettingsPanel() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Spacer - Smart spacing for navigation */}
+      <div className="h-32 pb-safe md:hidden" aria-hidden="true" />
     </div>
   );
 }

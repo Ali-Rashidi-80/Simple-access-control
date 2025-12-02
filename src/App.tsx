@@ -262,10 +262,8 @@ function AppContent() {
               />
             </motion.div>
 
-            {/* Recent Logs Preview - Mobile Only */}
-            <div className="block md:hidden">
-              <LogFeedInteractive logs={logs.slice(0, 3)} compact />
-            </div>
+            {/* Mobile Bottom Spacer - Smart spacing for navigation */}
+            <div className="h-32 pb-safe md:hidden" aria-hidden="true" />
           </div>
         );
 
@@ -274,6 +272,9 @@ function AppContent() {
           <div className="space-y-4">
             <h2 className="text-[#00F0FF] tracking-wide">{t('accessLogs')}</h2>
             <LogFeedInteractive logs={logs} />
+
+            {/* Mobile Bottom Spacer - Smart spacing for navigation */}
+            <div className="h-32 pb-safe md:hidden" aria-hidden="true" />
           </div>
         );
 
@@ -299,6 +300,9 @@ function AppContent() {
                 </div>
               ))}
             </div>
+
+            {/* Mobile Bottom Spacer - Smart spacing for navigation */}
+            <div className="h-32 pb-safe md:hidden" aria-hidden="true" />
           </div>
         );
 
@@ -357,7 +361,7 @@ function AppContent() {
         </header>
 
         {/* Content Area */}
-        <main className="p-4 md:p-5 pb-20 md:pb-6">
+        <main className="pt-8 px-4 pb-32 md:p-5 md:pb-6">
           {renderContent()}
         </main>
       </div>

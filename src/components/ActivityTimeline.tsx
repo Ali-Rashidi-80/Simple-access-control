@@ -46,9 +46,9 @@ export function ActivityTimeline({ activities, maxItems = 5 }: ActivityTimelineP
     const displayActivities = activities.slice(0, maxItems);
 
     return (
-        <div className="glass-card backdrop-blur-xl border border-white/10 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[#00F0FF] tracking-wide text-base font-medium">
+        <div className="glass-card backdrop-blur-xl border border-white/10 rounded-2xl p-4 md:p-5 relative overflow-hidden">
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-[#00F0FF] tracking-wide text-sm md:text-base font-medium">
                     {t('recentActivity') || 'فعالیت های اخیر'}
                 </h3>
                 <span className="text-white/40 text-xs">
@@ -56,7 +56,7 @@ export function ActivityTimeline({ activities, maxItems = 5 }: ActivityTimelineP
                 </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2.5">
                 {displayActivities.map((activity, index) => (
                     <motion.div
                         key={activity.id}
@@ -72,21 +72,21 @@ export function ActivityTimeline({ activities, maxItems = 5 }: ActivityTimelineP
                         {/* Connection Line */}
                         {index < displayActivities.length - 1 && (
                             <div
-                                className="absolute top-10 w-px h-full opacity-20"
+                                className="absolute top-9 w-px h-full opacity-20"
                                 style={{
                                     background: getColor(activity.type),
-                                    marginInlineStart: '14px',
+                                    marginInlineStart: '13px',
                                 }}
                             />
                         )}
 
-                        <div className="flex items-start gap-4 relative">
+                        <div className="flex items-start gap-3 relative">
                             {/* Icon */}
                             <motion.div
-                                className="relative z-10 p-2 rounded-xl backdrop-blur-sm flex-shrink-0"
+                                className="relative z-10 p-1.5 rounded-xl backdrop-blur-sm flex-shrink-0"
                                 style={{
                                     backgroundColor: `${getColor(activity.type)}15`,
-                                    boxShadow: `0 0 24px ${getColor(activity.type)}25`,
+                                    boxShadow: `0 0 20px ${getColor(activity.type)}20`,
                                 }}
                                 whileHover={{ scale: 1.1 }}
                                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
@@ -116,11 +116,11 @@ export function ActivityTimeline({ activities, maxItems = 5 }: ActivityTimelineP
                             </motion.div>
 
                             {/* Content */}
-                            <div className="flex-1 pt-1">
-                                <p className="text-white/90 text-sm leading-relaxed group-hover:text-white transition-colors">
+                            <div className="flex-1 pt-0.5 min-w-0">
+                                <p className="text-white/90 text-sm leading-relaxed group-hover:text-white transition-colors truncate">
                                     {activity.message}
                                 </p>
-                                <p className="text-white/40 text-xs mt-1.5">{activity.timestamp}</p>
+                                <p className="text-white/40 text-xs mt-1">{activity.timestamp}</p>
                             </div>
 
                             {/* Hover Glow */}

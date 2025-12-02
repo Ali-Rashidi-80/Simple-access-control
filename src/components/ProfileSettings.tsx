@@ -184,6 +184,9 @@ export function ProfileSettings() {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Mobile Bottom Spacer - Smart spacing for navigation */}
+            <div className="h-32 pb-safe md:hidden" aria-hidden="true" />
         </div>
     );
 }
