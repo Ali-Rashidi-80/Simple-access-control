@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, XCircle, Clock, MapPin, Smartphone, X, SortDesc, Search, RefreshCw, Activity, AlertTriangle, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
+import NeonDatePicker from '../../../components/Liquid-Neon-Persian-Picker-main/components/NeonDatePicker';
+import { DateRange } from '../../../components/Liquid-Neon-Persian-Picker-main/components/NeonDatePicker/types';
 
 import { Log } from '../types';
 
@@ -21,6 +23,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [showItemsDropdown, setShowItemsDropdown] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   const stats = useMemo(() => {
     const total = logs.length;
@@ -299,6 +302,11 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
               <span className="font-bold" style={{ color: primaryColor }}>{filteredLogs.length}</span>
               <span className="text-white/30">/</span>
               <span className="text-white/50">{logs.length}</span>
+            </div>
+
+            {/* Date Picker */}
+            <div className="relative z-50">
+              <NeonDatePicker onChange={setDateRange} />
             </div>
           </div>
 
