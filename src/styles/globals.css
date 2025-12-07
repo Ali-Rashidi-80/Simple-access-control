@@ -56,6 +56,74 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     DESIGN SYSTEM ENHANCEMENTS - Spacing, Transitions, Glassmorphism
+  ══════════════════════════════════════════════════════════════════════════ */
+
+  /* Spacing Scale - Harmonic progression for consistent layouts */
+  --space-2xs: 0.125rem;
+  /* 2px */
+  --space-xs: 0.25rem;
+  /* 4px */
+  --space-sm: 0.5rem;
+  /* 8px */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
+  --space-2xl: 3rem;
+  /* 48px */
+  --space-3xl: 4rem;
+  /* 64px */
+
+  /* Border Radius Scale */
+  --radius-sm: 0.375rem;
+  /* 6px */
+  --radius-md: 0.5rem;
+  /* 8px */
+  --radius-lg: 0.75rem;
+  /* 12px */
+  --radius-xl: 1rem;
+  /* 16px */
+  --radius-2xl: 1.5rem;
+  /* 24px */
+  --radius-full: 9999px;
+
+  /* Transition Timing Functions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Transition Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+
+  /* Glassmorphism Properties */
+  --glass-blur: 16px;
+  --glass-blur-heavy: 24px;
+  --glass-blur-subtle: 8px;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* Shadow System */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.3);
+  --shadow-glow-green: 0 0 20px rgba(0, 255, 157, 0.3);
+  --shadow-glow-red: 0 0 20px rgba(255, 46, 46, 0.3);
+
+  /* Touch Target Minimum (Accessibility) */
+  --touch-target-min: 44px;
 }
 
 .dark {
@@ -219,8 +287,70 @@ html {
 
 /* SentryGate Custom Styles */
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(var(--glass-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  transition:
+    background var(--duration-normal, 250ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+    border-color var(--duration-normal, 250ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+    box-shadow var(--duration-normal, 250ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+    transform var(--duration-normal, 250ms) var(--ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover, rgba(255, 255, 255, 0.08));
+  border-color: var(--glass-border-hover, rgba(255, 255, 255, 0.2));
+}
+
+/* Enhanced focus states for accessibility */
+.focus-ring:focus-visible,
+*:focus-visible {
+  outline: 2px solid var(--liquid-primary, #00F0FF);
+  outline-offset: 2px;
+}
+
+/* Interactive card with enhanced hover */
+.interactive-card {
+  cursor: pointer;
+  transition:
+    transform var(--duration-normal, 250ms) var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    box-shadow var(--duration-normal, 250ms) var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px);
+}
+
+.interactive-card:active {
+  transform: translateY(-2px);
+}
+
+/* Glow effects utility classes */
+.glow-cyan {
+  box-shadow: var(--shadow-glow-cyan, 0 0 20px rgba(0, 240, 255, 0.3));
+}
+
+.glow-green {
+  box-shadow: var(--shadow-glow-green, 0 0 20px rgba(0, 255, 157, 0.3));
+}
+
+.glow-red {
+  box-shadow: var(--shadow-glow-red, 0 0 20px rgba(255, 46, 46, 0.3));
+}
+
+/* Smooth text rendering */
+.smooth-text {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Touch-friendly targets */
+.touch-target {
+  min-width: var(--touch-target-min, 44px);
+  min-height: var(--touch-target-min, 44px);
 }
 
 /* Aurora Animations */

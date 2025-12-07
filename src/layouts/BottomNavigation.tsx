@@ -19,13 +19,24 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
 
   return (
     <motion.nav
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-      className="fixed bottom-4 left-4 right-4 z-50"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 300, delay: 0.1 }}
+      className="fixed bottom-0 left-0 right-0 z-50"
+      style={{
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)',
+        paddingLeft: 'max(env(safe-area-inset-left, 0px), 16px)',
+        paddingRight: 'max(env(safe-area-inset-right, 0px), 16px)',
+      }}
     >
-      <div className="glass-card backdrop-blur-xl border border-white/20 rounded-3xl px-6 py-4 shadow-2xl">
-        <div className="flex items-center justify-around">
+      <div
+        className="glass-card rounded-2xl mx-auto max-w-md"
+        style={{
+          padding: 'var(--space-sm, 0.5rem) var(--space-md, 1rem)',
+          boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 240, 255, 0.1)',
+        }}
+      >
+        <div className="flex items-center justify-around gap-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -34,36 +45,45 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
               <motion.button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className="relative flex flex-col items-center gap-1 px-4 py-2 group"
-                whileTap={{ scale: 0.9 }}
+                className="relative flex flex-col items-center justify-center gap-0.5 rounded-xl touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                style={{
+                  minWidth: '64px',
+                  minHeight: '52px',
+                  padding: 'var(--space-xs, 0.25rem) var(--space-sm, 0.5rem)',
+                }}
+                whileTap={{ scale: 0.92 }}
+                whileHover={{ scale: 1.02 }}
+                aria-label={t(item.labelKey)}
+                aria-current={isActive ? 'page' : undefined}
               >
                 {/* Active Background Blob */}
                 {isActive && (
                   <motion.div
                     layoutId="bottom-nav-active"
-                    className="absolute inset-0 rounded-2xl"
+                    className="absolute inset-0 rounded-xl"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%)',
-                      boxShadow: '0 0 20px rgba(0, 240, 255, 0.3)',
+                      background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%)',
+                      boxShadow: 'inset 0 0 20px rgba(0, 240, 255, 0.15), 0 0 16px rgba(0, 240, 255, 0.2)',
+                      border: '1px solid rgba(0, 240, 255, 0.2)',
                     }}
-                    transition={{ type: 'spring', duration: 0.6, bounce: 0.3 }}
+                    transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
                   />
                 )}
 
                 {/* Icon Container */}
                 <motion.div
                   animate={{
-                    scale: isActive ? 1.1 : 1,
-                    y: isActive ? -2 : 0,
+                    scale: isActive ? 1.15 : 1,
+                    y: isActive ? -1 : 0,
                   }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                   className="relative z-10"
                 >
                   <Icon
-                    className="w-6 h-6 transition-colors duration-300"
+                    className="w-5 h-5 transition-all duration-200"
                     style={{
-                      color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.5)',
-                      filter: isActive ? 'drop-shadow(0 0 8px #00F0FF)' : 'none',
+                      color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.55)',
+                      filter: isActive ? 'drop-shadow(0 0 6px #00F0FF)' : 'none',
                     }}
                     strokeWidth={isActive ? 2.5 : 2}
                   />
@@ -71,12 +91,15 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
 
                 {/* Label */}
                 <motion.span
-                  className="relative z-10 text-xs tracking-wide"
+                  className="relative z-10 text-[10px] font-medium tracking-wide leading-tight"
                   animate={{
-                    color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
-                    scale: isActive ? 1 : 0.95,
+                    color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.45)',
+                    opacity: isActive ? 1 : 0.9,
                   }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    textShadow: isActive ? '0 0 10px rgba(0, 240, 255, 0.5)' : 'none',
+                  }}
                 >
                   {t(item.labelKey)}
                 </motion.span>
@@ -84,12 +107,14 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
                 {/* Active Dot Indicator */}
                 {isActive && (
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-1 w-1.5 h-1.5 bg-[#00F0FF] rounded-full"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    className="absolute -top-0.5 w-1 h-1 bg-[#00F0FF] rounded-full"
                     style={{
-                      boxShadow: '0 0 8px #00F0FF',
+                      boxShadow: '0 0 8px #00F0FF, 0 0 12px #00F0FF',
                     }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 )}
               </motion.button>
@@ -97,9 +122,6 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
           })}
         </div>
       </div>
-
-      {/* Safe Area for iOS devices */}
-      <div className="h-safe-area-inset-bottom" />
     </motion.nav>
   );
 }

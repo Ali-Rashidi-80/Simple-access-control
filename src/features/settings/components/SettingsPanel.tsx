@@ -271,25 +271,46 @@ function ToggleSwitch({ isOn, color }: ToggleSwitchProps) {
 
   return (
     <motion.div
-      className="w-12 h-6 rounded-full flex items-center px-1 cursor-pointer"
+      className="relative w-14 h-7 rounded-full flex items-center cursor-pointer"
       style={{
-        backgroundColor: isOn ? `${color}30` : 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: isOn ? `${color}25` : 'rgba(255, 255, 255, 0.08)',
+        border: `1.5px solid ${isOn ? `${color}50` : 'rgba(255, 255, 255, 0.15)'}`,
+        boxShadow: isOn ? `0 0 16px ${color}30, inset 0 0 8px ${color}15` : 'none',
+        padding: '3px',
       }}
       animate={{
-        backgroundColor: isOn ? `${color}30` : 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: isOn ? `${color}25` : 'rgba(255, 255, 255, 0.08)',
+        borderColor: isOn ? `${color}50` : 'rgba(255, 255, 255, 0.15)',
       }}
+      transition={{ duration: 0.2 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
       <motion.div
-        className="w-4 h-4 rounded-full"
+        className="w-5 h-5 rounded-full relative"
         style={{
-          backgroundColor: color,
-          boxShadow: `0 0 10px ${color}`,
+          backgroundColor: isOn ? color : 'rgba(255, 255, 255, 0.4)',
+          boxShadow: isOn
+            ? `0 0 12px ${color}, 0 0 20px ${color}60`
+            : '0 2px 4px rgba(0, 0, 0, 0.2)',
         }}
         animate={{
           x: isOn ? (isRTL ? -24 : 24) : 0,
+          backgroundColor: isOn ? color : 'rgba(255, 255, 255, 0.4)',
         }}
-        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-      />
+        transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+      >
+        {/* Inner glow when active */}
+        {isOn && (
+          <motion.div
+            className="absolute inset-1 rounded-full bg-white/30"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+        )}
+      </motion.div>
     </motion.div>
   );
 }
+

@@ -345,14 +345,28 @@ function AppContent() {
       {/* Main Content */}
       <div className={`relative z-10 ${isRTL ? 'md:mr-64' : 'md:ml-64'} transition-all duration-300`}>
         {/* Header */}
-        <header className="glass-card backdrop-blur-xl border-b border-white/10 px-6 py-4 sticky top-0 z-[100]">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className={`tracking-wide text-lg md:text-xl font-bold ${theme === 'matrix' ? 'text-[#00FF00] font-mono' : 'text-[#00F0FF]'}`}>
+        <header
+          className="glass-card sticky top-0 z-[100] px-4 md:px-6 py-3 md:py-4"
+          style={{
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(0, 240, 255, 0.05)',
+          }}
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <h1
+                className={`tracking-wide text-base md:text-lg font-bold ${theme === 'matrix' ? 'font-mono' : ''}`}
+                style={{
+                  color: theme === 'matrix' ? '#00FF00' : '#00F0FF',
+                  textShadow: theme === 'matrix'
+                    ? '0 0 10px rgba(0, 255, 0, 0.5)'
+                    : '0 0 15px rgba(0, 240, 255, 0.3)',
+                }}
+              >
                 {theme === 'matrix' ? '> ' : ''}{t('appName')}
               </h1>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               <ThemeSwitcher />
               <LanguageSwitcher />
               <UserProfile onNavigate={setActiveTab} />
@@ -360,8 +374,8 @@ function AppContent() {
           </div>
         </header>
 
-        {/* Content Area */}
-        <main className="pt-8 px-4 pb-32 md:p-5 md:pb-6">
+        {/* Content Area - Enhanced padding for mobile bottom nav */}
+        <main className="pt-6 px-4 pb-36 md:px-6 md:pt-6 md:pb-8">
           {renderContent()}
         </main>
       </div>

@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Home, FileText, Users, Settings } from 'lucide-react';
+import { Home, FileText, Users, Settings, Shield, Activity } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface SidebarProps {
@@ -19,22 +19,59 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
     return (
         <aside
-            className={`fixed top-0 h-screen w-64 glass-card backdrop-blur-xl border-white/10 p-6 z-20 transition-all duration-300 ${isRTL ? 'right-0 border-l' : 'left-0 border-r'
+            className={`fixed top-0 h-screen w-64 glass-card p-0 z-20 transition-all duration-300 ${isRTL ? 'right-0 border-l border-white/10' : 'left-0 border-r border-white/10'
                 }`}
+            style={{
+                backdropFilter: 'blur(var(--glass-blur-heavy, 24px))',
+            }}
         >
-            {/* Logo */}
-            <div className="mb-12">
+            {/* Logo Section */}
+            <motion.div
+                className="px-6 pt-6 pb-4"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+            >
                 <div className="flex items-center gap-3">
+                    {/* Logo Icon */}
+                    <motion.div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 255, 157, 0.15))',
+                            border: '1px solid rgba(0, 240, 255, 0.3)',
+                            boxShadow: '0 0 20px rgba(0, 240, 255, 0.15)',
+                        }}
+                        whileHover={{ scale: 1.05, rotate: 5 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                    >
+                        <Shield className="w-5 h-5 text-[#00F0FF]" />
+                    </motion.div>
                     <div>
-                        <h2 className="text-[#00F0FF] tracking-wide text-xl font-bold">{t('appName')}</h2>
-                        <p className="text-white/30 text-xs mt-1">{t('version')}2.4.1</p>
+                        <h2
+                            className="tracking-wide text-lg font-bold"
+                            style={{
+                                color: '#00F0FF',
+                                textShadow: '0 0 20px rgba(0, 240, 255, 0.3)',
+                            }}
+                        >
+                            {t('appName')}
+                        </h2>
+                        <p className="text-white/35 text-xs font-medium">{t('version')}2.4.1</p>
                     </div>
                 </div>
-            </div>
+            </motion.div>
+
+            {/* Divider */}
+            <div
+                className="mx-4 h-px mb-4"
+                style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent)'
+                }}
+            />
 
             {/* Navigation */}
-            <nav className="space-y-2">
-                {navItems.map((item) => {
+            <nav className="px-3 space-y-1">
+                {navItems.map((item, index) => {
                     const Icon = item.icon;
                     const isActive = activeTab === item.id;
 
@@ -42,60 +79,74 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                         <motion.button
                             key={item.id}
                             onClick={() => onTabChange(item.id)}
-                            className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors overflow-hidden group ${isRTL ? 'flex-row-reverse' : 'flex-row'
+                            initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 + 0.2, duration: 0.3 }}
+                            className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] ${isRTL ? 'flex-row-reverse text-right' : 'flex-row text-left'
                                 }`}
-                            whileHover={{ scale: 1.02 }}
+                            whileHover={{ scale: 1.01, x: isRTL ? -4 : 4 }}
                             whileTap={{ scale: 0.98 }}
                         >
                             {/* Active Background */}
                             {isActive && (
                                 <motion.div
                                     layoutId="sidebar-active-bg"
-                                    className="absolute inset-0 glass-card border border-[#00F0FF]/30"
+                                    className="absolute inset-0 rounded-xl"
                                     style={{
-                                        background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%)',
-                                        boxShadow: '0 0 20px rgba(0, 240, 255, 0.2)',
+                                        background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%)',
+                                        border: '1px solid rgba(0, 240, 255, 0.25)',
+                                        boxShadow: 'inset 0 0 20px rgba(0, 240, 255, 0.1), 0 0 15px rgba(0, 240, 255, 0.15)',
                                     }}
-                                    transition={{ type: 'spring', duration: 0.6, bounce: 0.2 }}
+                                    transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
                                 />
                             )}
 
                             {/* Hover Effect */}
                             {!isActive && (
-                                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors rounded-xl" />
+                                <div
+                                    className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.04] transition-colors duration-200 rounded-xl"
+                                />
                             )}
 
                             {/* Icon */}
-                            <div className="relative z-10">
+                            <motion.div
+                                className="relative z-10"
+                                animate={{
+                                    scale: isActive ? 1.1 : 1,
+                                }}
+                                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                            >
                                 <Icon
-                                    className="w-5 h-5 transition-colors"
+                                    className="w-5 h-5 transition-all duration-200"
                                     style={{
-                                        color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.5)',
+                                        color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.55)',
+                                        filter: isActive ? 'drop-shadow(0 0 6px #00F0FF)' : 'none',
                                     }}
+                                    strokeWidth={isActive ? 2.2 : 2}
                                 />
-                            </div>
+                            </motion.div>
 
                             {/* Label */}
                             <span
-                                className="relative z-10 transition-colors flex-1"
+                                className="relative z-10 transition-all duration-200 flex-1 font-medium text-sm"
                                 style={{
-                                    color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.6)',
-                                    textAlign: isRTL ? 'right' : 'left'
+                                    color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.65)',
+                                    textShadow: isActive ? '0 0 12px rgba(0, 240, 255, 0.4)' : 'none',
                                 }}
                             >
                                 {t(item.labelKey)}
                             </span>
 
-                            {/* Active Indicator */}
+                            {/* Active Indicator Bar */}
                             {isActive && (
                                 <motion.div
-                                    className={`absolute top-1/2 -translate-y-1/2 w-1 h-8 bg-[#00F0FF] rounded-full ${isRTL ? 'left-0 rounded-r-none rounded-l-full' : 'right-0 rounded-l-none rounded-r-full'
+                                    className={`absolute top-1/2 -translate-y-1/2 w-[3px] h-7 bg-[#00F0FF] ${isRTL ? 'left-0 rounded-r-full' : 'right-0 rounded-l-full'
                                         }`}
                                     style={{
-                                        boxShadow: '0 0 10px #00F0FF',
+                                        boxShadow: '0 0 12px #00F0FF, 0 0 20px rgba(0, 240, 255, 0.5)',
                                     }}
                                     layoutId="sidebar-active-indicator"
-                                    transition={{ type: 'spring', duration: 0.6, bounce: 0.2 }}
+                                    transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
                                 />
                             )}
                         </motion.button>
@@ -103,16 +154,54 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                 })}
             </nav>
 
-            {/* Bottom Info */}
-            <div className="absolute bottom-6 left-6 right-6">
-                <div className="glass-card backdrop-blur-xl border border-white/10 rounded-xl p-4">
-                    <p className="text-white/40 text-xs mb-2 text-start">{t('systemStatus')}</p>
+            {/* Bottom Status Card */}
+            <motion.div
+                className="absolute bottom-5 left-4 right-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.4 }}
+            >
+                <div
+                    className="rounded-xl p-4"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(0, 255, 157, 0.08), rgba(0, 240, 255, 0.05))',
+                        border: '1px solid rgba(0, 255, 157, 0.15)',
+                        backdropFilter: 'blur(10px)',
+                    }}
+                >
+                    <div className="flex items-center gap-2 mb-3">
+                        <Activity className="w-4 h-4 text-[#00FF9D]" />
+                        <p className="text-white/50 text-xs font-medium">{t('systemStatus')}</p>
+                    </div>
                     <div className="flex items-center justify-between">
                         <span className="text-white/70 text-sm">{t('uptime')}</span>
-                        <span className="text-[#00FF9D] text-sm font-mono">99.8%</span>
+                        <div className="flex items-center gap-2">
+                            <motion.div
+                                className="w-2 h-2 rounded-full bg-[#00FF9D]"
+                                animate={{
+                                    scale: [1, 1.2, 1],
+                                    opacity: [1, 0.7, 1],
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: 'easeInOut'
+                                }}
+                                style={{ boxShadow: '0 0 8px #00FF9D' }}
+                            />
+                            <span
+                                className="text-sm font-mono font-semibold"
+                                style={{
+                                    color: '#00FF9D',
+                                    textShadow: '0 0 10px rgba(0, 255, 157, 0.4)',
+                                }}
+                            >
+                                99.8%
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </aside>
     );
 }
