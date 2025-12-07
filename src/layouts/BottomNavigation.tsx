@@ -22,21 +22,23 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: 'spring', damping: 25, stiffness: 300, delay: 0.1 }}
-      className="fixed bottom-0 left-0 right-0 z-50"
+      className="fixed bottom-0 z-50"
       style={{
-        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)',
-        paddingLeft: 'max(env(safe-area-inset-left, 0px), 16px)',
-        paddingRight: 'max(env(safe-area-inset-right, 0px), 16px)',
+        left: '12px',
+        right: '12px',
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)',
       }}
     >
       <div
-        className="glass-card rounded-2xl mx-auto max-w-md"
+        className="glass-card rounded-2xl"
         style={{
-          padding: 'var(--space-sm, 0.5rem) var(--space-md, 1rem)',
+          padding: '10px 12px',
           boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 240, 255, 0.1)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
-        <div className="flex items-center justify-around gap-1">
+        <div className="flex items-center justify-between">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -45,11 +47,10 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
               <motion.button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className="relative flex flex-col items-center justify-center gap-0.5 rounded-xl touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                className="relative flex-1 flex flex-col items-center justify-center gap-1 rounded-xl touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                 style={{
-                  minWidth: '64px',
-                  minHeight: '52px',
-                  padding: 'var(--space-xs, 0.25rem) var(--space-sm, 0.5rem)',
+                  minHeight: '56px',
+                  padding: '8px 4px',
                 }}
                 whileTap={{ scale: 0.92 }}
                 whileHover={{ scale: 1.02 }}
@@ -80,10 +81,10 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
                   className="relative z-10"
                 >
                   <Icon
-                    className="w-5 h-5 transition-all duration-200"
+                    className="w-6 h-6 transition-all duration-200"
                     style={{
-                      color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.55)',
-                      filter: isActive ? 'drop-shadow(0 0 6px #00F0FF)' : 'none',
+                      color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.6)',
+                      filter: isActive ? 'drop-shadow(0 0 8px #00F0FF)' : 'none',
                     }}
                     strokeWidth={isActive ? 2.5 : 2}
                   />
@@ -91,7 +92,7 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
 
                 {/* Label */}
                 <motion.span
-                  className="relative z-10 text-[10px] font-medium tracking-wide leading-tight"
+                  className="relative z-10 text-[11px] font-medium tracking-wide leading-tight"
                   animate={{
                     color: isActive ? '#00F0FF' : 'rgba(255, 255, 255, 0.45)',
                     opacity: isActive ? 1 : 0.9,
