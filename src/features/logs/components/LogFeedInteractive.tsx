@@ -39,6 +39,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [showItemsDropdown, setShowItemsDropdown] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
@@ -57,9 +58,17 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
 
   // Parse timestamp to Date object for comparison
   const parseLogTimestamp = useCallback((timestamp: string): Date => {
-    const today = new Date();
-    const [hours, minutes, seconds] = timestamp.split(':').map(Number);
-    return new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes, seconds);
+    // Support both 'HH:MM:SS' and 'YYYY-MM-DD HH:MM:SS' formats
+    if (timestamp.includes(' ')) {
+      const [datePart, timePart] = timestamp.split(' ');
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hours, minutes, seconds] = timePart.split(':').map(Number);
+      return new Date(year, month - 1, day, hours, minutes, seconds);
+    } else {
+      const today = new Date();
+      const [hours, minutes, seconds] = timestamp.split(':').map(Number);
+      return new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes, seconds);
+    }
   }, []);
 
   // Filter logs based on all criteria including date range
@@ -221,8 +230,8 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
             )}
           </div>
 
-          {/* Statistics Cards Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {/* Statistics Cards Grid - Square Brick Layout */}
+          <div className="flex flex-wrap gap-3 justify-start">
             {[
               { key: 'total', label: t('total') || 'کل', value: stats.total, icon: Activity, color: primaryColor, percentage: 100 },
               { key: 'success', label: t('success') || 'موفق', value: stats.success, icon: CheckCircle, color: '#00FF9D', percentage: stats.total ? (stats.success / stats.total) * 100 : 0 },
@@ -232,16 +241,17 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
             ].map((stat, index) => (
               <motion.div
                 key={stat.key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.08 }}
-                whileHover={{ scale: 1.03, y: -4 }}
+                whileHover={{ scale: 1.05, y: -4 }}
                 onHoverStart={() => setHoveredStat(stat.key)}
                 onHoverEnd={() => setHoveredStat(null)}
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer flex-shrink-0"
+                style={{ width: 'calc(33.333% - 8px)', minWidth: '100px', maxWidth: '140px' }}
               >
                 <div
-                  className="relative overflow-hidden rounded-2xl border p-4 transition-all duration-300"
+                  className="relative overflow-hidden rounded-2xl border aspect-square p-3 transition-all duration-300 flex flex-col items-center justify-center"
                   style={{
                     background: theme === 'matrix'
                       ? 'linear-gradient(135deg, rgba(0, 20, 0, 0.6), rgba(0, 10, 0, 0.8))'
@@ -259,55 +269,41 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                     }}
                   />
 
-                  {/* Top Row: Icon + Percentage */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center transition-all group-hover:scale-110"
-                      style={{
-                        background: `${stat.color}15`,
-                        border: `2px solid ${stat.color}30`,
-                        boxShadow: `0 0 20px ${stat.color}10`,
-                      }}
+                  {/* Circular Progress with Percentage */}
+                  <div className="relative w-12 h-12 mb-2">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
+                      <circle
+                        cx="20"
+                        cy="20"
+                        r="16"
+                        stroke={`${stat.color}20`}
+                        strokeWidth="3"
+                        fill="none"
+                      />
+                      <motion.circle
+                        cx="20"
+                        cy="20"
+                        r="16"
+                        stroke={stat.color}
+                        strokeWidth="3"
+                        fill="none"
+                        strokeLinecap="round"
+                        initial={{ strokeDasharray: '0 100' }}
+                        animate={{ strokeDasharray: `${stat.percentage} 100` }}
+                        transition={{ duration: 1, delay: index * 0.1 }}
+                      />
+                    </svg>
+                    <span
+                      className="absolute inset-0 flex items-center justify-center text-[8px] font-bold"
+                      style={{ color: stat.color }}
                     >
-                      <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
-                    </div>
-
-                    {/* Circular Progress */}
-                    <div className="relative w-10 h-10">
-                      <svg className="w-full h-full transform -rotate-90">
-                        <circle
-                          cx="20"
-                          cy="20"
-                          r="16"
-                          stroke={`${stat.color}20`}
-                          strokeWidth="3"
-                          fill="none"
-                        />
-                        <motion.circle
-                          cx="20"
-                          cy="20"
-                          r="16"
-                          stroke={stat.color}
-                          strokeWidth="3"
-                          fill="none"
-                          strokeLinecap="round"
-                          initial={{ strokeDasharray: '0 100' }}
-                          animate={{ strokeDasharray: `${stat.percentage} 100` }}
-                          transition={{ duration: 1, delay: index * 0.1 }}
-                        />
-                      </svg>
-                      <span
-                        className="absolute inset-0 flex items-center justify-center text-[9px] font-bold"
-                        style={{ color: stat.color }}
-                      >
-                        {Math.round(stat.percentage)}%
-                      </span>
-                    </div>
+                      {Math.round(stat.percentage)}%
+                    </span>
                   </div>
 
-                  {/* Value */}
+                  {/* Value - Large and Centered */}
                   <motion.p
-                    className="text-3xl font-bold mb-1"
+                    className="text-2xl font-bold text-center leading-none"
                     style={{
                       color: stat.color,
                       textShadow: `0 0 20px ${stat.color}40`,
@@ -319,8 +315,8 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                     {stat.value}
                   </motion.p>
 
-                  {/* Label */}
-                  <p className="text-xs text-white/50 font-medium truncate">
+                  {/* Label - Below Value */}
+                  <p className="text-[10px] text-white/50 font-medium text-center mt-1 leading-tight">
                     {stat.label}
                   </p>
 
@@ -361,36 +357,82 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
           >
             <div className="flex flex-wrap items-center gap-3">
 
-              {/* Search Input */}
-              <div className="relative flex-1 min-w-[200px]">
-                <Search
-                  className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 transition-all ${isRTL ? 'right-4' : 'left-4'}`}
-                  style={{ color: searchFocused ? primaryColor : 'rgba(255, 255, 255, 0.4)' }}
-                />
-                <input
-                  type="text"
-                  placeholder={t('searchLogs') || 'جستجوی کاربر، مکان، دستگاه...'}
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setSearchFocused(false)}
-                  className={`w-full bg-black/30 border-2 rounded-xl py-3 text-sm text-white/90 placeholder-white/30 focus:outline-none transition-all ${isRTL ? 'pr-11 pl-4 text-right' : 'pl-11 pr-4 text-left'}`}
-                  style={{
-                    borderColor: searchFocused ? `${primaryColor}60` : 'rgba(255, 255, 255, 0.1)',
-                    boxShadow: searchFocused ? `0 0 20px ${primaryColor}15` : 'none',
-                  }}
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
-                    className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-white/10 transition-all ${isRTL ? 'left-3' : 'right-3'}`}
-                  >
-                    <X className="w-3 h-3 text-white/50" />
-                  </button>
-                )}
+              {/* Search Input - Expandable Icon */}
+              <div className="relative">
+                <AnimatePresence mode="wait">
+                  {isSearchExpanded ? (
+                    <motion.div
+                      key="search-expanded"
+                      initial={{ width: 48, opacity: 0.8 }}
+                      animate={{ width: 280, opacity: 1 }}
+                      exit={{ width: 48, opacity: 0.8 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      className="relative"
+                    >
+                      <Search
+                        className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 transition-all ${isRTL ? 'right-4' : 'left-4'}`}
+                        style={{ color: searchFocused ? primaryColor : 'rgba(255, 255, 255, 0.4)' }}
+                      />
+                      <input
+                        type="text"
+                        placeholder={t('searchLogs') || 'جستجوی کاربر، مکان، دستگاه...'}
+                        value={searchQuery}
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
+                          setCurrentPage(1);
+                        }}
+                        onFocus={() => setSearchFocused(true)}
+                        onBlur={() => {
+                          setSearchFocused(false);
+                          if (!searchQuery) {
+                            setTimeout(() => setIsSearchExpanded(false), 150);
+                          }
+                        }}
+                        autoFocus
+                        className={`w-full bg-black/30 border-2 rounded-xl py-3 text-sm text-white/90 placeholder-white/30 focus:outline-none transition-all ${isRTL ? 'pr-12 pl-10 text-right' : 'pl-12 pr-10 text-left'}`}
+                        style={{
+                          borderColor: searchFocused ? `${primaryColor}60` : 'rgba(255, 255, 255, 0.1)',
+                          boxShadow: searchFocused ? `0 0 20px ${primaryColor}15` : 'none',
+                        }}
+                      />
+                      <button
+                        onClick={() => {
+                          setSearchQuery('');
+                          setIsSearchExpanded(false);
+                          setCurrentPage(1);
+                        }}
+                        className={`absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/10 transition-all ${isRTL ? 'left-2' : 'right-2'}`}
+                      >
+                        <X className="w-4 h-4 text-white/50" />
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <motion.button
+                      key="search-icon"
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.9, opacity: 0 }}
+                      onClick={() => setIsSearchExpanded(true)}
+                      className="w-12 h-12 rounded-xl border flex items-center justify-center bg-black/20 hover:bg-black/30 transition-all group"
+                      style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Search
+                        className="w-5 h-5 text-white/60 group-hover:text-white/80 transition-colors"
+                        style={{ color: searchQuery ? primaryColor : undefined }}
+                      />
+                      {searchQuery && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
+                          style={{ backgroundColor: primaryColor }}
+                        />
+                      )}
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Separator */}
@@ -431,8 +473,8 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
               {/* Separator */}
               <div className="hidden sm:block w-px h-8 bg-white/10" />
 
-              {/* Items Per Page */}
-              <div className="relative z-40">
+              {/* Items Per Page - Fixed z-index */}
+              <div className="relative z-[9999]">
                 <button
                   onClick={() => setShowItemsDropdown(!showItemsDropdown)}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border bg-black/20 hover:bg-black/30 transition-all text-sm font-medium text-white/70"
@@ -448,20 +490,21 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                     <>
                       {/* Backdrop */}
                       <div
-                        className="fixed inset-0 z-30"
+                        className="fixed inset-0 z-[9998]"
                         onClick={() => setShowItemsDropdown(false)}
                       />
                       <motion.div
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className={`absolute top-full mt-2 w-28 rounded-xl border overflow-hidden z-40 ${isRTL ? 'right-0' : 'left-0'}`}
+                        className={`absolute bottom-full mb-2 w-28 rounded-xl border overflow-hidden z-[9999] ${isRTL ? 'right-0' : 'left-0'}`}
                         style={{
                           background: theme === 'matrix'
                             ? 'rgba(0, 25, 0, 0.98)'
                             : 'rgba(15, 15, 30, 0.98)',
                           borderColor: 'rgba(255, 255, 255, 0.1)',
                           backdropFilter: 'blur(20px)',
+                          boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)',
                         }}
                       >
                         {[5, 10, 20, 50].map((num) => (
