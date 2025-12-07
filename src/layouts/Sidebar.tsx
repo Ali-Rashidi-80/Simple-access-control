@@ -154,54 +154,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                 })}
             </nav>
 
-            {/* Bottom Status Card */}
-            <motion.div
-                className="absolute bottom-5 left-4 right-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.4 }}
-            >
-                <div
-                    className="rounded-xl p-4"
-                    style={{
-                        background: 'linear-gradient(135deg, rgba(0, 255, 157, 0.08), rgba(0, 240, 255, 0.05))',
-                        border: '1px solid rgba(0, 255, 157, 0.15)',
-                        backdropFilter: 'blur(10px)',
-                    }}
-                >
-                    <div className="flex items-center gap-2 mb-3">
-                        <Activity className="w-4 h-4 text-[#00FF9D]" />
-                        <p className="text-white/50 text-xs font-medium">{t('systemStatus')}</p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <span className="text-white/70 text-sm">{t('uptime')}</span>
-                        <div className="flex items-center gap-2">
-                            <motion.div
-                                className="w-2 h-2 rounded-full bg-[#00FF9D]"
-                                animate={{
-                                    scale: [1, 1.2, 1],
-                                    opacity: [1, 0.7, 1],
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    ease: 'easeInOut'
-                                }}
-                                style={{ boxShadow: '0 0 8px #00FF9D' }}
-                            />
-                            <span
-                                className="text-sm font-mono font-semibold"
-                                style={{
-                                    color: '#00FF9D',
-                                    textShadow: '0 0 10px rgba(0, 255, 157, 0.4)',
-                                }}
-                            >
-                                99.8%
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
+
         </aside>
     );
 }

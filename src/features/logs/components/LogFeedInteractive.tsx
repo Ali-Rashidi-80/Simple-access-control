@@ -508,7 +508,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
               <div className="hidden sm:block w-px h-8 bg-white/10" />
 
               {/* Items Per Page */}
-              <div className="relative z-40">
+              <div className="relative z-50" style={{ overflow: 'visible' }}>
                 <button
                   onClick={() => setShowItemsDropdown(!showItemsDropdown)}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border bg-black/20 hover:bg-black/30 transition-all text-sm font-medium text-white/70"
@@ -1121,6 +1121,9 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                       </div>
                     </div>
                   )}
+
+                  {/* Bottom Spacer */}
+                  <div className="h-4" />
                 </div>
               </div>
             </motion.div>

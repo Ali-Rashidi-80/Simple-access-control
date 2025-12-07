@@ -128,14 +128,14 @@ function UsersSection({ usersData, t, theme }: UsersSectionProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 flex items-center justify-center px-3 py-4 pb-20 sm:p-6 md:p-8"
+            className="fixed inset-0 bg-black/85 backdrop-blur-xl z-[999] flex items-center justify-center px-3 py-4 pb-20 sm:p-6 md:p-8"
             onClick={() => setSelectedUser(null)}
           >
             <motion.div
               initial={{ scale: 0.95, y: 10 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 10 }}
-              className="relative w-full max-w-[95%] sm:max-w-[450px] md:max-w-[500px]"
+              className="relative w-[90%] max-w-[430px] sm:w-[430px] md:w-[460px] lg:w-[460px]"
               onClick={(e) => e.stopPropagation()}
             >
               <div
@@ -149,7 +149,7 @@ function UsersSection({ usersData, t, theme }: UsersSectionProps) {
               >
                 {/* Header - Inline Compact */}
                 <div
-                  className="relative p-3 flex items-center gap-3"
+                  className="relative p-4 flex items-center gap-4"
                   style={{
                     background: `linear-gradient(180deg, ${primaryColor}12, transparent)`,
                   }}
@@ -165,7 +165,7 @@ function UsersSection({ usersData, t, theme }: UsersSectionProps) {
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold"
+                      className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold"
                       style={{
                         background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}CC)`,
                         color: '#fff',
@@ -190,7 +190,7 @@ function UsersSection({ usersData, t, theme }: UsersSectionProps) {
                 </div>
 
                 {/* Stats - Horizontal Row with Flex */}
-                <div className="px-3 py-2 border-t border-white/5">
+                <div className="px-4 py-3 border-t border-white/5">
                   <div className="flex gap-2">
                     {[
                       { key: 'total', label: t('total') || 'کل', value: selectedUser.total, color: primaryColor },
@@ -213,8 +213,8 @@ function UsersSection({ usersData, t, theme }: UsersSectionProps) {
                   </div>
                 </div>
 
-                {/* Action Buttons - 2x2 Grid */}
-                <div className="p-3 pt-2 grid grid-cols-2 gap-2">
+                {/* Action Buttons */}
+                <div className="p-4 pt-3 space-y-2">
                   <button
                     className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-medium transition-all active:scale-[0.97]"
                     style={{

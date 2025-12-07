@@ -119,7 +119,7 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                     className="mr-1"
                 />
                 <div className="hidden md:block text-right" style={{ pointerEvents: 'none' }}>
-                    <div className="text-[11px] font-bold text-white leading-tight">{user?.fullName}</div>
+                    <div className="text-[11px] font-bold text-white leading-tight">{t(user?.fullName || '') || user?.fullName}</div>
                     <div className="text-[9px] text-white/60 leading-tight">@{user?.username}</div>
                 </div>
                 <ChevronDown
@@ -212,7 +212,7 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
 
                                         <div>
                                             <div style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '16px', textAlign: 'center' }}>
-                                                {user?.fullName}
+                                                {t(user?.fullName || '') || user?.fullName}
                                             </div>
                                             <div style={{
                                                 display: 'flex',
@@ -224,7 +224,7 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
                                                 justifyContent: 'center',
                                                 marginTop: '4px'
                                             }}>
-                                                <span>{user?.role}</span>
+                                                <span>{t(user?.role || '') || user?.role}</span>
                                                 <span>•</span>
                                                 <span>Lvl {user?.clearanceLevel}</span>
                                             </div>

@@ -12,7 +12,7 @@ interface LanguageContextType {
 const translations = {
   fa: {
     // Header
-    appName: 'دروازه نگهبان',
+    appName: 'SentryGate',
     serverRoom: 'اتاق سرور آلفا-۷',
     connected: 'متصل',
     offline: 'آفلاین',

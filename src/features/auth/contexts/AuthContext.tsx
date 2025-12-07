@@ -34,8 +34,8 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
         user: {
             id: '1',
             username: 'admin',
-            fullName: 'مدیر سیستم',
-            role: 'مدیر',
+            fullName: 'systemAdmin',
+            role: 'admin',
             clearanceLevel: 5,
             avatar: undefined,
             lastLogin: new Date().toISOString(),
@@ -47,8 +47,8 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
         user: {
             id: '2',
             username: 'operator',
-            fullName: 'اپراتور سیستم',
-            role: 'اپراتور',
+            fullName: 'systemOperator',
+            role: 'operator',
             clearanceLevel: 3,
             avatar: undefined,
             lastLogin: new Date().toISOString(),
