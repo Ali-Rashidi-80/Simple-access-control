@@ -39,6 +39,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [showItemsDropdown, setShowItemsDropdown] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
@@ -363,36 +364,81 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
           >
             <div className="flex flex-wrap items-center gap-3">
 
-              {/* Search Input */}
-              <div className="relative flex-1 min-w-[200px]">
-                <Search
-                  className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 transition-all ${isRTL ? 'right-4' : 'left-4'}`}
-                  style={{ color: searchFocused ? primaryColor : 'rgba(255, 255, 255, 0.4)' }}
-                />
-                <input
-                  type="text"
-                  placeholder={t('searchLogs') || 'جستجوی کاربر، مکان، دستگاه...'}
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setSearchFocused(false)}
-                  className={`w-full bg-black/30 border-2 rounded-xl py-3 text-sm text-white/90 placeholder-white/30 focus:outline-none transition-all ${isRTL ? 'pr-11 pl-4 text-right' : 'pl-11 pr-4 text-left'}`}
-                  style={{
-                    borderColor: searchFocused ? `${primaryColor}60` : 'rgba(255, 255, 255, 0.1)',
-                    boxShadow: searchFocused ? `0 0 20px ${primaryColor}15` : 'none',
-                  }}
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
-                    className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-white/10 transition-all ${isRTL ? 'left-3' : 'right-3'}`}
-                  >
-                    <X className="w-3 h-3 text-white/50" />
-                  </button>
-                )}
+              {/* Expandable Search Icon/Input */}
+              <div className={`relative ${searchExpanded ? 'flex-1 min-w-[200px] order-first w-full sm:w-auto sm:order-none' : ''}`}>
+                <AnimatePresence mode="wait">
+                  {!searchExpanded ? (
+                    /* Search Icon Button - BIGGER */
+                    <motion.button
+                      key="search-icon"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSearchExpanded(true)}
+                      className="w-12 h-12 rounded-xl flex items-center justify-center border bg-black/20 hover:bg-black/30 transition-all"
+                      style={{
+                        borderColor: searchQuery ? primaryColor : 'rgba(255, 255, 255, 0.1)',
+                        boxShadow: searchQuery ? `0 0 15px ${primaryColor}35` : 'none',
+                      }}
+                    >
+                      <Search className="w-5 h-5" style={{ color: searchQuery ? primaryColor : 'rgba(255, 255, 255, 0.6)' }} />
+                      {searchQuery && (
+                        <motion.div
+                          className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full"
+                          style={{ background: primaryColor }}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                        />
+                      )}
+                    </motion.button>
+                  ) : (
+                    /* Expanded Search Input - Full Width */
+                    <motion.div
+                      key="search-input"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="relative w-full"
+                    >
+                      <input
+                        type="text"
+                        autoFocus
+                        placeholder={t('searchLogs') || 'جستجو...'}
+                        value={searchQuery}
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
+                          setCurrentPage(1);
+                        }}
+                        onFocus={() => setSearchFocused(true)}
+                        onBlur={() => {
+                          setSearchFocused(false);
+                          if (!searchQuery) {
+                            setSearchExpanded(false);
+                          }
+                        }}
+                        className="w-full bg-black/30 border-2 rounded-xl py-3 px-4 text-sm text-white/90 placeholder-white/30 focus:outline-none transition-all text-center"
+                        style={{
+                          borderColor: searchFocused ? `${primaryColor}60` : 'rgba(255, 255, 255, 0.1)',
+                          boxShadow: searchFocused ? `0 0 20px ${primaryColor}15` : 'none',
+                        }}
+                      />
+                      {/* Close/Clear Button */}
+                      <button
+                        onClick={() => {
+                          setSearchQuery('');
+                          setSearchExpanded(false);
+                          setCurrentPage(1);
+                        }}
+                        className={`absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-all ${isRTL ? 'left-2' : 'right-2'}`}
+                      >
+                        <X className="w-4 h-4 text-white/50 hover:text-white/80" />
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Separator */}
