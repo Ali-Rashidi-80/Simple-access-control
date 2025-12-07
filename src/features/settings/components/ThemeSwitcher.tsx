@@ -1,13 +1,15 @@
 import { motion } from 'motion/react';
 import { Monitor, Terminal } from 'lucide-react';
 import { useAppSettings, Theme } from '../contexts/AppSettingsContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 
 export function ThemeSwitcher() {
     const { theme, setTheme } = useAppSettings();
+    const { t } = useLanguage();
 
-    const themes: { id: Theme; icon: React.ReactNode; label: string }[] = [
-        { id: 'neon', icon: <Monitor className="w-4 h-4" />, label: 'Neon' },
-        { id: 'matrix', icon: <Terminal className="w-4 h-4" />, label: 'Matrix' },
+    const themes: { id: Theme; icon: React.ReactNode; labelKey: string }[] = [
+        { id: 'neon', icon: <Monitor className="w-4 h-4" />, labelKey: 'theme_neon' },
+        { id: 'matrix', icon: <Terminal className="w-4 h-4" />, labelKey: 'theme_matrix' },
     ];
 
     const cycleTheme = () => {
@@ -32,7 +34,7 @@ export function ThemeSwitcher() {
                 {currentTheme.icon}
             </div>
             <span className={`text-white/80 text-sm tracking-wide ${theme === 'matrix' ? 'font-mono text-[#00FF00]/80' : ''}`}>
-                {currentTheme.label}
+                {t(currentTheme.labelKey)}
             </span>
         </motion.button>
     );

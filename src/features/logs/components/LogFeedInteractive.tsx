@@ -368,31 +368,59 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
               <div className={`relative ${searchExpanded ? 'flex-1 min-w-[200px] order-first w-full sm:w-auto sm:order-none' : ''}`}>
                 <AnimatePresence mode="wait">
                   {!searchExpanded ? (
-                    /* Search Icon Button - BIGGER */
-                    <motion.button
-                      key="search-icon"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setSearchExpanded(true)}
-                      className="w-12 h-12 rounded-xl flex items-center justify-center border bg-black/20 hover:bg-black/30 transition-all"
-                      style={{
-                        borderColor: searchQuery ? primaryColor : 'rgba(255, 255, 255, 0.1)',
-                        boxShadow: searchQuery ? `0 0 15px ${primaryColor}35` : 'none',
-                      }}
-                    >
-                      <Search className="w-5 h-5" style={{ color: searchQuery ? primaryColor : 'rgba(255, 255, 255, 0.6)' }} />
-                      {searchQuery && (
-                        <motion.div
-                          className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full"
-                          style={{ background: primaryColor }}
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
+                    /* Search Icon Button - With Tooltip */
+                    <div className="relative group">
+                      <motion.button
+                        key="search-icon"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setSearchExpanded(true)}
+                        className="w-12 h-12 rounded-xl flex items-center justify-center border bg-black/20 hover:bg-black/30 transition-all"
+                        style={{
+                          borderColor: searchQuery ? primaryColor : 'rgba(255, 255, 255, 0.1)',
+                          boxShadow: searchQuery ? `0 0 15px ${primaryColor}35` : 'none',
+                        }}
+                      >
+                        <Search className="w-5 h-5" style={{ color: searchQuery ? primaryColor : 'rgba(255, 255, 255, 0.6)' }} />
+                        {searchQuery && (
+                          <motion.div
+                            className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full"
+                            style={{ background: primaryColor }}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                          />
+                        )}
+                      </motion.button>
+
+                      {/* Tooltip */}
+                      <div
+                        className={`absolute bottom-full mb-2 ${isRTL ? 'right-0' : 'left-0'} opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50`}
+                      >
+                        <div
+                          className="px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap"
+                          style={{
+                            background: theme === 'matrix' ? 'rgba(0, 30, 0, 0.95)' : 'rgba(15, 15, 35, 0.95)',
+                            border: `1px solid ${primaryColor}40`,
+                            color: 'rgba(255, 255, 255, 0.85)',
+                            boxShadow: `0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px ${primaryColor}20`,
+                          }}
+                        >
+                          {t('searchTooltip') || 'جستجو بر اساس نام، مکان یا دستگاه'}
+                        </div>
+                        {/* Tooltip Arrow */}
+                        <div
+                          className={`absolute top-full ${isRTL ? 'right-4' : 'left-4'} w-0 h-0`}
+                          style={{
+                            borderLeft: '6px solid transparent',
+                            borderRight: '6px solid transparent',
+                            borderTop: `6px solid ${primaryColor}40`,
+                          }}
                         />
-                      )}
-                    </motion.button>
+                      </div>
+                    </div>
                   ) : (
                     /* Expanded Search Input - Full Width */
                     <motion.div
@@ -503,7 +531,7 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className={`absolute top-full mt-2 w-28 rounded-xl border overflow-hidden z-40 ${isRTL ? 'right-0' : 'left-0'}`}
+                        className={`absolute top-full mt-2 w-28 rounded-xl border overflow-hidden z-[100] ${isRTL ? 'right-0' : 'left-0'}`}
                         style={{
                           background: theme === 'matrix'
                             ? 'rgba(0, 25, 0, 0.98)'
