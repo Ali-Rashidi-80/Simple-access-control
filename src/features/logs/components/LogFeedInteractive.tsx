@@ -221,8 +221,13 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
             )}
           </div>
 
-          {/* Statistics Cards Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {/* Statistics Cards Grid - Brick-like responsive layout */}
+          <div
+            className="grid gap-3"
+            style={{
+              gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+            }}
+          >
             {[
               { key: 'total', label: t('total') || 'کل', value: stats.total, icon: Activity, color: primaryColor, percentage: 100 },
               { key: 'success', label: t('success') || 'موفق', value: stats.success, icon: CheckCircle, color: '#00FF9D', percentage: stats.total ? (stats.success / stats.total) * 100 : 0 },
@@ -232,103 +237,100 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
             ].map((stat, index) => (
               <motion.div
                 key={stat.key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.08 }}
-                whileHover={{ scale: 1.03, y: -4 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.06 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 onHoverStart={() => setHoveredStat(stat.key)}
                 onHoverEnd={() => setHoveredStat(null)}
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer aspect-square"
               >
                 <div
-                  className="relative overflow-hidden rounded-2xl border p-4 transition-all duration-300"
+                  className="relative h-full overflow-hidden rounded-2xl border p-3 transition-all duration-300 flex flex-col"
                   style={{
                     background: theme === 'matrix'
-                      ? 'linear-gradient(135deg, rgba(0, 20, 0, 0.6), rgba(0, 10, 0, 0.8))'
-                      : 'linear-gradient(135deg, rgba(15, 15, 35, 0.6), rgba(10, 10, 30, 0.8))',
-                    borderColor: hoveredStat === stat.key ? `${stat.color}50` : 'rgba(255, 255, 255, 0.08)',
-                    boxShadow: hoveredStat === stat.key ? `0 8px 32px ${stat.color}20` : 'none',
-                    backdropFilter: 'blur(12px)',
+                      ? 'linear-gradient(145deg, rgba(0, 20, 0, 0.7), rgba(0, 15, 0, 0.9))'
+                      : 'linear-gradient(145deg, rgba(15, 15, 35, 0.7), rgba(10, 10, 30, 0.9))',
+                    borderColor: hoveredStat === stat.key ? `${stat.color}60` : 'rgba(255, 255, 255, 0.08)',
+                    boxShadow: hoveredStat === stat.key ? `0 6px 24px ${stat.color}25, inset 0 0 20px ${stat.color}08` : 'none',
+                    backdropFilter: 'blur(16px)',
                   }}
                 >
                   {/* Background Glow */}
                   <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
                     style={{
-                      background: `radial-gradient(circle at center, ${stat.color}15, transparent 70%)`,
+                      background: `radial-gradient(circle at 50% 50%, ${stat.color}18, transparent 65%)`,
                     }}
                   />
 
-                  {/* Top Row: Icon + Percentage */}
-                  <div className="flex items-center justify-between mb-3">
+                  {/* Top Section: Icon */}
+                  <div className="flex items-center justify-between mb-auto">
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center transition-all group-hover:scale-110"
+                      className="w-9 h-9 rounded-xl flex items-center justify-center transition-all group-hover:scale-110"
                       style={{
-                        background: `${stat.color}15`,
-                        border: `2px solid ${stat.color}30`,
-                        boxShadow: `0 0 20px ${stat.color}10`,
+                        background: `${stat.color}18`,
+                        border: `1.5px solid ${stat.color}35`,
+                        boxShadow: `0 0 12px ${stat.color}12`,
                       }}
                     >
-                      <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
+                      <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
                     </div>
 
-                    {/* Circular Progress */}
-                    <div className="relative w-10 h-10">
-                      <svg className="w-full h-full transform -rotate-90">
-                        <circle
-                          cx="20"
-                          cy="20"
-                          r="16"
-                          stroke={`${stat.color}20`}
-                          strokeWidth="3"
-                          fill="none"
-                        />
-                        <motion.circle
-                          cx="20"
-                          cy="20"
-                          r="16"
-                          stroke={stat.color}
-                          strokeWidth="3"
-                          fill="none"
-                          strokeLinecap="round"
-                          initial={{ strokeDasharray: '0 100' }}
-                          animate={{ strokeDasharray: `${stat.percentage} 100` }}
-                          transition={{ duration: 1, delay: index * 0.1 }}
-                        />
-                      </svg>
-                      <span
-                        className="absolute inset-0 flex items-center justify-center text-[9px] font-bold"
-                        style={{ color: stat.color }}
-                      >
-                        {Math.round(stat.percentage)}%
-                      </span>
+                    {/* Percentage Badge */}
+                    <div
+                      className="px-2 py-1 rounded-lg text-[10px] font-bold"
+                      style={{
+                        background: `${stat.color}15`,
+                        color: stat.color,
+                        border: `1px solid ${stat.color}25`,
+                      }}
+                    >
+                      {Math.round(stat.percentage)}%
                     </div>
                   </div>
 
-                  {/* Value */}
-                  <motion.p
-                    className="text-3xl font-bold mb-1"
-                    style={{
-                      color: stat.color,
-                      textShadow: `0 0 20px ${stat.color}40`,
-                    }}
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: index * 0.1 + 0.2, type: 'spring' }}
-                  >
-                    {stat.value}
-                  </motion.p>
+                  {/* Center: Value */}
+                  <div className="flex-1 flex items-center justify-center">
+                    <motion.p
+                      className="text-3xl font-extrabold leading-none"
+                      style={{
+                        color: stat.color,
+                        textShadow: `0 0 25px ${stat.color}50`,
+                      }}
+                      initial={{ scale: 0.6, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: index * 0.08 + 0.15, type: 'spring', stiffness: 200 }}
+                    >
+                      {stat.value}
+                    </motion.p>
+                  </div>
 
-                  {/* Label */}
-                  <p className="text-xs text-white/50 font-medium truncate">
+                  {/* Bottom: Label */}
+                  <p
+                    className="text-[11px] text-white/55 font-semibold text-center truncate"
+                    style={{ letterSpacing: '0.02em' }}
+                  >
                     {stat.label}
                   </p>
 
-                  {/* Bottom Accent */}
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-1 opacity-60"
+                  {/* Bottom Accent Line */}
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-[3px]"
                     style={{
-                      background: `linear-gradient(90deg, transparent, ${stat.color}, transparent)`,
+                      background: `linear-gradient(90deg, transparent 5%, ${stat.color}80 50%, transparent 95%)`,
+                    }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: index * 0.1 + 0.3, duration: 0.4 }}
+                  />
+
+                  {/* Corner Glow Effect */}
+                  <div
+                    className="absolute -top-3 -right-3 w-12 h-12 rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-400 pointer-events-none"
+                    style={{
+                      background: `radial-gradient(circle, ${stat.color}40, transparent 70%)`,
+                      filter: 'blur(8px)',
                     }}
                   />
                 </div>
