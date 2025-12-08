@@ -9,8 +9,8 @@ import machine
 import time
 
 # SSID and Password (REPLACE WITH YOUR CREDENTIALS)
-SSID = ""
-PASSWORD = ""
+SSID = "ICT"
+PASSWORD = "@Mohsen1370"
 
 def do_connect():
     wlan = network.WLAN(network.STA_IF)

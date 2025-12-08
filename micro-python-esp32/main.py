@@ -8,15 +8,31 @@ import random
 import time
 from mfrc522 import MFRC522
 
+# SSL Support
+try:
+    import ussl
+except ImportError:
+    try:
+        import ssl as ussl
+    except ImportError:
+        print("[SYS] Warning: SSL not available")
+        ussl = None
+
 # ==========================================
 # 0. CREDENTIALS & CONFIG
 # ==========================================
 WIFI_SSID = "ICT"
 WIFI_PASS = "@Mohsen1370"
 
-SERVER_IP = "192.168.1.100"  # CHANGE THIS TO YOUR BACKEND IP
-SERVER_PORT = 8000
-WS_URL = "ws://{}:{}/ws/hardware".format(SERVER_IP, SERVER_PORT)
+# CLOUD CONFIGURATION
+SERVER_HOST = "sentry-backend.app" # REPLACE WITH YOUR DOMAIN
+SERVER_PORT = 443 # Default HTTPS/WSS port
+USE_SSL = True
+
+if USE_SSL:
+    WS_URL = "wss://{}/ws/hardware".format(SERVER_HOST)
+else:
+    WS_URL = "ws://{}:{}/ws/hardware".format(SERVER_HOST, SERVER_PORT)
 
 # Temperature Calibration
 VREF = 3.580 
@@ -37,7 +53,7 @@ PERIPHERALS = dict(
 )
 
 # ==========================================
-# 2. LIGHTWEIGHT ASYNC WEBSOCKET CLIENT
+# 2. LIGHTWEIGHT ASYNC WEBSOCKET CLIENT (SSL ENHANCED)
 # ==========================================
 class AsyncWSClient:
     def __init__(self, uri):
@@ -45,17 +61,28 @@ class AsyncWSClient:
         self.reader = None
         self.writer = None
         self.open = False
+        self.ssl = False
 
     async def connect(self):
         try:
             proto, dummy, host, path = self.uri.split("/", 3)
             port = 80
+            if proto == "wss:":
+                self.ssl = True
+                port = 443
+            
             if ":" in host:
                 host, port = host.split(":")
                 port = int(port)
             
-            print(f"[WS] Connecting to {host}:{port}...")
-            self.reader, self.writer = await asyncio.open_connection(host, port)
+            print(f"[WS] Connecting to {host}:{port} ({'SSL' if self.ssl else 'TCP'})...")
+            
+            # 1. Open socket connection
+            self.reader, self.writer = await asyncio.open_connection(host, port, ssl=self.ssl)
+            
+            # Note: in MicroPython asyncio.open_connection with ssl=True handles the wrap_socket internally
+            # or returns a wrapped stream. The previous manual wrap strategy is for sync sockets.
+            # uasyncio.open_connection(host, port, ssl=True) is supported in recent MicroPython versions.
             
             # WebSocket Handshake (Fixed Key)
             key = "dGhlIHNhbXBsZSBub25jZQ=="
@@ -185,49 +212,36 @@ class HardwareManager:
         except:
             return 0.0
 
-    # --- Async Sound Helpers ---
     async def _sound(self, freq, duration_sec):
         if freq < 50: freq = 50
         self.buzzer.freq(int(freq))
-        self.buzzer.duty_u16(32768) # 50%
+        self.buzzer.duty_u16(32768) 
         await asyncio.sleep(duration_sec)
 
     async def _silence(self, duration_sec):
         self.buzzer.duty_u16(0)
         await asyncio.sleep(duration_sec)
 
-    # --- Melodies from test/main_buzzer_passive.py ---
-    
     async def play_success(self):
-        """Magic Chime: E5, G#5, B5, E6"""
         print("[SND] Success: Magic Chime")
         melody = [659, 830, 987, 1318] 
-        # Fast 3 notes
         for i in range(3):
-            await self._sound(melody[i], 0.08) # 80ms
-            await self._silence(0.02)          # 20ms
-        
-        # Last note long
+            await self._sound(melody[i], 0.08) 
+            await self._silence(0.02)          
         await self._silence(0.03)
-        await self._sound(melody[3], 0.3)      # 300ms
+        await self._sound(melody[3], 0.3)      
         await self._silence(0.1)
 
     async def play_error(self):
-        """System Fail: Dissonant + Power Down"""
         print("[SND] Error: System Fail")
         await self._sound(440, 0.15)
         await self._sound(311, 0.3)
-        
-        # Power down effect
-        # We can't blocking loop here too long, so coarse steps
         for f in range(311, 50, -30):
             self.buzzer.freq(int(f))
             await asyncio.sleep(0.01)
-        
         await self._silence(0.2)
 
     async def play_startup(self):
-        """Simple startup beep sequence"""
         await self._sound(1000, 0.1)
         await self._silence(0.1)
         await self._sound(1000, 0.1)
@@ -235,7 +249,7 @@ class HardwareManager:
 
     async def open_door(self, duration=3):
         print(f"[HW] Opening Door for {duration}s...")
-        asyncio.create_task(self.play_success()) # Play sound concurrently
+        asyncio.create_task(self.play_success()) 
         self.relay.value(1)
         await asyncio.sleep(duration) 
         self.relay.value(0)
@@ -286,22 +300,22 @@ async def system_runner():
         wdt = None
 
     hw = HardwareManager()
+    
+    # Use global WS_URL which supports WSS
+    print(f"[SYS] Target WebSocket: {WS_URL}")
     ws = AsyncWSClient(WS_URL)
     
-    # Startup Sound
     await hw.play_startup()
     
-    # Tasks
     asyncio.create_task(ws_receiver(ws, hw))
     asyncio.create_task(telemetry_sender(ws, hw))
     
     wifi_retry_count = 0
-    print(f"[SYS] System Runner Started. Target: {SERVER_IP}")
+    print(f"[SYS] System Runner Started.")
     
     while True:
         if wdt: wdt.feed()
 
-        # Robust WiFi Check & Auto-Reconnect
         sta = network.WLAN(network.STA_IF)
         if not sta.isconnected():
             print(f"[NET] WiFi Down. Reconnecting to {WIFI_SSID}...")
@@ -330,7 +344,6 @@ async def system_runner():
                 else:
                     await asyncio.sleep(5)
             
-            # RFID Scan
             if hw.rdr:
                 try:
                     (stat, tag_type) = hw.rdr.request(hw.rdr.REQIDL)
@@ -339,7 +352,6 @@ async def system_runner():
                         if stat == hw.rdr.OK:
                             uid_str = "0x%02x%02x%02x%02x" % (uid[0], uid[1], uid[2], uid[3])
                             print(f"[RFID] Scanned: {uid_str}")
-                            # Send rfid key
                             payload = json.dumps({
                                 "type": "scan",
                                 "rfid": uid_str,

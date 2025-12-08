@@ -5,7 +5,7 @@ import os
 # Create app directory if it doesn't exist to ensure DB file can be created
 os.makedirs("data", exist_ok=True)
 
-SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./data/sentrygate.db"
+SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:////app/data/sentrygate.db"
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL,
