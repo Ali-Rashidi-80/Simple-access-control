@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Toaster } from 'sonner';
+import { WebSocketProvider } from './contexts/WebSocketContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './features/auth/contexts/AuthContext';
 import { AppSettingsProvider, useAppSettings } from './features/settings/contexts/AppSettingsContext';
 import { Sidebar } from './layouts/Sidebar';
 import { BottomNavigation } from './layouts/BottomNavigation';
 import { LiquidUnlockButton } from './features/auth/components/LiquidUnlockButton';
+import Dashboard from './features/dashboard/Dashboard';
+import UserManagement from './features/users/UserManagement';
 import { StatsCard } from './features/dashboard/components/StatsCard';
 import { LogFeedInteractive } from './features/logs/components/LogFeedInteractive';
 import { LanguageSwitcher } from './features/settings/components/LanguageSwitcher';
@@ -632,7 +636,10 @@ export default function App() {
     <LanguageProvider>
       <AppSettingsProvider>
         <AuthProvider>
-          <AppContent />
+          <WebSocketProvider>
+            <AppContent />
+            <Toaster richColors position="top-center" theme="dark" />
+          </WebSocketProvider>
         </AuthProvider>
       </AppSettingsProvider>
     </LanguageProvider>

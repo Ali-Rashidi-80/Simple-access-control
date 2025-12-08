@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: sentrygate_backend
+    volumes:
+      - ./backend/data:/app/data
+    restart: always
+    networks:
+      - sentrygate-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentrygate_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - sentrygate-network
+
+networks:
+  sentrygate-network:
+    driver: bridge

@@ -58,9 +58,20 @@ export function LogFeedInteractive({ logs, compact = false }: LogFeedInteractive
 
   // Parse timestamp to Date object for comparison
   const parseLogTimestamp = useCallback((timestamp: string): Date => {
+    // If timestamp is just time "HH:MM:SS", we might need the old logic, but generally backend sends ISO.
+    // Let's support both: if it contains "T" or "-", assume ISO. Else assume Time-only (today).
+    if (timestamp.includes('T') || timestamp.includes('-')) {
+      return new Date(timestamp);
+    }
+
+    // Fallback for Time-only "HH:MM:SS" (legacy/mock support)
     const today = new Date();
-    const [hours, minutes, seconds] = timestamp.split(':').map(Number);
-    return new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes, seconds);
+    const parts = timestamp.split(':');
+    if (parts.length >= 2) {
+      const [hours, minutes, seconds] = parts.map(Number);
+      return new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes, seconds || 0);
+    }
+    return new Date(); // Fallback
   }, []);
 
   // Filter logs based on all criteria including date range

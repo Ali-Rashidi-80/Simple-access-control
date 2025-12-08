@@ -27,7 +27,7 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
   const [requireBiometric, setRequireBiometric] = useState(false); // Default false per request
   const [isDuressMode, setIsDuressMode] = useState(false);
   const [theme, setTheme] = useState<Theme>('neon');
-  const [timerDuration, setTimerDuration] = useState(5);
+  const [timerDuration, setTimerDuration] = useState(3);
   const [autoLockStart, setAutoLockStart] = useState(0); // 12 AM (midnight)
   const [autoLockEnd, setAutoLockEnd] = useState(6); // 6 AM
   const [isSecureMode, setIsSecureMode] = useState(false);
