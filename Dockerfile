@@ -1,24 +1,45 @@
-# Build Stage
+# Dockerfile (Monolithic)
+
+# ==========================================
+# Stage 1: Build Frontend (Node.js)
+# ==========================================
 FROM node:18-alpine as builder
+
+WORKDIR /frontend_build
+
+# Copy dependency definitions
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code (files in root)
+COPY . .
+
+# Build React App (Output -> /frontend_build/build)
+RUN npm run build
+
+
+# ==========================================
+# Stage 2: Production Backend (Python)
+# ==========================================
+FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+# Install Backend Dependencies
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
-# Set env var for build time if managed by Vite
-ENV VITE_API_URL=/api
-ENV VITE_WS_URL=ws://localhost/ws/frontend
+# Copy Backend Code
+COPY backend/ .
 
-RUN npm run build
+# Copy Built Frontend Assets from Stage 1
+# We place them in /app/static
+COPY --from=builder /frontend_build/build /app/static
 
-# Run Stage
-FROM nginx:alpine
+# Expose Port
+EXPOSE 8000
 
-COPY --from=builder /app/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Run FastAPI
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

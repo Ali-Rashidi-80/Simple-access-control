@@ -17,6 +17,7 @@ class AccessLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_name = Column(String)  # Denormalized for easier querying if user is deleted, or unknown
+    rfid_tag = Column(String, index=True) # Added to track which tag caused the log
     action = Column(String)  # GRANTED, DENIED
     timestamp = Column(DateTime, default=datetime.utcnow)
     is_duress = Column(Boolean, default=False)

@@ -19,20 +19,40 @@ except ImportError:
         ussl = None
 
 # ==========================================
-# 0. CREDENTIALS & CONFIG
+# 0. CREDENTIALS & CONFIG LOAD
 # ==========================================
-WIFI_SSID = "ICT"
-WIFI_PASS = "@Mohsen1370"
+def load_config():
+    try:
+        with open('config.json', 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[SYS] Error loading config.json: {e}")
+        return None
 
-# CLOUD CONFIGURATION
-SERVER_HOST = "sentry-backend.app" # REPLACE WITH YOUR DOMAIN
-SERVER_PORT = 443 # Default HTTPS/WSS port
-USE_SSL = True
+CONFIG = load_config()
+
+if not CONFIG:
+    print("[SYS] CRITICAL: config.json missing or invalid. Using defaults/failing.")
+    WIFI_SSID = "DEFAULT_SSID"
+    WIFI_PASS = "DEFAULT_PASS"
+    SERVER_HOST = "localhost"
+    SERVER_PORT = 8000
+    USE_SSL = False
+    WS_PATH = "/ws/hardware"
+else:
+    WIFI_SSID = CONFIG.get("wifi_ssid", "")
+    WIFI_PASS = CONFIG.get("wifi_pass", "")
+    SERVER_HOST = CONFIG.get("server_host", "localhost")
+    SERVER_PORT = CONFIG.get("server_port", 8000)
+    USE_SSL = CONFIG.get("use_ssl", False)
+    WS_PATH = CONFIG.get("ws_path", "/ws/hardware")
 
 if USE_SSL:
-    WS_URL = "wss://{}/ws/hardware".format(SERVER_HOST)
+    WS_URL = "wss://{}{}".format(SERVER_HOST, WS_PATH)
+    if SERVER_PORT != 443:
+         WS_URL = "wss://{}:{}{}".format(SERVER_HOST, SERVER_PORT, WS_PATH)
 else:
-    WS_URL = "ws://{}:{}/ws/hardware".format(SERVER_HOST, SERVER_PORT)
+    WS_URL = "ws://{}:{}{}".format(SERVER_HOST, SERVER_PORT, WS_PATH)
 
 # Temperature Calibration
 VREF = 3.580 
@@ -53,7 +73,7 @@ PERIPHERALS = dict(
 )
 
 # ==========================================
-# 2. LIGHTWEIGHT ASYNC WEBSOCKET CLIENT (SSL ENHANCED)
+# 2. LIGHTWEIGHT ASYNC WEBSOCKET CLIENT
 # ==========================================
 class AsyncWSClient:
     def __init__(self, uri):
@@ -80,11 +100,7 @@ class AsyncWSClient:
             # 1. Open socket connection
             self.reader, self.writer = await asyncio.open_connection(host, port, ssl=self.ssl)
             
-            # Note: in MicroPython asyncio.open_connection with ssl=True handles the wrap_socket internally
-            # or returns a wrapped stream. The previous manual wrap strategy is for sync sockets.
-            # uasyncio.open_connection(host, port, ssl=True) is supported in recent MicroPython versions.
-            
-            # WebSocket Handshake (Fixed Key)
+            # WebSocket Handshake (Fixed Key for lightness)
             key = "dGhlIHNhbXBsZSBub25jZQ=="
             req = (
                 "GET /{} HTTP/1.1\r\n"
@@ -177,7 +193,7 @@ class AsyncWSClient:
                 pass
 
 # ==========================================
-# 3. HARDWARE MANAGERS (With PWM Melodies)
+# 3. HARDWARE MANAGERS
 # ==========================================
 class HardwareManager:
     def __init__(self):
@@ -276,16 +292,17 @@ async def ws_receiver(ws, hw):
                     elif cmd == "DENY":
                         asyncio.create_task(hw.access_denied())
                 except:
-                    pass
+                    print("[WS] JSON Parse Error")
         await asyncio.sleep(0.1)
 
 async def telemetry_sender(ws, hw):
     while True:
         if ws.open:
             try:
+                # UPDATED SCHEMA: 'temperature' instead of 'temp'
                 msg = json.dumps({
                     "type": "telemetry",
-                    "temp": hw.read_temp()
+                    "temperature": hw.read_temp() 
                 }).encode()
                 await ws.send(msg)
             except:
@@ -300,8 +317,6 @@ async def system_runner():
         wdt = None
 
     hw = HardwareManager()
-    
-    # Use global WS_URL which supports WSS
     print(f"[SYS] Target WebSocket: {WS_URL}")
     ws = AsyncWSClient(WS_URL)
     
@@ -344,6 +359,7 @@ async def system_runner():
                 else:
                     await asyncio.sleep(5)
             
+            # RFID Loop
             if hw.rdr:
                 try:
                     (stat, tag_type) = hw.rdr.request(hw.rdr.REQIDL)
@@ -352,10 +368,12 @@ async def system_runner():
                         if stat == hw.rdr.OK:
                             uid_str = "0x%02x%02x%02x%02x" % (uid[0], uid[1], uid[2], uid[3])
                             print(f"[RFID] Scanned: {uid_str}")
+                            
+                            # UPDATED SCHEMA: 'temperature' instead of 'temp'
                             payload = json.dumps({
                                 "type": "scan",
                                 "rfid": uid_str,
-                                "temp": hw.read_temp()
+                                "temperature": hw.read_temp()
                             }).encode()
                             await ws.send(payload)
                             await asyncio.sleep(1.5) 

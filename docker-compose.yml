@@ -1,29 +1,48 @@
-version: '3.8'
-
 services:
   backend:
     build:
       context: ./backend
-    container_name: sentrygate_backend
-    volumes:
-      - ./backend/data:/app/data
+      dockerfile: Dockerfile
+    container_name: sentry_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:password@db/sentrygate
+    depends_on:
+      db:
+        condition: service_healthy
     restart: always
-    networks:
-      - sentrygate-network
 
   frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
-    container_name: sentrygate_frontend
+    container_name: sentry_frontend
     ports:
-      - "80:80"
+      - "5173:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
     depends_on:
       - backend
     restart: always
-    networks:
-      - sentrygate-network
 
-networks:
-  sentrygate-network:
-    driver: bridge
+  db:
+    image: postgres:15-alpine
+    container_name: sentry_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sentrygate
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d sentrygate" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  postgres_data:

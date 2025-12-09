@@ -1,26 +1,27 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 
-# Create app directory if it doesn't exist to ensure DB file can be created
-os.makedirs("data", exist_ok=True)
-
-SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:////app/data/sentrygate.db"
+# Use an environment variable for flexibility, default to a local file for now but ready for Postgres
+# For Phase 1 (Microscopic Audit), we will stick to SQLite to ensure we don't break the user's setup immediately, 
+# BUT we switch to the ASYNC driver.
+# ideally: POSTGRES_URL = "postgresql+asyncpg://user:password@localhost/dbname"
+DATABASE_URL = "sqlite+aiosqlite:///./sql_app.db"
 
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},  # Needed for SQLite
+    DATABASE_URL, 
+    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 )
 
-SessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
+AsyncSessionLocal = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
+)
 
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base()
 
-# Dependency to get DB session
 async def get_db():
-    async with SessionLocal() as db:
-        try:
-            yield db
-        finally:
-            await db.close()
+    async with AsyncSessionLocal() as session:
+        yield session
