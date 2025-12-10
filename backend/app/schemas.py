@@ -48,7 +48,7 @@ class AccessLogResponse(AccessLogBase):
 
 # Message FROM Hardware (ESP32)
 class HardwareMessage(BaseModel):
-    type: Literal["scan", "telemetry"]
+    type: Literal["scan", "telemetry", "ping"]
     rfid: Optional[str] = None
     temperature: Optional[float] = None # Standardized key: 'temperature'
     is_duress: bool = False
@@ -64,7 +64,7 @@ class HardwareCommand(BaseModel):
 
 # Message FROM Backend TO Frontend
 class BroadcastMessage(BaseModel):
-    type: Literal["ACCESS_LOG", "UNKNOWN_TAG", "PONG"]
-    data: Optional[dict] = None # For ACCESS_LOG
+    type: Literal["ACCESS_LOG", "UNKNOWN_TAG", "PONG", "TELEMETRY"]
+    data: Optional[dict] = None # For ACCESS_LOG and TELEMETRY
     uid: Optional[str] = None # For UNKNOWN_TAG
     timestamp: Optional[str] = None

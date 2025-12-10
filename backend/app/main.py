@@ -18,10 +18,14 @@ logger = logging.getLogger("uvicorn")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Create tables
-    async with engine.begin() as conn:
-        # await conn.run_sync(Base.metadata.drop_all) # UNCOMMENT TO RESET DB
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables verified.")
+    try:
+        async with engine.begin() as conn:
+            # await conn.run_sync(Base.metadata.drop_all) # UNCOMMENT TO RESET DB
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database tables verified.")
+    except Exception as e:
+        logger.error(f"Database Connection Failed at Startup: {e}")
+        # Continue startup so the app binds to port (allows 500 responses instead of 502 timeout)
     yield
     # Shutdown
     await engine.dispose()
@@ -31,7 +35,14 @@ app = FastAPI(title="SentryGate IoT API", lifespan=lifespan)
 # --- CORS ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, lock this down to front-end URL
+    allow_origins=[
+        "http://localhost:5173",
+        "https://sentry-frontend.chbk.app",
+        "http://sentry-frontend.chbk.app",
+        "https://rash32.ir",
+        "http://rash32.ir",
+        "*" 
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -70,6 +81,11 @@ async def websocket_endpoint(websocket: WebSocket, client_type: str):
         manager.disconnect(websocket, client_type)
     except Exception as e:
         logger.error(f"WebSocket Error ({client_type}): {e}")
+        # Try to close gracefully before disconnecting
+        try:
+            await websocket.close()
+        except:
+            pass
         manager.disconnect(websocket, client_type)
 
 # ==========================================

@@ -65,7 +65,16 @@ class ConnectionManager:
         if msg.type == "scan" and msg.rfid:
             await self._handle_scan(msg, db)
         elif msg.type == "telemetry":
-            pass
+            # Broadcast temperature to frontend
+            await self.broadcast_to_frontend(schemas.BroadcastMessage(
+                type="TELEMETRY",
+                data={"temperature": msg.temperature}
+            ))
+        elif msg.type == "ping":
+            # Keep-alive: Send acknowledgment back to hardware to keep connection alive
+            # This ensures reverse proxies/load balancers see activity on the connection
+            pass  # The act of receiving is enough for most setups, but for extra reliability
+            # we could optionally send: await websocket.send_json({"cmd": "PONG"})
 
     async def _handle_scan(self, msg: schemas.HardwareMessage, db: AsyncSession):
         auth_service = AuthService(db)

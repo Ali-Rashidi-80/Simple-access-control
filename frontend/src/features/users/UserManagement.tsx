@@ -22,7 +22,7 @@ const UserManagement = () => {
     const [rfid, setRfid] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    const apiUrl = 'https://rynix.ir';
 
     // Fetch Users
     const fetchUsers = async () => {

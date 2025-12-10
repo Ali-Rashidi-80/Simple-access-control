@@ -6,11 +6,15 @@ import os
 # For Phase 1 (Microscopic Audit), we will stick to SQLite to ensure we don't break the user's setup immediately, 
 # BUT we switch to the ASYNC driver.
 # ideally: POSTGRES_URL = "postgresql+asyncpg://user:password@localhost/dbname"
-DATABASE_URL = "sqlite+aiosqlite:///./sql_app.db"
+# Prioritize Env Var (Production), fallback to SQLite (Dev)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./sql_app.db")
+
+# Postgres requires no special connect_args, SQLite does
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 
 engine = create_async_engine(
     DATABASE_URL, 
-    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+    connect_args=connect_args
 )
 
 AsyncSessionLocal = sessionmaker(

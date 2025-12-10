@@ -1,7 +1,7 @@
 import network
 import uasyncio as asyncio
 import machine
-from machine import WDT, PWM, Pin
+from machine import WDT, PWM, Pin, SPI
 import json
 import gc
 import random
@@ -33,18 +33,18 @@ CONFIG = load_config()
 
 if not CONFIG:
     print("[SYS] CRITICAL: config.json missing or invalid. Using defaults/failing.")
-    WIFI_SSID = "DEFAULT_SSID"
-    WIFI_PASS = "DEFAULT_PASS"
-    SERVER_HOST = "localhost"
-    SERVER_PORT = 8000
-    USE_SSL = False
+    WIFI_SSID = "ICT"
+    WIFI_PASS = "@Mohsen1370"
+    SERVER_HOST = "rynix.ir"
+    SERVER_PORT = 443
+    USE_SSL = True
     WS_PATH = "/ws/hardware"
 else:
     WIFI_SSID = CONFIG.get("wifi_ssid", "")
     WIFI_PASS = CONFIG.get("wifi_pass", "")
-    SERVER_HOST = CONFIG.get("server_host", "localhost")
-    SERVER_PORT = CONFIG.get("server_port", 8000)
-    USE_SSL = CONFIG.get("use_ssl", False)
+    SERVER_HOST = CONFIG.get("server_host", "rash32.ir")
+    SERVER_PORT = CONFIG.get("server_port", 443)
+    USE_SSL = CONFIG.get("use_ssl", True)
     WS_PATH = CONFIG.get("ws_path", "/ws/hardware")
 
 if USE_SSL:
@@ -73,7 +73,7 @@ PERIPHERALS = dict(
 )
 
 # ==========================================
-# 2. LIGHTWEIGHT ASYNC WEBSOCKET CLIENT
+# 2. ROBUST ASYNC WEBSOCKET CLIENT
 # ==========================================
 class AsyncWSClient:
     def __init__(self, uri):
@@ -82,6 +82,7 @@ class AsyncWSClient:
         self.writer = None
         self.open = False
         self.ssl = False
+        self.sock = None
 
     async def connect(self):
         try:
@@ -97,10 +98,9 @@ class AsyncWSClient:
             
             print(f"[WS] Connecting to {host}:{port} ({'SSL' if self.ssl else 'TCP'})...")
             
-            # 1. Open socket connection
             self.reader, self.writer = await asyncio.open_connection(host, port, ssl=self.ssl)
             
-            # WebSocket Handshake (Fixed Key for lightness)
+            # WebSocket Handshake
             key = "dGhlIHNhbXBsZSBub25jZQ=="
             req = (
                 "GET /{} HTTP/1.1\r\n"
@@ -115,12 +115,13 @@ class AsyncWSClient:
             self.writer.write(req.encode())
             await self.writer.drain()
             
+            # Read Handshake Response
             while True:
                 line = await self.reader.readline()
                 if line == b"\r\n":
                     break
                 if not line:
-                    raise OSError("Handshake failed")
+                    raise OSError("Handshake failed: No response")
             
             self.open = True
             print("[WS] Connected!")
@@ -134,7 +135,7 @@ class AsyncWSClient:
         if not self.open: return
         try:
             frame = bytearray()
-            frame.append(0x81)
+            frame.append(0x81) # Text Frame
             length = len(data)
             if length < 126:
                 frame.append(0x80 | length)
@@ -156,41 +157,123 @@ class AsyncWSClient:
             print(f"[WS] Send Error: {e}")
             self.close()
 
+    async def _send_pong(self, payload=b""):
+        """Send a WebSocket PONG frame (RFC 6455 compliance)."""
+        if not self.open: return
+        try:
+            frame = bytearray()
+            frame.append(0x8A)  # 0x80 (FIN) | 0x0A (Pong opcode)
+            length = len(payload)
+            frame.append(0x80 | length)  # Masked
+            
+            mask = bytes([random.getrandbits(8) for _ in range(4)])
+            frame.extend(mask)
+            
+            if length > 0:
+                masked_data = bytearray(length)
+                for i in range(length):
+                    masked_data[i] = payload[i] ^ mask[i % 4]
+                frame.extend(masked_data)
+            
+            self.writer.write(frame)
+            await self.writer.drain()
+        except Exception as e:
+            print(f"[WS] Pong Error: {e}")
+
+    async def read_exactly(self, n, timeout_sec=30):
+        """Read exactly n bytes with timeout to prevent infinite blocking."""
+        data = b""
+        try:
+            while len(data) < n:
+                chunk = await asyncio.wait_for(
+                    self.reader.read(n - len(data)),
+                    timeout=timeout_sec
+                )
+                if not chunk:
+                    raise OSError("Connection closed during read")
+                data += chunk
+        except asyncio.TimeoutError:
+            raise OSError("Read timeout")
+        return data
+
     async def recv(self):
         if not self.open: return None
         try:
-            byte1 = await self.reader.read(1)
-            if not byte1: 
+            # Read first byte (FIN + Opcode)
+            data = await self.read_exactly(1)
+            byte1 = data[0]
+            opcode = byte1 & 0x0f
+            
+            # Handle Close Frame (opcode 0x8)
+            if opcode == 0x8:
+                # Consume close payload before closing
+                data = await self.read_exactly(1)
+                byte2 = data[0]
+                length = byte2 & 0x7f
+                if length > 0:
+                    await self.read_exactly(length)  # Consume close reason
+                print("[WS] Server sent Close Frame")
                 self.close()
                 return None
             
-            opcode = byte1[0] & 0x0f
-            if opcode == 0x8: 
-                self.close()
+            # Handle Ping - MUST respond with Pong (RFC 6455)
+            if opcode == 0x9:
+                data = await self.read_exactly(1)
+                byte2 = data[0]
+                length = byte2 & 0x7f
+                payload = b""
+                if length > 0:
+                    payload = await self.read_exactly(length)
+                # Send Pong with same payload
+                await self._send_pong(payload)
                 return None
-                
-            byte2 = await self.reader.read(1)
-            if not byte2: return None
             
-            length = byte2[0] & 0x7f
+            # Handle Pong (opcode 0xA) - ignore, just consume
+            if opcode == 0xA:
+                data = await self.read_exactly(1)
+                byte2 = data[0]
+                length = byte2 & 0x7f
+                if length > 0:
+                    await self.read_exactly(length)
+                return None
+
+            # Read second byte (Mask + Length)
+            data = await self.read_exactly(1)
+            byte2 = data[0]
+            length = byte2 & 0x7f
+            
             if length == 126:
-                length_bytes = await self.reader.read(2)
-                length = int.from_bytes(length_bytes, 'big')
+                data = await self.read_exactly(2)
+                length = int.from_bytes(data, 'big')
+            elif length == 127:
+                data = await self.read_exactly(8)
+                length = int.from_bytes(data, 'big')
             
-            payload = await self.reader.read(length)
-            return payload.decode('utf-8')
+            # Read Payload
+            if length > 0:
+                payload = await self.read_exactly(length)
+                try:
+                    return payload.decode('utf-8')
+                except:
+                    # If binary or corrupted, return hex string representation or None
+                    return None
+            return "" # Empty frame
+            
         except Exception as e:
             print(f"[WS] Recv Error: {e}")
             self.close()
             return None
 
     def close(self):
+        """Close connection and release resources."""
         self.open = False
         if self.writer:
             try:
                 self.writer.close()
             except:
                 pass
+        self.writer = None
+        self.reader = None
 
 # ==========================================
 # 3. HARDWARE MANAGERS
@@ -211,7 +294,16 @@ class HardwareManager:
         
         # RFID
         try:
-            self.rdr = MFRC522(sck=SCK_PIN, mosi=MOSI_PIN, miso=MISO_PIN, rst=RST_PIN, cs=CS_PIN)
+            # Explicit Reset
+            rst = Pin(RST_PIN, Pin.OUT)
+            rst.off()
+            time.sleep(0.05)
+            rst.on()
+            time.sleep(0.05)
+            
+            # SPI Init
+            spi = SPI(1, baudrate=2500000, polarity=0, phase=0, sck=Pin(SCK_PIN), mosi=Pin(MOSI_PIN), miso=Pin(MISO_PIN))
+            self.rdr = MFRC522(spi=spi, cs=Pin(CS_PIN, Pin.OUT))
             print("[HW] RFID Initialized")
         except Exception as e:
             print(f"[HW] RFID Init Error: {e}")
@@ -291,23 +383,37 @@ async def ws_receiver(ws, hw):
                         asyncio.create_task(hw.open_door(duration))
                     elif cmd == "DENY":
                         asyncio.create_task(hw.access_denied())
-                except:
-                    print("[WS] JSON Parse Error")
-        await asyncio.sleep(0.1)
+                    elif cmd == "PONG":
+                         pass # Heartbeat response
+                except Exception as e:
+                    print(f"[WS] JSON Parse Error: {e} | Raw: {msg}")
+        await asyncio.sleep(0.05)
 
 async def telemetry_sender(ws, hw):
     while True:
         if ws.open:
             try:
-                # UPDATED SCHEMA: 'temperature' instead of 'temp'
+                temp = hw.read_temp()
                 msg = json.dumps({
                     "type": "telemetry",
-                    "temperature": hw.read_temp() 
+                    "temperature": temp 
                 }).encode()
+                await ws.send(msg)
+                print(f"[TEL] Sent temperature: {temp}°C")
+            except Exception as e:
+                print(f"[TEL] Error sending telemetry: {e}")
+        await asyncio.sleep(30)
+
+async def ping_sender(ws):
+    """Send periodic ping to keep the WebSocket connection alive."""
+    while True:
+        if ws.open:
+            try:
+                msg = json.dumps({"type": "ping"}).encode()
                 await ws.send(msg)
             except:
                 pass
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
 
 async def system_runner():
     print("[SYS] Initializing Watchdog (15s)...")
@@ -324,6 +430,7 @@ async def system_runner():
     
     asyncio.create_task(ws_receiver(ws, hw))
     asyncio.create_task(telemetry_sender(ws, hw))
+    asyncio.create_task(ping_sender(ws))
     
     wifi_retry_count = 0
     print(f"[SYS] System Runner Started.")
@@ -369,7 +476,6 @@ async def system_runner():
                             uid_str = "0x%02x%02x%02x%02x" % (uid[0], uid[1], uid[2], uid[3])
                             print(f"[RFID] Scanned: {uid_str}")
                             
-                            # UPDATED SCHEMA: 'temperature' instead of 'temp'
                             payload = json.dumps({
                                 "type": "scan",
                                 "rfid": uid_str,

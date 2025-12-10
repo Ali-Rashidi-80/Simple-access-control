@@ -27,7 +27,7 @@ interface WebSocketContextType {
 }
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
-const WS_URL = 'ws://127.0.0.1:8000/ws/frontend';
+const WS_URL = 'wss://rynix.ir/ws/frontend';
 
 export function WebSocketProvider({ children }: { children: ReactNode }) {
     const { t } = useLanguage();
