@@ -78,7 +78,8 @@ export function UserProfile({ onNavigate }: UserProfileProps) {
     const handleLogout = (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsDropdownOpen(false);
-        localStorage.removeItem('sentry_gate_user');
+        logout();
+        // Force reload to clear any other state
         setTimeout(() => window.location.href = '/', 100);
     };
 

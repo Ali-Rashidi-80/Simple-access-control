@@ -10,8 +10,10 @@ class ApiClient {
 
     private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const url = `${this.baseUrl}${endpoint}`;
+        const token = localStorage.getItem('sentry_token');
         const headers = {
             'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
             ...options.headers,
         };
 

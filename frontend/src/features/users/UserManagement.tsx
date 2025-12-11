@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { Button } from '../../components/ui/button';
 import { toast } from 'sonner';
+import { api } from '../../utils/api';
 
 interface User {
     id: number;
@@ -22,14 +23,11 @@ const UserManagement = () => {
     const [rfid, setRfid] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    const apiUrl = 'https://rynix.ir';
-
     // Fetch Users
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${apiUrl}/users/`);
-            const data = await res.json();
+            const data = await api.get<User[]>('/users/');
             setUsers(data);
         } catch (error) {
             console.error("Failed to fetch users", error);
@@ -64,35 +62,26 @@ const UserManagement = () => {
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch(`${apiUrl}/users/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name,
-                    role: 'user', // Default role
-                    rfid_tag: rfid
-                })
+            await api.post('/users/', {
+                name,
+                role: 'user', // Default role
+                rfid_tag: rfid
             });
 
-            if (res.ok) {
-                toast.success("User created successfully");
-                setIsFormOpen(false);
-                setName("");
-                setRfid("");
-                fetchUsers();
-            } else {
-                const err = await res.json();
-                toast.error(`Error: ${err.detail || 'Failed to create'}`);
-            }
-        } catch (error) {
-            toast.error("Network error");
+            toast.success("User created successfully");
+            setIsFormOpen(false);
+            setName("");
+            setRfid("");
+            fetchUsers();
+        } catch (error: any) {
+            toast.error(`Error: ${error.message || 'Failed to create'}`);
         }
     };
 
     const handleDelete = async (id: number) => {
         if (!confirm("Are you sure?")) return;
         try {
-            await fetch(`${apiUrl}/users/${id}`, { method: 'DELETE' });
+            await api.delete(`/users/${id}`);
             toast.success("User deleted");
             fetchUsers();
         } catch (error) {

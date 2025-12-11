@@ -35,7 +35,7 @@ const TOKEN_KEY = 'sentry_token';
 const USER_KEY = 'sentry_user';
 const TOKEN_EXPIRY_KEY = 'sentry_token_expiry';
 const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in ms
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://rynix.ir';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
