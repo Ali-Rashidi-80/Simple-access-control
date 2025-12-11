@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import { api } from '../../../utils/api';
 
 interface User {
     id: string;
@@ -7,6 +8,7 @@ interface User {
     role: string;
     clearanceLevel: number;
     avatar?: string;
+    email?: string;
     lastLogin?: string;
     isOnline: boolean;
 }
@@ -15,6 +17,7 @@ interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+    error: string | null;
     login: (username: string, password: string) => Promise<boolean>;
     loginWithOTP: (phone: string, otp: string) => Promise<boolean>;
     loginWith2FA: (username: string, password: string, code: string) => Promise<boolean>;
@@ -23,193 +26,190 @@ interface AuthContextType {
     verifyOTP: (phone: string, otp: string) => Promise<boolean>;
     requestPasswordReset: (username: string) => Promise<boolean>;
     resetPassword: (username: string, newPassword: string, code: string) => Promise<boolean>;
+    updateProfile: (data: { fullName?: string; email?: string }) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// Mock user data for demonstration
-const MOCK_USERS: Record<string, { password: string; user: User }> = {
-    'admin': {
-        password: 'admin123',
-        user: {
-            id: '1',
-            username: 'admin',
-            fullName: 'systemAdmin',
-            role: 'admin',
-            clearanceLevel: 5,
-            avatar: undefined,
-            lastLogin: new Date().toISOString(),
-            isOnline: true,
-        },
-    },
-    'operator': {
-        password: 'operator123',
-        user: {
-            id: '2',
-            username: 'operator',
-            fullName: 'systemOperator',
-            role: 'operator',
-            clearanceLevel: 3,
-            avatar: undefined,
-            lastLogin: new Date().toISOString(),
-            isOnline: true,
-        },
-    },
-};
-
-// Mock OTP storage
-const OTP_STORAGE: Record<string, { code: string; expiresAt: number }> = {};
+const TOKEN_KEY = 'sentry_token';
+const USER_KEY = 'sentry_user';
+const TOKEN_EXPIRY_KEY = 'sentry_token_expiry';
+const _SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in ms
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Check for existing session on mount
-    useEffect(() => {
-        const storedUser = localStorage.getItem('sentry_gate_user');
-        if (storedUser) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (error) {
-                console.error('Failed to parse stored user:', error);
-                localStorage.removeItem('sentry_gate_user');
-            }
-        }
-        setIsLoading(false);
+    // Check session validity
+    const isSessionValid = useCallback(() => {
+        const expiry = localStorage.getItem(TOKEN_EXPIRY_KEY);
+        if (!expiry) return false;
+        return Date.now() < parseInt(expiry);
     }, []);
 
-    // Mock login function
-    const login = async (username: string, password: string): Promise<boolean> => {
-        setIsLoading(true);
-
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        const userRecord = MOCK_USERS[username];
-        if (userRecord && userRecord.password === password) {
-            const loggedInUser = { ...userRecord.user, lastLogin: new Date().toISOString() };
-            setUser(loggedInUser);
-            localStorage.setItem('sentry_gate_user', JSON.stringify(loggedInUser));
-            setIsLoading(false);
-            return true;
-        }
-
-        setIsLoading(false);
-        return false;
-    };
-
-    // Mock OTP request
-    const requestOTP = async (phone: string): Promise<boolean> => {
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        // Generate random 6-digit OTP
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-        // Store OTP with 5-minute expiration
-        OTP_STORAGE[phone] = {
-            code: otp,
-            expiresAt: Date.now() + 5 * 60 * 1000,
-        };
-
-        // In a real app, this would send SMS
-        console.log(`OTP for ${phone}: ${otp} (Valid for 5 minutes)`);
-
-        return true;
-    };
-
-    // Mock OTP verification
-    const verifyOTP = async (phone: string, otp: string): Promise<boolean> => {
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        const storedOTP = OTP_STORAGE[phone];
-        if (!storedOTP) return false;
-
-        if (storedOTP.expiresAt < Date.now()) {
-            delete OTP_STORAGE[phone];
+    // Validate token with backend
+    const validateToken = useCallback(async () => {
+        const token = localStorage.getItem(TOKEN_KEY);
+        if (!token || !isSessionValid()) {
+            logout();
             return false;
         }
 
-        return storedOTP.code === otp;
-    };
+        try {
+            const response = await api.get<{ valid: boolean; user?: User }>('/auth/validate', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-    // Mock OTP login
-    const loginWithOTP = async (phone: string, otp: string): Promise<boolean> => {
-        const isValid = await verifyOTP(phone, otp);
-        if (isValid) {
-            const guestUser: User = {
-                id: 'guest',
-                username: 'guest',
-                fullName: 'کاربر مهمان',
-                role: 'مهمان',
-                clearanceLevel: 1,
-                lastLogin: new Date().toISOString(),
-                isOnline: true,
-            };
-            setUser(guestUser);
-            localStorage.setItem('sentry_gate_user', JSON.stringify(guestUser));
-            delete OTP_STORAGE[phone];
-            return true;
+            if (response.valid && response.user) {
+                setUser(response.user);
+                return true;
+            }
+        } catch (e) {
+            console.warn('Token validation failed:', e);
         }
+
+        logout();
         return false;
-    };
+    }, [isSessionValid]);
 
-    // Mock 2FA login
-    const loginWith2FA = async (username: string, password: string, code: string): Promise<boolean> => {
+    // Check for existing session on mount
+    useEffect(() => {
+        const checkSession = async () => {
+            const storedUser = localStorage.getItem(USER_KEY);
+            const token = localStorage.getItem(TOKEN_KEY);
+
+            if (storedUser && token && isSessionValid()) {
+                try {
+                    setUser(JSON.parse(storedUser));
+                    // Validate with backend in background
+                    validateToken();
+                } catch (error) {
+                    console.error('Failed to parse stored user:', error);
+                    logout();
+                }
+            }
+            setIsLoading(false);
+        };
+
+        checkSession();
+
+        // Set up session expiry check
+        const interval = setInterval(() => {
+            if (!isSessionValid()) {
+                logout();
+            }
+        }, 60000); // Check every minute
+
+        return () => clearInterval(interval);
+    }, [isSessionValid, validateToken]);
+
+    // Real login with backend API
+    const login = async (username: string, password: string): Promise<boolean> => {
         setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        setError(null);
 
-        const userRecord = MOCK_USERS[username];
-        if (userRecord && userRecord.password === password && code === '123456') {
-            const loggedInUser = { ...userRecord.user, lastLogin: new Date().toISOString() };
-            setUser(loggedInUser);
-            localStorage.setItem('sentry_gate_user', JSON.stringify(loggedInUser));
+        try {
+            const response = await api.post<{
+                access_token: string;
+                expires_in: number;
+                user: User;
+            }>('/auth/login', { username, password });
+
+            // Store token and user
+            const expiryTime = Date.now() + (response.expires_in * 1000);
+            localStorage.setItem(TOKEN_KEY, response.access_token);
+            localStorage.setItem(USER_KEY, JSON.stringify(response.user));
+            localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
+
+            setUser(response.user);
             setIsLoading(false);
             return true;
-        }
 
-        setIsLoading(false);
+        } catch (e: any) {
+            setError(e.message || 'خطا در ورود');
+            setIsLoading(false);
+            return false;
+        }
+    };
+
+    // OTP-based login (placeholder for future implementation)
+    const requestOTP = async (phone: string): Promise<boolean> => {
+        // Not implemented in backend yet
+        console.log('OTP request for:', phone);
         return false;
     };
 
-    // Mock password reset request
+    const verifyOTP = async (_phone: string, _otp: string): Promise<boolean> => {
+        // Not implemented in backend yet
+        return false;
+    };
+
+    const loginWithOTP = async (_phone: string, _otp: string): Promise<boolean> => {
+        // Not implemented in backend yet
+        return false;
+    };
+
+    // 2FA login (placeholder for future implementation)
+    const loginWith2FA = async (username: string, password: string, _code: string): Promise<boolean> => {
+        // Not implemented - fall back to normal login
+        return login(username, password);
+    };
+
+    // Password reset (placeholder for future implementation)
     const requestPasswordReset = async (username: string): Promise<boolean> => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        if (MOCK_USERS[username]) {
-            // Generate reset code
-            const code = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log(`Password reset code for ${username}: ${code}`);
-            return true;
-        }
-
+        console.log('Password reset requested for:', username);
         return false;
     };
 
-    // Mock password reset
-    const resetPassword = async (username: string, newPassword: string, code: string): Promise<boolean> => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // In a real app, verify the code and update password
-        if (MOCK_USERS[username] && code === '123456') {
-            MOCK_USERS[username].password = newPassword;
-            return true;
-        }
-
+    const resetPassword = async (_username: string, _newPassword: string, _code: string): Promise<boolean> => {
         return false;
+    };
+
+    // Update profile
+    const updateProfile = async (data: { fullName?: string; email?: string }): Promise<boolean> => {
+        const token = localStorage.getItem(TOKEN_KEY);
+        if (!token) return false;
+
+        try {
+            await api.put('/profile/', {
+                full_name: data.fullName,
+                email: data.email
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            // Update local user
+            if (user) {
+                const updatedUser = {
+                    ...user,
+                    fullName: data.fullName || user.fullName,
+                    email: data.email || user.email
+                };
+                setUser(updatedUser);
+                localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+            }
+
+            return true;
+        } catch (e) {
+            console.error('Profile update failed:', e);
+            return false;
+        }
     };
 
     // Logout function
     const logout = () => {
         console.log('AuthContext: logout called');
         setUser(null);
-        localStorage.removeItem('sentry_gate_user');
-        console.log('AuthContext: user set to null');
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(TOKEN_EXPIRY_KEY);
     };
 
     const value: AuthContextType = {
         user,
-        isAuthenticated: !!user,
+        isAuthenticated: !!user && isSessionValid(),
         isLoading,
+        error,
         login,
         loginWithOTP,
         loginWith2FA,
@@ -218,6 +218,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         verifyOTP,
         requestPasswordReset,
         resetPassword,
+        updateProfile,
     };
 
     return (
@@ -234,3 +235,4 @@ export function useAuth() {
     }
     return context;
 }
+

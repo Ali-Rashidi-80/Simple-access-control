@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Thermometer, Activity, AlertTriangle } from 'lucide-react';
+import { Thermometer, Activity, AlertTriangle, User, Fingerprint } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useWebSocket } from '../../contexts/WebSocketContext';
+import { useAuth } from '../auth/contexts/AuthContext';
 import { LiquidUnlockButton } from '../auth/components/LiquidUnlockButton';
 import { StatsCard } from './components/StatsCard';
 import { ActivityTimeline } from './components/ActivityTimeline';
@@ -11,11 +12,67 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
     const { t } = useLanguage();
-    const { logs, isConnected, sendMessage, lastUnknownTag } = useWebSocket();
+    const { logs, isConnected, sendMessage, lastUnknownTag, lastGrantedAccess, clearGrantedAccess } = useWebSocket();
+    const { user } = useAuth();
     const navigate = useNavigate();
 
+    // Auto-unlock state
+    const [autoUnlockTriggered, setAutoUnlockTriggered] = useState(false);
+
+    // Real ping measurement
+    const [ping, setPing] = useState<number | null>(null);
+
+    const measurePing = useCallback(async () => {
+        if (!isConnected) {
+            setPing(null);
+            return;
+        }
+        const start = performance.now();
+        try {
+            await fetch('/api/ping', { method: 'HEAD', cache: 'no-cache' });
+            const end = performance.now();
+            setPing(Math.round(end - start));
+        } catch {
+            setPing(null);
+        }
+    }, [isConnected]);
+
+    // Measure ping every 30 seconds
+    useEffect(() => {
+        measurePing();
+        const interval = setInterval(measurePing, 30000);
+        return () => clearInterval(interval);
+    }, [measurePing]);
+
     const currentTemp = logs.length > 0 && logs[0].temperature !== null ? logs[0].temperature : '--';
-    const currentPing = isConnected ? 12 : '--';
+    const currentPing = ping !== null ? ping : isConnected ? '~' : '--';
+
+    // AUTO-UNLOCK: When registered user scans RFID and gets GRANTED
+    // Only triggers visual animation on the button - NO command sent (door already opens from ESP32)
+    useEffect(() => {
+        if (lastGrantedAccess && !autoUnlockTriggered) {
+            // Show auto-unlock notification with user name
+            toast.success(
+                <div className="flex items-center gap-3">
+                    <Fingerprint className="w-5 h-5 text-[#00FF9D]" />
+                    <div>
+                        <div className="font-bold text-[#00FF9D]">{t('accessGranted') || 'دسترسی مجاز'}</div>
+                        <div className="text-sm text-white/70">{lastGrantedAccess.user_name}</div>
+                    </div>
+                </div>,
+                { duration: 3000 }
+            );
+
+            // Trigger visual animation on unlock button (no command sent)
+            setAutoUnlockTriggered(true);
+        }
+    }, [lastGrantedAccess, autoUnlockTriggered, t]);
+
+    // Callback when external trigger animation completes
+    const handleExternalTriggerComplete = useCallback(() => {
+        clearGrantedAccess();
+        setAutoUnlockTriggered(false);
+    }, [clearGrantedAccess]);
 
     useEffect(() => {
         if (lastUnknownTag) {
@@ -50,6 +107,34 @@ export default function Dashboard() {
 
     return (
         <div className="space-y-3 md:space-y-4">
+            {/* Welcome Message */}
+            {user && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="glass-card p-4 rounded-2xl backdrop-blur-xl border border-[#00F0FF]/20"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, transparent 100%)',
+                    }}
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#00F0FF]/20 flex items-center justify-center">
+                            {user.avatar ? (
+                                <img src={user.avatar} alt={user.fullName} className="w-10 h-10 rounded-full object-cover" />
+                            ) : (
+                                <User className="w-5 h-5 text-[#00F0FF]" />
+                            )}
+                        </div>
+                        <div>
+                            <p className="text-white/90 text-sm">
+                                {t('welcome') || 'خوش آمدید'}، <span className="text-[#00F0FF] font-medium">{user.fullName}</span> عزیز
+                            </p>
+                            <p className="text-white/40 text-xs">{user.role === 'admin' ? t('systemAdmin') || 'مدیر سیستم' : t('operator') || 'اپراتور'}</p>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
+
             <AnimatePresence>
                 {lastUnknownTag && (
                     <motion.div
@@ -89,7 +174,11 @@ export default function Dashboard() {
                     <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 50%, var(--liquid-primary)20 0%, transparent 70%)' }} />
                 </motion.div>
                 <div className="flex flex-col items-center justify-center py-3 md:py-4">
-                    <LiquidUnlockButton onUnlock={handleUnlock} />
+                    <LiquidUnlockButton
+                        onUnlock={handleUnlock}
+                        externalTrigger={autoUnlockTriggered}
+                        onExternalTriggerComplete={handleExternalTriggerComplete}
+                    />
                 </div>
             </div>
 

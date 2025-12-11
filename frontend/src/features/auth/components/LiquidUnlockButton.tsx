@@ -6,6 +6,8 @@ import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
 
 interface LiquidUnlockButtonProps {
   onUnlock: (isDuressMode?: boolean) => void;
+  externalTrigger?: boolean; // When true, shows visual animation WITHOUT sending command
+  onExternalTriggerComplete?: () => void; // Called when external trigger animation completes
 }
 
 // Convert English numbers to Persian numbers
@@ -14,7 +16,7 @@ const toPersianNumber = (num: number): string => {
   return num.toString().split('').map(digit => persianDigits[parseInt(digit)] || digit).join('');
 };
 
-export function LiquidUnlockButton({ onUnlock }: LiquidUnlockButtonProps) {
+export function LiquidUnlockButton({ onUnlock, externalTrigger, onExternalTriggerComplete }: LiquidUnlockButtonProps) {
   const { t, language } = useLanguage();
   const { isSecureMode, requireBiometric, isDuressMode, timerDuration } = useAppSettings();
   const [isPressed, setIsPressed] = useState(false);
@@ -26,6 +28,38 @@ export function LiquidUnlockButton({ onUnlock }: LiquidUnlockButtonProps) {
   const pressTimer = useRef<number | null>(null);
   const progressTimer = useRef<number | null>(null);
   const countdownTimer = useRef<number | null>(null);
+
+  // Handle external trigger (RFID scan) - visual only, no command sent
+  useEffect(() => {
+    if (externalTrigger && !isUnlocked && !isCountingDown) {
+      // Trigger visual animation immediately (skip progress fill, go straight to unlocked)
+      if (progressTimer.current) clearInterval(progressTimer.current);
+
+      setProgress(100);
+      setIsUnlocked(true);
+
+      // Start countdown
+      setIsCountingDown(true);
+      setCountdown(timerDuration);
+
+      countdownTimer.current = window.setInterval(() => {
+        setCountdown((prev: number) => {
+          if (prev <= 1) {
+            if (countdownTimer.current) {
+              clearInterval(countdownTimer.current);
+            }
+            setIsCountingDown(false);
+            setIsUnlocked(false);
+            setProgress(0);
+            setIsPressed(false);
+            onExternalTriggerComplete?.();
+            return timerDuration;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+  }, [externalTrigger, isUnlocked, isCountingDown, timerDuration, onExternalTriggerComplete]);
 
   const handlePressStart = async () => {
     if (isUnlocked || isCountingDown) return;
@@ -100,6 +134,7 @@ export function LiquidUnlockButton({ onUnlock }: LiquidUnlockButtonProps) {
       setTimeout(() => setShowDuressWarning(false), 3000);
     }
 
+    // Only call onUnlock for MANUAL press (not external trigger)
     onUnlock(isDuressMode);
 
     // Start countdown with liquid drain effect

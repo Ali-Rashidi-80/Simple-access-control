@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Shield, Fingerprint, AlertOctagon, Clock, Terminal } from 'lucide-react';
+import { Shield, Fingerprint, Clock, Terminal, ChevronUp, ChevronDown, AlertOctagon } from 'lucide-react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { useAppSettings } from '../contexts/AppSettingsContext';
 import {
@@ -9,6 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../components/ui/select';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../../../components/ui/popover';
 
 export function SettingsPanel() {
   const { t } = useLanguage();
@@ -62,8 +68,13 @@ export function SettingsPanel() {
 
       {/* Settings Cards */}
       <div className="space-y-4">
-        {/* Auto-Lock Schedule */}
-        <div className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/10">
+        {/* Auto-Lock Schedule with Time Picker */}
+        <div
+          className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/10"
+          style={{
+            background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.03) 0%, transparent 100%)',
+          }}
+        >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#00F0FF]/10 flex items-center justify-center">
@@ -78,24 +89,16 @@ export function SettingsPanel() {
           <div className="flex items-center gap-4">
             <div className="flex-1">
               <label className="text-white/60 text-sm mb-2 block">{t('startTime')}</label>
-              <input
-                type="number"
-                min="0"
-                max="23"
+              <TimePickerField
                 value={autoLockStart}
-                onChange={(e) => setAutoLockTimes(parseInt(e.target.value), autoLockEnd)}
-                className="w-full glass-card backdrop-blur-xl border border-white/10 rounded-xl px-4 py-2 text-white bg-transparent focus:border-[#00F0FF]/50 transition-colors outline-none"
+                onChange={(v) => setAutoLockTimes(v, autoLockEnd)}
               />
             </div>
             <div className="flex-1">
               <label className="text-white/60 text-sm mb-2 block">{t('endTime')}</label>
-              <input
-                type="number"
-                min="0"
-                max="23"
+              <TimePickerField
                 value={autoLockEnd}
-                onChange={(e) => setAutoLockTimes(autoLockStart, parseInt(e.target.value))}
-                className="w-full glass-card backdrop-blur-xl border border-white/10 rounded-xl px-4 py-2 text-white bg-transparent focus:border-[#00F0FF]/50 transition-colors outline-none"
+                onChange={(v) => setAutoLockTimes(autoLockStart, v)}
               />
             </div>
           </div>
@@ -167,28 +170,7 @@ export function SettingsPanel() {
           )}
         </motion.div>
 
-        {/* Access Notifications */}
-        <motion.div
-          className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300"
-          whileHover={{ scale: 1.01 }}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-white/70">{t('accessNotifications')}</span>
-            <ToggleSwitch isOn={true} color="#00F0FF" />
-          </div>
-        </motion.div>
 
-        {/* Audit Mode */}
-        <motion.div
-          className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300"
-          whileHover={{ scale: 1.01 }}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-white/70">{t('auditMode')}</span>
-            <ToggleSwitch isOn={true} color="#00F0FF" />
-          </div>
-        </motion.div>
-        {/* Default Configuration */}
         <div className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/10">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-[#00F0FF]/10 flex items-center justify-center">
@@ -271,41 +253,63 @@ function ToggleSwitch({ isOn, color }: ToggleSwitchProps) {
 
   return (
     <motion.div
-      className="relative w-14 h-7 rounded-full flex items-center cursor-pointer"
+      className="relative w-14 h-8 rounded-full flex items-center cursor-pointer overflow-hidden"
       style={{
-        backgroundColor: isOn ? `${color}25` : 'rgba(255, 255, 255, 0.08)',
-        border: `1.5px solid ${isOn ? `${color}50` : 'rgba(255, 255, 255, 0.15)'}`,
-        boxShadow: isOn ? `0 0 16px ${color}30, inset 0 0 8px ${color}15` : 'none',
-        padding: '3px',
+        backgroundColor: isOn ? `${color}30` : 'rgba(100, 100, 100, 0.3)',
+        border: `2px solid ${isOn ? color : 'rgba(150, 150, 150, 0.4)'}`,
+        boxShadow: isOn ? `0 0 20px ${color}40` : 'inset 0 2px 4px rgba(0,0,0,0.3)',
       }}
       animate={{
-        backgroundColor: isOn ? `${color}25` : 'rgba(255, 255, 255, 0.08)',
-        borderColor: isOn ? `${color}50` : 'rgba(255, 255, 255, 0.15)',
+        backgroundColor: isOn ? `${color}30` : 'rgba(100, 100, 100, 0.3)',
+        borderColor: isOn ? color : 'rgba(150, 150, 150, 0.4)',
       }}
-      transition={{ duration: 0.2 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.25 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
-      <motion.div
-        className="w-5 h-5 rounded-full relative"
+      {/* Background Labels */}
+      <span
+        className="absolute text-[9px] font-bold transition-opacity duration-200"
         style={{
-          backgroundColor: isOn ? color : 'rgba(255, 255, 255, 0.4)',
+          [isRTL ? 'right' : 'left']: '5px',
+          opacity: isOn ? 1 : 0,
+          color: color
+        }}
+      >
+        ON
+      </span>
+      <span
+        className="absolute text-[9px] font-bold transition-opacity duration-200"
+        style={{
+          [isRTL ? 'left' : 'right']: '4px',
+          opacity: isOn ? 0 : 1,
+          color: 'rgba(180, 180, 180, 0.8)'
+        }}
+      >
+        OFF
+      </span>
+
+      {/* Knob */}
+      <motion.div
+        className="w-6 h-6 rounded-full absolute"
+        style={{
+          backgroundColor: isOn ? color : 'rgba(180, 180, 180, 0.9)',
           boxShadow: isOn
-            ? `0 0 12px ${color}, 0 0 20px ${color}60`
-            : '0 2px 4px rgba(0, 0, 0, 0.2)',
+            ? `0 0 12px ${color}, 0 2px 6px rgba(0,0,0,0.3)`
+            : '0 2px 6px rgba(0, 0, 0, 0.4)',
+          [isRTL ? 'right' : 'left']: '1px'
         }}
         animate={{
-          x: isOn ? (isRTL ? -24 : 24) : 0,
-          backgroundColor: isOn ? color : 'rgba(255, 255, 255, 0.4)',
+          x: isOn ? (isRTL ? -22 : 22) : 0,
+          backgroundColor: isOn ? color : 'rgba(180, 180, 180, 0.9)',
         }}
-        transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       >
-        {/* Inner glow when active */}
         {isOn && (
           <motion.div
-            className="absolute inset-1 rounded-full bg-white/30"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            className="absolute inset-1 rounded-full bg-white/40"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
           />
         )}
@@ -314,3 +318,60 @@ function ToggleSwitch({ isOn, color }: ToggleSwitchProps) {
   );
 }
 
+// Time Picker Field Component
+function TimePickerField({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const formatHour = (h: number) => {
+    const period = h >= 12 ? 'PM' : 'AM';
+    const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    return `${hour12}:00 ${period}`;
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <button
+          className="w-full glass-card backdrop-blur-xl border border-white/10 rounded-xl px-4 py-3 text-white bg-transparent hover:border-[#00F0FF]/50 transition-colors outline-none flex items-center justify-between group"
+        >
+          <span className="text-lg font-medium">{formatHour(value)}</span>
+          <Clock className="w-4 h-4 text-white/40 group-hover:text-[#00F0FF] transition-colors" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-48 p-4 bg-[#0a0a14]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
+        align="center"
+      >
+        <div className="flex flex-col items-center gap-3">
+          <button
+            onClick={() => onChange(value < 23 ? value + 1 : 0)}
+            className="p-2 rounded-xl hover:bg-white/10 text-white/60 hover:text-[#00F0FF] transition-colors"
+          >
+            <ChevronUp className="w-6 h-6" />
+          </button>
+          <div className="text-3xl font-bold text-[#00F0FF] py-2">
+            {formatHour(value)}
+          </div>
+          <button
+            onClick={() => onChange(value > 0 ? value - 1 : 23)}
+            className="p-2 rounded-xl hover:bg-white/10 text-white/60 hover:text-[#00F0FF] transition-colors"
+          >
+            <ChevronDown className="w-6 h-6" />
+          </button>
+          <div className="grid grid-cols-4 gap-1 mt-2 w-full">
+            {[0, 6, 12, 18].map((h) => (
+              <button
+                key={h}
+                onClick={() => { onChange(h); setIsOpen(false); }}
+                className={`py-1 px-2 rounded-lg text-xs font-medium transition-colors ${value === h ? 'bg-[#00F0FF] text-black' : 'bg-white/5 text-white/60 hover:bg-white/10'
+                  }`}
+              >
+                {formatHour(h).split(' ')[0]}
+              </button>
+            ))}
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

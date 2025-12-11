@@ -67,11 +67,16 @@ async def test_get_users(client):
 @pytest.mark.asyncio
 async def test_get_logs(client):
     """
-    Test fetching logs.
+    Test fetching logs - returns LogsResponse with logs, total, stats
     """
     response = await client.get("/logs/")
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    data = response.json()
+    # API returns LogsResponse object, not plain list
+    assert "logs" in data or isinstance(data, list)
+    if "logs" in data:
+        assert isinstance(data["logs"], list)
+        assert "total" in data
 
 @pytest.mark.asyncio
 @respx.mock

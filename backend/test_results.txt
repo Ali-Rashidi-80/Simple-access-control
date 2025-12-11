@@ -1,0 +1,891 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.0, pytest-9.0.1, pluggy-1.6.0 -- C:\Program Files\Python312\python.exe
+cachedir: .pytest_cache
+benchmark: 5.2.3 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+PyQt6 6.10.0 -- Qt runtime 6.10.1 -- Qt compiled 6.10.0
+rootdir: D:\0\door_control\Sentrygateuiuxdesign\backend
+plugins: anyio-4.11.0, asyncio-1.3.0, benchmark-5.2.3, cov-7.0.0, mock-3.15.1, qt-4.5.0, timeout-2.4.0, respx-0.22.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 99 items
+
+tests/test_api.py::test_create_user PASSED                               [  1%]
+tests/test_api.py::test_duplicate_user_rfid PASSED                       [  2%]
+tests/test_api.py::test_get_users PASSED                                 [  3%]
+tests/test_api.py::test_get_logs FAILED                                  [  4%]
+tests/test_api.py::test_microservice_interaction PASSED                  [  5%]
+tests/test_database.py::test_user_unique_rfid_constraint PASSED          [  6%]
+tests/test_database.py::test_log_data_persistence FAILED                 [  7%]
+tests/test_database.py::test_settings_persistence FAILED                 [  8%]
+tests/test_database.py::test_user_delete_cascades PASSED                 [  9%]
+tests/test_database.py::test_user_name_required PASSED                   [ 10%]
+tests/test_database.py::test_user_rfid_required PASSED                   [ 11%]
+tests/test_database.py::test_log_filter_invalid_status PASSED            [ 12%]
+tests/test_database.py::test_log_filter_invalid_date PASSED              [ 13%]
+tests/test_database.py::test_pagination_negative_skip PASSED             [ 14%]
+tests/test_database.py::test_pagination_zero_limit PASSED                [ 15%]
+tests/test_database.py::test_pagination_very_large_limit FAILED          [ 16%]
+tests/test_database.py::test_very_long_rfid_tag PASSED                   [ 17%]
+tests/test_database.py::test_unicode_rfid_tag PASSED                     [ 18%]
+tests/test_database.py::test_empty_body_requests PASSED                  [ 19%]
+tests/test_database.py::test_null_values_in_payload PASSED               [ 20%]
+tests/test_database.py::test_extra_fields_ignored PASSED                 [ 21%]
+tests/test_database.py::test_concurrent_user_creation FAILED             [ 22%]
+tests/test_database.py::test_concurrent_user_creation ERROR              [ 22%]
+tests/test_database.py::test_concurrent_read_write FAILED                [ 23%]
+tests/test_database.py::test_log_date_filter_iso_format PASSED           [ 24%]
+tests/test_database.py::test_log_date_filter_future_date PASSED          [ 25%]
+tests/test_database.py::test_log_date_range PASSED                       [ 26%]
+tests/test_esp32_simulation.py::test_esp32_scan_message_format PASSED    [ 27%]
+tests/test_esp32_simulation.py::test_esp32_telemetry_message_format PASSED [ 28%]
+tests/test_esp32_simulation.py::test_esp32_ping_message PASSED           [ 29%]
+tests/test_esp32_simulation.py::test_esp32_status_message PASSED         [ 30%]
+tests/test_esp32_simulation.py::test_esp32_registered_user_scan PASSED   [ 31%]
+tests/test_esp32_simulation.py::test_esp32_unregistered_card_scan PASSED [ 32%]
+tests/test_esp32_simulation.py::test_esp32_rapid_scans PASSED            [ 33%]
+tests/test_esp32_simulation.py::test_esp32_receives_open_command PASSED  [ 34%]
+tests/test_esp32_simulation.py::test_esp32_relay_status_update PASSED    [ 35%]
+tests/test_esp32_simulation.py::test_esp32_temperature_telemetry PASSED  [ 36%]
+tests/test_esp32_simulation.py::test_esp32_temperature_edge_cases PASSED [ 37%]
+tests/test_esp32_simulation.py::test_esp32_reconnection PASSED           [ 38%]
+tests/test_esp32_simulation.py::test_esp32_malformed_message PASSED      [ 39%]
+tests/test_esp32_simulation.py::test_esp32_missing_fields PASSED         [ 40%]
+tests/test_esp32_simulation.py::test_esp32_invalid_message_type PASSED   [ 41%]
+tests/test_esp32_simulation.py::test_esp32_response_latency PASSED       [ 42%]
+tests/test_esp32_simulation.py::test_esp32_message_throughput PASSED     [ 43%]
+tests/test_integration.py::test_full_user_lifecycle PASSED               [ 44%]
+tests/test_integration.py::test_user_with_special_characters PASSED      [ 45%]
+tests/test_integration.py::test_user_validation_empty_name FAILED        [ 46%]
+tests/test_integration.py::test_user_validation_empty_rfid FAILED        [ 47%]
+tests/test_integration.py::test_full_authentication_flow FAILED          [ 48%]
+tests/test_integration.py::test_authentication_with_settings_update FAILED [ 49%]
+tests/test_integration.py::test_unauthenticated_settings_update_rejected PASSED [ 50%]
+tests/test_integration.py::test_logs_comprehensive_filtering PASSED      [ 51%]
+tests/test_integration.py::test_logs_stats_accuracy PASSED               [ 52%]
+tests/test_integration.py::test_profile_update_flow FAILED               [ 53%]
+tests/test_integration.py::test_password_change_flow FAILED              [ 54%]
+tests/test_integration.py::test_password_change_wrong_current FAILED     [ 55%]
+tests/test_integration.py::test_complete_access_control_scenario FAILED  [ 56%]
+tests/test_integration.py::test_concurrent_requests PASSED               [ 57%]
+tests/test_integration.py::test_api_response_format_consistency PASSED   [ 58%]
+tests/test_integration.py::test_nonexistent_user_delete PASSED           [ 59%]
+tests/test_integration.py::test_invalid_json_payload PASSED              [ 60%]
+tests/test_integration.py::test_large_payload_handling PASSED            [ 61%]
+tests/test_integration.py::test_unicode_in_all_fields PASSED             [ 62%]
+tests/test_sanity.py::test_sanity PASSED                                 [ 63%]
+tests/test_security.py::test_login_success FAILED                        [ 64%]
+tests/test_security.py::test_login_wrong_password PASSED                 [ 65%]
+tests/test_security.py::test_login_invalid_username_format PASSED        [ 66%]
+tests/test_security.py::test_login_nonexistent_user PASSED               [ 67%]
+tests/test_security.py::test_rate_limiting_after_failures PASSED         [ 68%]
+tests/test_security.py::test_protected_endpoint_without_token PASSED     [ 69%]
+tests/test_security.py::test_protected_endpoint_with_valid_token FAILED  [ 70%]
+tests/test_security.py::test_protected_endpoint_with_invalid_token PASSED [ 71%]
+tests/test_security.py::test_token_validation_endpoint FAILED            [ 72%]
+tests/test_security.py::test_token_validation_expired PASSED             [ 73%]
+tests/test_security.py::test_xss_prevention_in_user_name PASSED          [ 74%]
+tests/test_security.py::test_sql_injection_in_login_username PASSED      [ 75%]
+tests/test_security.py::test_sql_injection_in_user_query PASSED          [ 76%]
+tests/test_security.py::test_logout FAILED                               [ 77%]
+tests/test_security.py::test_me_endpoint FAILED                          [ 78%]
+tests/test_security.py::test_get_settings_public PASSED                  [ 79%]
+tests/test_security.py::test_update_settings_requires_auth PASSED        [ 80%]
+tests/test_security.py::test_update_settings_with_auth FAILED            [ 81%]
+tests/test_security.py::test_update_profile FAILED                       [ 82%]
+tests/test_security.py::test_change_password FAILED                      [ 83%]
+tests/test_security.py::test_change_password_wrong_current FAILED        [ 84%]
+tests/test_security.py::test_logs_pagination PASSED                      [ 85%]
+tests/test_security.py::test_logs_status_filter PASSED                   [ 86%]
+tests/test_security.py::test_logs_date_filter PASSED                     [ 87%]
+tests/test_websocket.py::test_websocket_frontend_connection PASSED       [ 88%]
+tests/test_websocket.py::test_websocket_hardware_connection PASSED       [ 89%]
+tests/test_websocket.py::test_known_rfid_scan_grants_access PASSED       [ 90%]
+tests/test_websocket.py::test_unknown_rfid_scan_triggers_notification PASSED [ 91%]
+tests/test_websocket.py::test_telemetry_broadcast_to_frontend PASSED     [ 92%]
+tests/test_websocket.py::test_frontend_open_command PASSED               [ 93%]
+tests/test_websocket.py::test_access_log_created_on_valid_scan PASSED    [ 94%]
+tests/test_websocket.py::test_duress_flag_in_logs PASSED                 [ 95%]
+tests/test_websocket.py::test_websocket_response_time PASSED             [ 96%]
+tests/test_websocket.py::test_concurrent_websocket_connections PASSED    [ 97%]
+tests/test_websocket.py::test_invalid_websocket_message PASSED           [ 98%]
+tests/test_websocket.py::test_empty_rfid_scan PASSED                     [100%]
+
+=================================== ERRORS ====================================
+_____________ ERROR at teardown of test_concurrent_user_creation ______________
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\pytestqt\plugin.py:205: in pytest_runtest_teardown
+    result = yield
+             ^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\pytest_asyncio\plugin.py:330: in finalizer
+    runner.run(async_finalizer(), context=context)
+C:\Program Files\Python312\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Program Files\Python312\Lib\asyncio\base_events.py:664: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\pytest_asyncio\plugin.py:322: in async_finalizer
+    await gen_obj.__anext__()
+tests\conftest.py:50: in db_session
+    async with TestingSessionLocal() as session:
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\asyncio\session.py:1071: in __aexit__
+    await asyncio.shield(task)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\asyncio\session.py:1016: in close
+    await greenlet_spawn(self.sync_session.close)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py:190: in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py:2507: in close
+    self._close_impl(invalidate=False)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py:2576: in _close_impl
+    transaction.close(invalidate)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py:119: in _go
+    raise sa_exc.IllegalStateChangeError(
+E   sqlalchemy.exc.IllegalStateChangeError: Method 'close()' can't be called here; method '_prepare_impl()' is already in progress and this would cause an unexpected state change to <SessionTransactionState.CLOSED: 5> (Background on this error at: https://sqlalche.me/e/20/isce)
+-------------------------- Captured stderr teardown ---------------------------
+ERROR:asyncio:unhandled exception during asyncio.run() shutdown
+task: <Task finished name='Task-224' coro=<test_concurrent_user_creation.<locals>.create_user() done, defined at D:\0\door_control\Sentrygateuiuxdesign\backend\tests\test_database.py:213> exception=ResourceClosedError('This transaction is closed')>
+Traceback (most recent call last):
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4427, in _flush
+    flush_context.execute()
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\dialects\sqlite\aiosqlite.py", line 162, in execute
+    self.await_(_cursor.execute(operation, parameters))
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\aiosqlite\cursor.py", line 40, in execute
+    await self._execute(self._cursor.execute, sql, parameters)
+  File "C:\Program Files\Python312\Lib\site-packages\aiosqlite\cursor.py", line 32, in _execute
+    return await self._conn._execute(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\aiosqlite\core.py", line 122, in _execute
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\0\door_control\Sentrygateuiuxdesign\backend\tests\test_database.py", line 214, in create_user
+    return await client.post("/users/", json={
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1859, in post
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\asgi.py", line 170, in handle_async_request
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 290, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\0\door_control\Sentrygateuiuxdesign\backend\app\main.py", line 180, in create_user
+    await db.commit()
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\asyncio\session.py", line 1000, in commit
+    await greenlet_spawn(self.sync_session.commit)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 203, in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 2030, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 1311, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 1286, in _prepare_impl
+    self.session.flush()
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4331, in flush
+    self._flush(objects)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4466, in _flush
+    with util.safe_reraise():
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\langhelpers.py", line 228, in __exit__
+    raise value.with_traceback(traceback)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4467, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "<string>", line 2, in rollback
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py", line 101, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 986, in _raise_for_prerequisite_state
+    raise sa_exc.ResourceClosedError("This transaction is closed")
+sqlalchemy.exc.ResourceClosedError: This transaction is closed
+---------------------------- Captured log teardown ----------------------------
+ERROR    asyncio:base_events.py:1785 unhandled exception during asyncio.run() shutdown
+task: <Task finished name='Task-224' coro=<test_concurrent_user_creation.<locals>.create_user() done, defined at D:\0\door_control\Sentrygateuiuxdesign\backend\tests\test_database.py:213> exception=ResourceClosedError('This transaction is closed')>
+Traceback (most recent call last):
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4427, in _flush
+    flush_context.execute()
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\dialects\sqlite\aiosqlite.py", line 162, in execute
+    self.await_(_cursor.execute(operation, parameters))
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\aiosqlite\cursor.py", line 40, in execute
+    await self._execute(self._cursor.execute, sql, parameters)
+  File "C:\Program Files\Python312\Lib\site-packages\aiosqlite\cursor.py", line 32, in _execute
+    return await self._conn._execute(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\aiosqlite\core.py", line 122, in _execute
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\0\door_control\Sentrygateuiuxdesign\backend\tests\test_database.py", line 214, in create_user
+    return await client.post("/users/", json={
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1859, in post
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\asgi.py", line 170, in handle_async_request
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py", line 290, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\0\door_control\Sentrygateuiuxdesign\backend\app\main.py", line 180, in create_user
+    await db.commit()
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\asyncio\session.py", line 1000, in commit
+    await greenlet_spawn(self.sync_session.commit)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 203, in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 2030, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 1311, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 1286, in _prepare_impl
+    self.session.flush()
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4331, in flush
+    self._flush(objects)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4466, in _flush
+    with util.safe_reraise():
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\langhelpers.py", line 228, in __exit__
+    raise value.with_traceback(traceback)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 4467, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "<string>", line 2, in rollback
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py", line 101, in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+  File "C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py", line 986, in _raise_for_prerequisite_state
+    raise sa_exc.ResourceClosedError("This transaction is closed")
+sqlalchemy.exc.ResourceClosedError: This transaction is closed
+================================== FAILURES ===================================
+________________________________ test_get_logs ________________________________
+tests\test_api.py:74: in test_get_logs
+    assert isinstance(response.json(), list)
+E   AssertionError: assert False
+E    +  where False = isinstance({'logs': [], 'stats': {'all': 0, 'error': 0, 'pending': 0, 'success': 0}, 'total': 0}, list)
+E    +    where {'logs': [], 'stats': {'all': 0, 'error': 0, 'pending': 0, 'success': 0}, 'total': 0} = json()
+E    +      where json = <Response [200 OK]>.json
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: GET http://test/logs/ "HTTP/1.1 200 OK"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/logs/ "HTTP/1.1 200 OK"
+__________________________ test_log_data_persistence __________________________
+tests\test_database.py:43: in test_log_data_persistence
+    assert logs1.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: GET http://test/logs/?limit=1000 "HTTP/1.1 422 Unprocessable Entity"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/logs/?limit=1000 "HTTP/1.1 422 Unprocessable Entity"
+__________________________ test_settings_persistence __________________________
+tests\test_database.py:64: in test_settings_persistence
+    token = login.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+______________________ test_pagination_very_large_limit _______________________
+tests\test_database.py:149: in test_pagination_very_large_limit
+    assert response.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: GET http://test/logs/?limit=100000 "HTTP/1.1 422 Unprocessable Entity"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/logs/?limit=100000 "HTTP/1.1 422 Unprocessable Entity"
+________________________ test_concurrent_user_creation ________________________
+tests\test_database.py:222: in test_concurrent_user_creation
+    results = await asyncio.gather(*tasks)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_database.py:214: in create_user
+    return await client.post("/users/", json={
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1859: in post
+    return await self.request(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\applications.py:1134: in __call__
+    await super().__call__(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py:716: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py:736: in app
+    await route.handle(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py:290: in handle
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:125: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:111: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:391: in app
+    raw_response = await run_endpoint_function(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:290: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\main.py:180: in create_user
+    await db.commit()
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\asyncio\session.py:1000: in commit
+    await greenlet_spawn(self.sync_session.commit)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py:190: in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py:1329: in commit
+    self._parent.commit(_to_root=True)
+<string>:2: in commit
+    ???
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py:119: in _go
+    raise sa_exc.IllegalStateChangeError(
+E   sqlalchemy.exc.IllegalStateChangeError: Method 'commit()' can't be called here; method '_prepare_impl()' is already in progress and this would cause an unexpected state change to <SessionTransactionState.CLOSED: 5> (Background on this error at: https://sqlalche.me/e/20/isce)
+_________________________ test_concurrent_read_write __________________________
+tests\test_database.py:252: in test_concurrent_read_write
+    results = await asyncio.gather(*tasks)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_database.py:238: in create_user
+    return await client.post("/users/", json={
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1859: in post
+    return await self.request(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\applications.py:1134: in __call__
+    await super().__call__(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py:716: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py:736: in app
+    await route.handle(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\routing.py:290: in handle
+    await self.app(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:125: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:111: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:391: in app
+    raw_response = await run_endpoint_function(
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\fastapi\routing.py:290: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\main.py:180: in create_user
+    await db.commit()
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\asyncio\session.py:1000: in commit
+    await greenlet_spawn(self.sync_session.commit)
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\util\_concurrency_py3k.py:190: in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py:2030: in commit
+    trans.commit(_to_root=True)
+<string>:2: in commit
+    ???
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\session.py:1329: in commit
+    self._parent.commit(_to_root=True)
+<string>:2: in commit
+    ???
+C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\state_changes.py:119: in _go
+    raise sa_exc.IllegalStateChangeError(
+E   sqlalchemy.exc.IllegalStateChangeError: Method 'commit()' can't be called here; method '_prepare_impl()' is already in progress and this would cause an unexpected state change to <SessionTransactionState.CLOSED: 5> (Background on this error at: https://sqlalche.me/e/20/isce)
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: GET http://test/users/ "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET http://test/users/ "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET http://test/users/ "HTTP/1.1 200 OK"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/users/ "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/users/ "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1740 HTTP Request: GET http://test/users/ "HTTP/1.1 200 OK"
+_______________________ test_user_validation_empty_name _______________________
+tests\test_integration.py:74: in test_user_validation_empty_name
+    assert response.status_code in [400, 422], "Empty name should be rejected"
+E   AssertionError: Empty name should be rejected
+E   assert 200 in [400, 422]
+E    +  where 200 = <Response [200 OK]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/users/ "HTTP/1.1 200 OK"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/users/ "HTTP/1.1 200 OK"
+_______________________ test_user_validation_empty_rfid _______________________
+tests\test_integration.py:86: in test_user_validation_empty_rfid
+    assert response.status_code in [400, 422], "Empty RFID should be rejected"
+E   AssertionError: Empty RFID should be rejected
+E   assert 200 in [400, 422]
+E    +  where 200 = <Response [200 OK]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/users/ "HTTP/1.1 200 OK"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/users/ "HTTP/1.1 200 OK"
+________________________ test_full_authentication_flow ________________________
+tests\test_integration.py:103: in test_full_authentication_flow
+    assert login_response.status_code == 200, f"Login failed: {login_response.text}"
+E   AssertionError: Login failed: {"detail":"\u0646\u0627\u0645 \u06a9\u0627\u0631\u0628\u0631\u06cc \u06cc\u0627 \u0631\u0645\u0632 \u0639\u0628\u0648\u0631 \u0627\u0634\u062a\u0628\u0627\u0647 \u0627\u0633\u062a"}
+E   assert 401 == 200
+E    +  where 401 = <Response [401 Unauthorized]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+__________________ test_authentication_with_settings_update ___________________
+tests\test_integration.py:139: in test_authentication_with_settings_update
+    token = login.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+__________________________ test_profile_update_flow ___________________________
+tests\test_integration.py:229: in test_profile_update_flow
+    token = login.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+__________________________ test_password_change_flow __________________________
+tests\test_integration.py:252: in test_password_change_flow
+    assert login1.status_code == 200
+E   assert 401 == 200
+E    +  where 401 = <Response [401 Unauthorized]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_____________________ test_password_change_wrong_current ______________________
+tests\test_integration.py:291: in test_password_change_wrong_current
+    token = login.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+____________________ test_complete_access_control_scenario ____________________
+tests\test_integration.py:324: in test_complete_access_control_scenario
+    assert login.status_code == 200
+E   assert 401 == 200
+E    +  where 401 = <Response [401 Unauthorized]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_____________________________ test_login_success ______________________________
+tests\test_security.py:25: in test_login_success
+    assert response.status_code == 200
+E   assert 401 == 200
+E    +  where 401 = <Response [401 Unauthorized]>.status_code
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+__________________ test_protected_endpoint_with_valid_token ___________________
+tests\test_security.py:101: in test_protected_endpoint_with_valid_token
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_______________________ test_token_validation_endpoint ________________________
+tests\test_security.py:131: in test_token_validation_endpoint
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_________________________________ test_logout _________________________________
+tests\test_security.py:198: in test_logout
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+______________________________ test_me_endpoint _______________________________
+tests\test_security.py:216: in test_me_endpoint
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_______________________ test_update_settings_with_auth ________________________
+tests\test_security.py:255: in test_update_settings_with_auth
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_____________________________ test_update_profile _____________________________
+tests\test_security.py:281: in test_update_profile
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+____________________________ test_change_password _____________________________
+tests\test_security.py:300: in test_change_password
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+_____________________ test_change_password_wrong_current ______________________
+tests\test_security.py:333: in test_change_password_wrong_current
+    token = login_response.json()["access_token"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'access_token'
+---------------------------- Captured stderr call -----------------------------
+INFO:httpx:HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/auth/login "HTTP/1.1 401 Unauthorized"
+============================== warnings summary ===============================
+app\schemas.py:19
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\schemas.py:19: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class UserResponse(UserBase):
+
+app\schemas.py:37
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\schemas.py:37: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class AccessLogResponse(AccessLogBase):
+
+tests/test_api.py: 3 warnings
+tests/test_database.py: 7 warnings
+tests/test_esp32_simulation.py: 9 warnings
+tests/test_integration.py: 6 warnings
+tests/test_security.py: 1 warning
+tests/test_websocket.py: 2 warnings
+  C:\Users\fani\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_database.py: 1 warning
+tests/test_integration.py: 6 warnings
+tests/test_security.py: 19 warnings
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\services\security.py:86: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    window_start = datetime.utcnow() - timedelta(minutes=RATE_LIMIT_WINDOW_MINUTES)
+
+tests/test_database.py: 1 warning
+tests/test_integration.py: 6 warnings
+tests/test_security.py: 18 warnings
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\services\security.py:76: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow()
+
+tests/test_database.py::test_concurrent_user_creation
+tests/test_database.py::test_concurrent_read_write
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\main.py:179: SAWarning: Usage of the 'Session.add()' operation is not currently supported within the execution stage of the flush process. Results may not be consistent.  Consider using alternative event listeners or connection-level operations instead.
+    db.add(db_user)
+
+tests/test_esp32_simulation.py: 17 warnings
+tests/test_websocket.py: 10 warnings
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\services\security.py:195: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff = datetime.utcnow() - timedelta(days=LOG_RETENTION_DAYS)
+
+tests/test_esp32_simulation.py::test_esp32_receives_open_command
+tests/test_websocket.py::test_frontend_open_command
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\services\log_service.py:16: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow()
+
+tests/test_security.py::test_rate_limiting_after_failures
+  D:\0\door_control\Sentrygateuiuxdesign\backend\app\services\security.py:114: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    seconds_remaining = int((reset_time - datetime.utcnow()).total_seconds())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_api.py::test_get_logs - AssertionError: assert False
+FAILED tests/test_database.py::test_log_data_persistence - assert 422 == 200
+FAILED tests/test_database.py::test_settings_persistence - KeyError: 'access_...
+FAILED tests/test_database.py::test_pagination_very_large_limit - assert 422 ...
+FAILED tests/test_database.py::test_concurrent_user_creation - sqlalchemy.exc...
+FAILED tests/test_database.py::test_concurrent_read_write - sqlalchemy.exc.Il...
+FAILED tests/test_integration.py::test_user_validation_empty_name - Assertion...
+FAILED tests/test_integration.py::test_user_validation_empty_rfid - Assertion...
+FAILED tests/test_integration.py::test_full_authentication_flow - AssertionEr...
+FAILED tests/test_integration.py::test_authentication_with_settings_update - ...
+FAILED tests/test_integration.py::test_profile_update_flow - KeyError: 'acces...
+FAILED tests/test_integration.py::test_password_change_flow - assert 401 == 200
+FAILED tests/test_integration.py::test_password_change_wrong_current - KeyErr...
+FAILED tests/test_integration.py::test_complete_access_control_scenario - ass...
+FAILED tests/test_security.py::test_login_success - assert 401 == 200
+FAILED tests/test_security.py::test_protected_endpoint_with_valid_token - Key...
+FAILED tests/test_security.py::test_token_validation_endpoint - KeyError: 'ac...
+FAILED tests/test_security.py::test_logout - KeyError: 'access_token'
+FAILED tests/test_security.py::test_me_endpoint - KeyError: 'access_token'
+FAILED tests/test_security.py::test_update_settings_with_auth - KeyError: 'ac...
+FAILED tests/test_security.py::test_update_profile - KeyError: 'access_token'
+FAILED tests/test_security.py::test_change_password - KeyError: 'access_token'
+FAILED tests/test_security.py::test_change_password_wrong_current - KeyError:...
+ERROR tests/test_database.py::test_concurrent_user_creation - sqlalchemy.exc....
+============ 23 failed, 76 passed, 113 warnings, 1 error in 10.49s ============

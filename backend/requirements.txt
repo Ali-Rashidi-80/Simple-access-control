@@ -12,3 +12,8 @@ httpx
 requests
 python-dotenv
 aiosqlite
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+apscheduler
+respx

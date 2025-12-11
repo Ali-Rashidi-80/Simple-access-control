@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime
+from datetime import datetime, timezone
 from .. import models
 
 class LogService:
@@ -13,7 +13,7 @@ class LogService:
             action=action,
             is_duress=is_duress,
             temperature=temperature,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         self.db.add(log_entry)
         await self.db.commit()

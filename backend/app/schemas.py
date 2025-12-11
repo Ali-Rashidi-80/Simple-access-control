@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import Optional, Literal
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Optional, Literal, List
 from datetime import datetime
 
 # ==========================================
@@ -8,10 +8,10 @@ from datetime import datetime
 
 # --- User Schemas ---
 class UserBase(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1, description="User name cannot be empty")
     role: str = "user"
     avatar_url: Optional[str] = None
-    rfid_tag: str
+    rfid_tag: str = Field(..., min_length=1, description="RFID tag cannot be empty")
 
 class UserCreate(UserBase):
     pass
@@ -19,10 +19,9 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
     created_at: datetime
-    is_active: bool = True # Added as it was seen in UserData frontend interface
-
-    class Config:
-        from_attributes = True
+    is_active: bool = True
+    
+    model_config = ConfigDict(from_attributes=True)
 
 # --- Log Schemas ---
 class AccessLogBase(BaseModel):
@@ -37,10 +36,42 @@ class AccessLogCreate(AccessLogBase):
 class AccessLogResponse(AccessLogBase):
     id: int
     timestamp: datetime
-    rfid: Optional[str] = None
+    rfid_tag: Optional[str] = None
+    
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+# Log query with filtering
+class LogQuery(BaseModel):
+    skip: int = 0
+    limit: int = 50
+    status: Optional[Literal["success", "error", "pending", "all"]] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+
+class LogsResponse(BaseModel):
+    logs: List[AccessLogResponse]
+    total: int
+    stats: dict
+
+# --- Settings Schemas ---
+class SettingUpdate(BaseModel):
+    key: str
+    value: str
+
+class SettingsResponse(BaseModel):
+    settings: dict
+
+class BulkSettingsUpdate(BaseModel):
+    settings: dict  # key-value pairs
+
+# --- Profile Schemas ---
+class ProfileUpdate(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str = Field(..., min_length=6)
 
 # ==========================================
 # 2. WEBSOCKET PROTOCOL SCHEMAS
@@ -68,3 +99,4 @@ class BroadcastMessage(BaseModel):
     data: Optional[dict] = None # For ACCESS_LOG and TELEMETRY
     uid: Optional[str] = None # For UNKNOWN_TAG
     timestamp: Optional[str] = None
+
