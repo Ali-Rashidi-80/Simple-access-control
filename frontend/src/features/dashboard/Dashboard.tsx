@@ -51,6 +51,9 @@ export default function Dashboard() {
     // Only triggers visual animation on the button - NO command sent (door already opens from ESP32)
     useEffect(() => {
         if (lastGrantedAccess && !autoUnlockTriggered) {
+            // Ignore manual overrides (Remote Admin) to prevent ghost presses
+            if (lastGrantedAccess.user_name === 'Remote Admin') return;
+
             // Show auto-unlock notification with user name
             toast.success(
                 <div className="flex items-center gap-3">

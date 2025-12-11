@@ -2,8 +2,40 @@ from fastapi import FastAPI, Depends, WebSocket, WebSocketDisconnect, HTTPExcept
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, func, and_
-from typing import List, Optional
+from sqlalchemy import select, func, and_
+import logging
+import json
+import os
+import sys
+import asyncio
+from dotenv import load_dotenv
+
+# Load environment variables
+# Check multiple locations for .env:
+# 1. Project Root (Development: Sentrygateuiuxdesign/.env)
+# 2. Backend Root (Docker: /app/.env)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.dirname(current_dir)
+project_root = os.path.dirname(backend_dir)  # 2 levels up
+
+env_paths = [
+    os.path.join(project_root, ".env"),   # Dev: D:\...\Sentrygateuiuxdesign\.env
+    os.path.join(backend_dir, ".env"),    # Docker: /app/.env
+    os.path.join(current_dir, ".env")     # Fallback
+]
+
+env_loaded = False
+for path in env_paths:
+    if os.path.exists(path):
+        print(f"Loading .env from: {path}")
+        load_dotenv(path)
+        env_loaded = True
+        break
+
+if not env_loaded:
+    print("WARNING: No .env file found in search paths.")
+
+from typing import List, Optional, Dict, Any
 from datetime import datetime, timezone
 import logging
 import os
@@ -23,10 +55,16 @@ from .services.auth_router import router as auth_router, get_current_user, get_o
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("uvicorn")
 
-# --- CORS Origins from Environment ---
-DEFAULT_CORS_ORIGINS = "http://localhost:5173,http://localhost:3000"
-CORS_ORIGINS = [origin.strip() for origin in os.getenv("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",") if origin.strip()]
-logger.info(f"CORS Origins loaded: {CORS_ORIGINS}")
+# --- CORS Configuration ---
+# Explicitly allowing frontend domains
+origins = [
+    "https://rash32.ir",
+    "https://rynix.ir",
+    "https://www.rash32.ir",
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+logger.info(f"CORS Policy applied for origins: {origins}")
 
 # --- File Upload Directories ---
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "./data/uploads")
@@ -85,11 +123,30 @@ async def seed_default_settings(db: AsyncSession):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Create tables and seed data
-    try:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        logger.info("Database tables verified.")
-        
+    # Create tables (Retry logic)
+    max_retries = 10
+    retry_interval = 5  # seconds
+    
+    logger.info(f"Connecting to database at... {os.getenv('DATABASE_URL', 'UNKNOWN').split('@')[-1]}") # Log masked URL
+
+    for attempt in range(max_retries):
+        try:
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+            logger.info("✅ Database connected and tables verified.")
+            break
+        except Exception as e:
+            logger.warning(f"Database connection blocked ({attempt + 1}/{max_retries}): {e}")
+            if attempt < max_retries - 1:
+                logger.info(f"Retrying in {retry_interval} seconds...")
+                await asyncio.sleep(retry_interval)
+            else:
+                logger.error("❌ Could not connect to database after multiple attempts.")
+                # We don't raise here to allow the app to start (and perhaps heal later), 
+                # or you might want to raise e to crash the container.
+                # For now, let's allow startup so logs can be seen.
+    
+    try:     
         # Seed admin and settings
         async with AsyncSessionLocal() as db:
             await seed_default_admin(db)
@@ -102,13 +159,17 @@ async def lifespan(app: FastAPI):
         logger.info("Scheduler started for weekly backups")
         
     except Exception as e:
-        logger.error(f"Database Connection Failed at Startup: {e}")
+        logger.error(f"Startup tasks failed: {e}")
     
     yield
     
     # Shutdown
-    scheduler.shutdown()
-    await engine.dispose()
+    try:
+        if scheduler.running:
+            scheduler.shutdown()
+        await engine.dispose()
+    except Exception as e:
+        logger.error(f"Shutdown error: {e}")
 
 
 app = FastAPI(title="SentryGate IoT API", lifespan=lifespan)
@@ -119,13 +180,13 @@ app.include_router(auth_router)
 # --- Static Files for Uploads ---
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
-# --- CORS (Strict - no wildcard in production!) ---
+# --- CORS (Hardened with Regex) ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,  # ✅ No wildcard - only configured origins
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

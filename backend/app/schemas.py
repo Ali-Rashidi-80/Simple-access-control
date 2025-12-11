@@ -100,3 +100,27 @@ class BroadcastMessage(BaseModel):
     uid: Optional[str] = None # For UNKNOWN_TAG
     timestamp: Optional[str] = None
 
+
+# ==========================================
+# 3. SMS OTP SCHEMAS
+# ==========================================
+
+class SendOTPRequest(BaseModel):
+    """Request to send OTP to phone number"""
+    phone: str = Field(..., min_length=10, max_length=15, pattern=r"^(?:(?:\+|00)98|0)?9\d{9}$",
+                       description="Iranian phone number (e.g. 0912..., +98912...)")
+
+class VerifyOTPRequest(BaseModel):
+    """Request to verify OTP and login"""
+    phone: str = Field(..., min_length=10, max_length=15, pattern=r"^(?:(?:\+|00)98|0)?9\d{9}$")
+    otp: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$",
+                     description="6-digit OTP code")
+
+class OTPResponse(BaseModel):
+    """Response for OTP operations"""
+    success: bool
+    message: str
+    phone_masked: Optional[str] = None  # 9123****45
+    expires_in: Optional[int] = None  # seconds
+
+

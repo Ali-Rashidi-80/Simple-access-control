@@ -20,7 +20,7 @@ interface LoginPanelProps {
 export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
     const { t, isRTL } = useLanguage();
     const { theme } = useAppSettings();
-    const { login, loginWithOTP, loginWith2FA, requestOTP, verifyOTP, requestPasswordReset, resetPassword } = useAuth();
+    const { login, loginWithOTP, loginWith2FA, loginWithGoogle, requestOTP, verifyOTP, requestPasswordReset, resetPassword } = useAuth();
 
     // State
     const [mode, setMode] = useState<LoginMode>('login');
@@ -272,23 +272,12 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
         setCurrentBg(prev => prev === 'login-bg' ? 'b' : 'login-bg');
     };
 
-    // Google Login Handler
-    const handleGoogleLogin = async () => {
+    // Google Login Handler - redirects to Google OAuth
+    const handleGoogleLogin = () => {
         setIsLoading(true);
         setError('');
-        try {
-            // Simulate Google OAuth
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setSuccess('ورود با Google موفقیت‌آمیز!');
-            setTimeout(() => {
-                onClose();
-                setSuccess('');
-            }, 1500);
-        } catch (err) {
-            setError('خطا در ورود با Google');
-        } finally {
-            setIsLoading(false);
-        }
+        loginWithGoogle();
+        // Note: This redirects the browser, so we don't need to handle response
     };
 
     // Back Button Component

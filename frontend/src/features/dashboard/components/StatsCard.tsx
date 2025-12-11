@@ -71,7 +71,7 @@ export function StatsCard({ icon, label, value, status, trend }: StatsCardProps)
       path += index === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
     });
 
-    return path;
+    return path || `M 0 ${height}`;
   };
 
   return (

@@ -241,3 +241,84 @@ async def get_me(current_user: models.AdminUser = Depends(get_current_user)):
         "lastLogin": current_user.last_login.isoformat() if current_user.last_login else None,
         "isOnline": True
     }
+
+
+# ==========================================
+# GOOGLE OAUTH ROUTES
+# ==========================================
+
+from .google_oauth import google_auth_redirect, google_auth_callback, GOOGLE_OAUTH_ENABLED
+
+@router.get("/google")
+async def google_login(request: Request):
+    """Redirect to Google OAuth"""
+    if not GOOGLE_OAUTH_ENABLED:
+        raise HTTPException(status_code=501, detail="ورود با گوگل فعال نیست")
+    return await google_auth_redirect(request)
+
+
+@router.get("/google/callback")
+async def google_callback(request: Request, db: AsyncSession = Depends(get_db)):
+    """Handle Google OAuth callback"""
+    if not GOOGLE_OAUTH_ENABLED:
+        raise HTTPException(status_code=501, detail="ورود با گوگل فعال نیست")
+    return await google_auth_callback(request, db)
+
+
+# ==========================================
+# SMS OTP ROUTES
+# ==========================================
+
+from .sms_otp import send_otp, verify_otp, get_client_ip as get_otp_client_ip
+from ..schemas import SendOTPRequest, VerifyOTPRequest, OTPResponse
+
+@router.post("/otp/send", response_model=OTPResponse)
+async def send_mobile_otp(
+    request: Request,
+    data: SendOTPRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    """Send OTP to phone number"""
+    client_ip = get_client_ip(request)
+    user_agent = request.headers.get("user-agent", "")
+    
+    result = await send_otp(data.phone, db, client_ip, user_agent)
+    return OTPResponse(
+        success=result["success"],
+        message=result["message"],
+        phone_masked=result.get("phone_masked"),
+        expires_in=result.get("expires_in")
+    )
+
+
+@router.post("/otp/verify")
+async def verify_mobile_otp(
+    request: Request,
+    data: VerifyOTPRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    """Verify OTP and login"""
+    client_ip = get_client_ip(request)
+    user_agent = request.headers.get("user-agent", "")
+    
+    return await verify_otp(data.phone, data.otp, db, client_ip, user_agent)
+
+
+@router.post("/otp/resend", response_model=OTPResponse)
+async def resend_mobile_otp(
+    request: Request,
+    data: SendOTPRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    """Resend OTP to phone number"""
+    client_ip = get_client_ip(request)
+    user_agent = request.headers.get("user-agent", "")
+    
+    result = await send_otp(data.phone, db, client_ip, user_agent)
+    return OTPResponse(
+        success=result["success"],
+        message="کد تأیید مجدداً ارسال شد",
+        phone_masked=result.get("phone_masked"),
+        expires_in=result.get("expires_in")
+    )
+

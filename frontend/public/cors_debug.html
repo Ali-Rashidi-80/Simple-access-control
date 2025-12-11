@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS & WebSocket Diagnostic</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; background: #fff; color: #333; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        .log-box { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; height: 400px; overflow-y: scroll; font-family: monospace; white-space: pre-wrap; font-size: 13px; margin-top: 20px; }
+        button { padding: 12px 24px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; transition: background 0.3s; }
+        button:hover { background: #0056b3; }
+        .status-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <h1>Connectivity Diagnostic Tool</h1>
+    <p>Origin: <strong><script>document.write(window.location.origin)</script></strong></p>
+    <p>Target: <strong>https://rynix.ir</strong></p>
+    
+    <button onclick="runTests()">Start Diagnostics</button>
+
+    <div id="results" style="margin-top: 20px;"></div>
+    <h3>Detailed Logs:</h3>
+    <div id="logs" class="log-box"></div>
+
+    <script>
+        // Configuration
+        const API_URL = "https://rynix.ir/api/settings/";
+        const WS_URL = "wss://rynix.ir/ws/frontend";
+
+        function log(msg, type = 'info') {
+            const box = document.getElementById('logs');
+            const entry = document.createElement('div');
+            const time = new Date().toLocaleTimeString();
+            entry.textContent = `[${time}] ${msg}`;
+            
+            if(type === 'error') entry.style.color = '#ff6b6b';
+            if(type === 'success') entry.style.color = '#51cf66';
+            if(type === 'warning') entry.style.color = '#fcc419';
+            
+            box.appendChild(entry);
+            box.scrollTop = box.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${msg}`);
+        }
+
+        async function testFetch() {
+            log(`[HTTP] Initiating GET request to ${API_URL}...`);
+            try {
+                const start = performance.now();
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                    mode: 'cors'
+                });
+                const duration = (performance.now() - start).toFixed(2);
+                
+                log(`[HTTP] Response received in ${duration}ms`, 'info');
+                log(`[HTTP] Status: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                log(`[HTTP] Headers: ${JSON.stringify(Object.fromEntries(response.headers))}`, 'info');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`[HTTP] Data Success: ${JSON.stringify(data).substring(0, 100)}...`, 'success');
+                    return { success: true, status: response.status };
+                } else {
+                    log(`[HTTP] Failed. Status: ${response.status}`, 'error');
+                    try {
+                        const errText = await response.text();
+                        log(`[HTTP] Body: ${errText}`, 'error');
+                    } catch(e) {}
+                    return { success: false, status: response.status };
+                }
+            } catch (error) {
+                log(`[HTTP] Network/CORS Error: ${error.message}`, 'error');
+                if (error.message.includes('Failed to fetch')) {
+                    log('[HTTP] Hint: check CORS headers, SSL validity, or if server is reachable.', 'warning');
+                }
+                return { success: false, error: error.message };
+            }
+        }
+
+        function testWebSocket() {
+            return new Promise((resolve) => {
+                log(`[WS] Connecting to ${WS_URL}...`);
+                const ws = new WebSocket(WS_URL);
+                let connected = false;
+
+                const timeout = setTimeout(() => {
+                    if (!connected) {
+                        log('[WS] Connection Timed Out (5000ms)', 'error');
+                        ws.close();
+                        resolve(false);
+                    }
+                }, 5000);
+
+                ws.onopen = () => {
+                    connected = true;
+                    clearTimeout(timeout);
+                    log('[WS] Connected Successfully! (ReadyState: 1)', 'success');
+                    ws.close();
+                    resolve(true);
+                };
+
+                ws.onerror = (event) => {
+                    // WebSocket errors are guarded by browsers, but we can infer some things
+                    log('[WS] Error Event Triggered', 'error');
+                };
+
+                ws.onclose = (event) => {
+                    if (!connected) {
+                        clearTimeout(timeout);
+                        log(`[WS] Connection Failed. Code: ${event.code}, Reason: "${event.reason}"`, 'error');
+                        if (event.code === 1006) log('[WS] Code 1006 usually means abnormal closure (e.g. Connection Refused or CORS block)', 'warning');
+                        resolve(false);
+                    } else {
+                        log(`[WS] Closed Cleanly.`, 'info');
+                    }
+                };
+            });
+        }
+
+        async function runTests() {
+            const logsDiv = document.getElementById('logs');
+            logsDiv.innerHTML = '';
+            document.getElementById('results').innerHTML = '<span class="warning">Running Diagnostics...</span>';
+            
+            log('--- STARTING DIAGNOSTICS ---');
+            log(`Browser User Agent: ${navigator.userAgent}`);
+            
+            const httpResult = await testFetch();
+            const wsResult = await testWebSocket();
+
+            const resultDiv = document.getElementById('results');
+            if(httpResult.success && wsResult) {
+                resultDiv.innerHTML = '<h2 class="success">PASSED: Full Connectivity Confirmed ✅</h2>';
+            } else if (httpResult.success && !wsResult) {
+                resultDiv.innerHTML = '<h2 class="warning">PARTIAL: HTTP Works, WebSocket Failed ⚠️</h2>';
+            } else {
+                resultDiv.innerHTML = '<h2 class="error">FAILED: No Connectivity ❌</h2><p>Please screenshot the logs below.</p>';
+            }
+            log('--- DIAGNOSTICS COMPLETE ---');
+        }
+    </script>
+</body>
+</html>

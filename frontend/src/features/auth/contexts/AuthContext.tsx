@@ -21,6 +21,7 @@ interface AuthContextType {
     login: (username: string, password: string) => Promise<boolean>;
     loginWithOTP: (phone: string, otp: string) => Promise<boolean>;
     loginWith2FA: (username: string, password: string, code: string) => Promise<boolean>;
+    loginWithGoogle: () => void;
     logout: () => void;
     requestOTP: (phone: string) => Promise<boolean>;
     verifyOTP: (phone: string, otp: string) => Promise<boolean>;
@@ -33,7 +34,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const TOKEN_KEY = 'sentry_token';
 const USER_KEY = 'sentry_user';
 const TOKEN_EXPIRY_KEY = 'sentry_token_expiry';
-const _SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in ms
+const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in ms
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
@@ -132,21 +134,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    // OTP-based login (placeholder for future implementation)
+    // OTP-based login - sends OTP to phone number
     const requestOTP = async (phone: string): Promise<boolean> => {
-        // Not implemented in backend yet
-        console.log('OTP request for:', phone);
-        return false;
+        setError(null);
+        try {
+            const response = await api.post<{ success: boolean; message: string }>('/auth/otp/send', { phone });
+            return response.success;
+        } catch (e: any) {
+            setError(e.message || 'خطا در ارسال کد تأیید');
+            return false;
+        }
     };
 
-    const verifyOTP = async (_phone: string, _otp: string): Promise<boolean> => {
-        // Not implemented in backend yet
-        return false;
+    const verifyOTP = async (phone: string, otp: string): Promise<boolean> => {
+        setError(null);
+        try {
+            const response = await api.post<{
+                success: boolean;
+                access_token: string;
+                expires_in: number;
+                user: User;
+            }>('/auth/otp/verify', { phone, otp });
+
+            if (response.success && response.access_token) {
+                const expiryTime = Date.now() + (response.expires_in * 1000);
+                localStorage.setItem(TOKEN_KEY, response.access_token);
+                localStorage.setItem(USER_KEY, JSON.stringify(response.user));
+                localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
+                setUser(response.user);
+                return true;
+            }
+            return false;
+        } catch (e: any) {
+            setError(e.message || 'کد تأیید اشتباه است');
+            return false;
+        }
     };
 
-    const loginWithOTP = async (_phone: string, _otp: string): Promise<boolean> => {
-        // Not implemented in backend yet
-        return false;
+    const loginWithOTP = async (phone: string, otp: string): Promise<boolean> => {
+        setIsLoading(true);
+        const result = await verifyOTP(phone, otp);
+        setIsLoading(false);
+        return result;
     };
 
     // 2FA login (placeholder for future implementation)
@@ -205,6 +234,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem(TOKEN_EXPIRY_KEY);
     };
 
+    // Google OAuth - redirects to Google login
+    const loginWithGoogle = () => {
+        window.location.href = `${API_URL}/auth/google`;
+    };
+
     const value: AuthContextType = {
         user,
         isAuthenticated: !!user && isSessionValid(),
@@ -213,6 +247,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         loginWithOTP,
         loginWith2FA,
+        loginWithGoogle,
         logout,
         requestOTP,
         verifyOTP,

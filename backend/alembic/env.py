@@ -8,8 +8,9 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 # Import your Base and models here so Alembic can see them
-from app.database import Base, SQLALCHEMY_DATABASE_URL
-from app.models import User, AccessLog  # Import all models to ensure they are registered
+# Import your Base and models here so Alembic can see them
+from app.database import Base, DATABASE_URL as SQLALCHEMY_DATABASE_URL
+from app import models  # Import module to register all models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

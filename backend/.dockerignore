@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+# .env (Allowed for production fix)
+.DS_Store
+coverage
+# content that is not needed in docker
+docs/
+micro-python-esp32/
