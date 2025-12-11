@@ -9,8 +9,19 @@ from datetime import datetime, timedelta
 import asyncio
 
 
+# Helper to get auth token
+async def get_auth_headers(client):
+    """Login and return auth headers"""
+    response = await client.post("/auth/login", json={
+        "username": "admin",
+        "password": "admin123"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
 # =============================================================================
-# USER MANAGEMENT INTEGRATION TESTS
+# USER MANAGEMENT INTEGRATION TESTS (Protected - require auth)
 # =============================================================================
 
 @pytest.mark.asyncio
@@ -19,30 +30,32 @@ async def test_full_user_lifecycle(client: AsyncClient):
     Test complete user lifecycle: Create → Read → Update → Delete
     Verifies database persistence at each step
     """
+    headers = await get_auth_headers(client)
+    
     # 1. CREATE
     user_data = {
         "name": "Lifecycle Test User",
         "rfid_tag": "LIFECYCLE_001",
         "role": "operator"
     }
-    create_response = await client.post("/users/", json=user_data)
+    create_response = await client.post("/users/", json=user_data, headers=headers)
     assert create_response.status_code == 200, f"Create failed: {create_response.text}"
     created_user = create_response.json()
     user_id = created_user["id"]
     
     # 2. READ - Verify user exists in list
-    list_response = await client.get("/users/")
+    list_response = await client.get("/users/", headers=headers)
     assert list_response.status_code == 200
     users = list_response.json()
     found = any(u["id"] == user_id for u in users)
     assert found, f"Created user {user_id} not found in list"
     
     # 3. DELETE
-    delete_response = await client.delete(f"/users/{user_id}")
+    delete_response = await client.delete(f"/users/{user_id}", headers=headers)
     assert delete_response.status_code == 200, f"Delete failed: {delete_response.text}"
     
     # 4. VERIFY DELETED
-    list_after = await client.get("/users/")
+    list_after = await client.get("/users/", headers=headers)
     users_after = list_after.json()
     still_exists = any(u["id"] == user_id for u in users_after)
     assert not still_exists, "User still exists after deletion"
@@ -51,12 +64,14 @@ async def test_full_user_lifecycle(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_user_with_special_characters(client: AsyncClient):
     """Test creating user with Persian/Arabic names and special characters"""
+    headers = await get_auth_headers(client)
+    
     user_data = {
         "name": "علی محمدی",  # Persian name
         "rfid_tag": "PERSIAN_USER_001",
         "role": "کاربر"  # Persian role
     }
-    response = await client.post("/users/", json=user_data)
+    response = await client.post("/users/", json=user_data, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "علی محمدی"
@@ -65,24 +80,28 @@ async def test_user_with_special_characters(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_user_validation_empty_name(client: AsyncClient):
     """Test that empty user name is rejected"""
+    headers = await get_auth_headers(client)
+    
     user_data = {
         "name": "",
         "rfid_tag": "EMPTY_NAME_001",
         "role": "user"
     }
-    response = await client.post("/users/", json=user_data)
+    response = await client.post("/users/", json=user_data, headers=headers)
     assert response.status_code in [400, 422], "Empty name should be rejected"
 
 
 @pytest.mark.asyncio
 async def test_user_validation_empty_rfid(client: AsyncClient):
     """Test that empty RFID tag is rejected"""
+    headers = await get_auth_headers(client)
+    
     user_data = {
         "name": "Test User",
         "rfid_tag": "",
         "role": "user"
     }
-    response = await client.post("/users/", json=user_data)
+    response = await client.post("/users/", json=user_data, headers=headers)
     assert response.status_code in [400, 422], "Empty RFID should be rejected"
 
 
@@ -177,41 +196,43 @@ async def test_unauthenticated_settings_update_rejected(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_logs_comprehensive_filtering(client: AsyncClient):
     """Test logs endpoint with all filter combinations"""
+    headers = await get_auth_headers(client)
+    
     # Test without filters
-    response1 = await client.get("/logs/")
+    response1 = await client.get("/logs/", headers=headers)
     assert response1.status_code == 200
     
     # Test with pagination
-    response2 = await client.get("/logs/?skip=0&limit=5")
+    response2 = await client.get("/logs/?skip=0&limit=5", headers=headers)
     assert response2.status_code == 200
     data2 = response2.json()
     logs = data2.get("logs", data2)
     assert len(logs) <= 5
     
     # Test with status filter
-    response3 = await client.get("/logs/?status=success")
+    response3 = await client.get("/logs/?status=success", headers=headers)
     assert response3.status_code == 200
     
     # Test with date range
     today = datetime.now().isoformat()
-    response4 = await client.get(f"/logs/?start_date={today}")
+    response4 = await client.get(f"/logs/?start_date={today}", headers=headers)
     assert response4.status_code == 200
 
 
 @pytest.mark.asyncio
 async def test_logs_stats_accuracy(client: AsyncClient):
     """Test that log statistics are accurate"""
-    response = await client.get("/logs/")
+    headers = await get_auth_headers(client)
+    
+    response = await client.get("/logs/", headers=headers)
     assert response.status_code == 200
     data = response.json()
     
     if "stats" in data:
         stats = data["stats"]
         logs = data.get("logs", [])
-        
-        # Verify stats match actual logs
-        success_count = len([l for l in logs if l.get("action") == "GRANTED" or l.get("status") == "success"])
-        # Stats should roughly match (may differ if more logs exist than returned)
+        # Verify stats exist
+        assert "success" in stats or "all" in stats
 
 
 # =============================================================================
@@ -312,17 +333,11 @@ async def test_complete_access_control_scenario(client: AsyncClient):
     1. Admin logs in
     2. Creates a new user with RFID
     3. User appears in list
-    4. (Simulated) RFID scan would grant access
-    5. Access log created
-    6. Admin deletes user
+    4. Access log created
+    5. Admin deletes user
     """
-    # Step 1: Admin login
-    login = await client.post("/auth/login", json={
-        "username": "admin",
-        "password": "admin123"
-    })
-    assert login.status_code == 200
-    token = login.json()["access_token"]
+    # Step 1: Admin login and get headers
+    headers = await get_auth_headers(client)
     
     # Step 2: Create user
     new_user = {
@@ -330,37 +345,31 @@ async def test_complete_access_control_scenario(client: AsyncClient):
         "rfid_tag": "SCENARIO_TEST_001",
         "role": "employee"
     }
-    create = await client.post("/users/", json=new_user)
+    create = await client.post("/users/", json=new_user, headers=headers)
     assert create.status_code == 200
     user_id = create.json()["id"]
     
     # Step 3: Verify in list
-    users = await client.get("/users/")
+    users = await client.get("/users/", headers=headers)
     assert any(u["rfid_tag"] == "SCENARIO_TEST_001" for u in users.json())
     
-    # Step 4: Simulate scan (if endpoint exists)
-    try:
-        scan = await client.post("/debug/simulate-scan", json={
-            "rfid_tag": "SCENARIO_TEST_001"
-        })
-    except:
-        pass  # Endpoint may not exist
-    
-    # Step 5: Check logs (log may or may not be created depending on scan endpoint)
-    logs = await client.get("/logs/?limit=10")
+    # Step 4: Check logs
+    logs = await client.get("/logs/?limit=10", headers=headers)
     assert logs.status_code == 200
     
-    # Step 6: Delete user
-    delete = await client.delete(f"/users/{user_id}")
+    # Step 5: Delete user
+    delete = await client.delete(f"/users/{user_id}", headers=headers)
     assert delete.status_code == 200
 
 
 @pytest.mark.asyncio
 async def test_concurrent_requests(client: AsyncClient):
     """Test system handles concurrent requests correctly"""
+    headers = await get_auth_headers(client)
+    
     # Create multiple requests simultaneously
     async def make_request(i):
-        return await client.get("/users/")
+        return await client.get("/users/", headers=headers)
     
     # Run 5 concurrent requests
     tasks = [make_request(i) for i in range(5)]
@@ -374,19 +383,17 @@ async def test_concurrent_requests(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_api_response_format_consistency(client: AsyncClient):
     """Test all API responses have consistent format"""
-    endpoints = [
-        ("/users/", "GET"),
-        ("/logs/", "GET"),
-        ("/settings/", "GET"),
-    ]
+    headers = await get_auth_headers(client)
     
-    for endpoint, method in endpoints:
-        if method == "GET":
-            response = await client.get(endpoint)
-        
-        assert response.status_code == 200, f"{endpoint} failed"
-        data = response.json()
-        assert data is not None, f"{endpoint} returned None"
+    # Settings is public, users and logs need auth
+    response = await client.get("/settings/")
+    assert response.status_code == 200
+    
+    response = await client.get("/users/", headers=headers)
+    assert response.status_code == 200
+    
+    response = await client.get("/logs/", headers=headers)
+    assert response.status_code == 200
 
 
 # =============================================================================
@@ -396,7 +403,8 @@ async def test_api_response_format_consistency(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_nonexistent_user_delete(client: AsyncClient):
     """Test deleting non-existent user returns appropriate error"""
-    response = await client.delete("/users/999999")
+    headers = await get_auth_headers(client)
+    response = await client.delete("/users/999999", headers=headers)
     assert response.status_code in [404, 400], "Should return error for non-existent user"
 
 
@@ -416,13 +424,15 @@ async def test_invalid_json_payload(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_large_payload_handling(client: AsyncClient):
     """Test API handles reasonably large payloads"""
+    headers = await get_auth_headers(client)
+    
     large_name = "A" * 1000  # 1000 character name
     user_data = {
         "name": large_name,
         "rfid_tag": "LARGE_PAYLOAD_001",
         "role": "user"
     }
-    response = await client.post("/users/", json=user_data)
+    response = await client.post("/users/", json=user_data, headers=headers)
     # Should either accept or reject gracefully (not crash)
     assert response.status_code in [200, 400, 422]
 
@@ -430,12 +440,14 @@ async def test_large_payload_handling(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_unicode_in_all_fields(client: AsyncClient):
     """Test Unicode support in all user fields"""
+    headers = await get_auth_headers(client)
+    
     user_data = {
         "name": "محمد حسینی 日本語 🔒",
         "rfid_tag": "UNICODE_TEST_001",
         "role": "مدیر"
     }
-    response = await client.post("/users/", json=user_data)
+    response = await client.post("/users/", json=user_data, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert "محمد" in data["name"]

@@ -52,7 +52,7 @@ async def db_session():
 @pytest_asyncio.fixture(scope="function")
 async def client(db_session):
     """
-    Fixture for HTTP client with test database.
+    Fixture for HTTP client with test database (no auth).
     """
     async def override_get_db():
         try:
@@ -67,6 +67,20 @@ async def client(db_session):
         yield ac
     
     app.dependency_overrides.clear()
+
+
+@pytest_asyncio.fixture(scope="function")
+async def auth_headers(client):
+    """
+    Fixture that returns auth headers with valid token.
+    Use this for tests that require authentication.
+    """
+    response = await client.post("/auth/login", json={
+        "username": "admin",
+        "password": "admin123"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
 
 
 @pytest.fixture(scope="session", autouse=True)

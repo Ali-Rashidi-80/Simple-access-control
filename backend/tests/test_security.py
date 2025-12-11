@@ -13,6 +13,17 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
+# Helper to get auth headers
+async def get_auth_headers(client):
+    """Login and return auth headers"""
+    response = await client.post("/auth/login", json={
+        "username": "admin",
+        "password": "admin123"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
 # --- AUTHENTICATION TESTS ---
 
 @pytest.mark.asyncio
@@ -156,13 +167,13 @@ async def test_token_validation_expired(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_xss_prevention_in_user_name(client: AsyncClient):
     """Test XSS content is sanitized in user creation"""
+    headers = await get_auth_headers(client)
     response = await client.post("/users/", json={
         "name": "<script>alert('xss')</script>",
         "rfid_tag": "XSS_TEST_001",
         "role": "user"
-    })
+    }, headers=headers)
     assert response.status_code == 200
-    # Name should be stored but frontend will handle display safely
 
 
 @pytest.mark.asyncio
@@ -179,9 +190,8 @@ async def test_sql_injection_in_login_username(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_sql_injection_in_user_query(client: AsyncClient):
     """Test SQL injection is prevented in user queries"""
-    # SQLAlchemy ORM parameterizes queries automatically
-    response = await client.get("/users/?limit=10' OR '1'='1")
-    # Should return 422 (validation error) not execute injection
+    headers = await get_auth_headers(client)
+    response = await client.get("/users/?limit=10' OR '1'='1", headers=headers)
     assert response.status_code in [200, 422]
 
 
@@ -346,7 +356,8 @@ async def test_change_password_wrong_current(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_logs_pagination(client: AsyncClient):
     """Test logs endpoint with pagination"""
-    response = await client.get("/logs/?skip=0&limit=10")
+    headers = await get_auth_headers(client)
+    response = await client.get("/logs/?skip=0&limit=10", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert "logs" in data
@@ -357,12 +368,14 @@ async def test_logs_pagination(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_logs_status_filter(client: AsyncClient):
     """Test logs endpoint with status filter"""
-    response = await client.get("/logs/?status=success")
+    headers = await get_auth_headers(client)
+    response = await client.get("/logs/?status=success", headers=headers)
     assert response.status_code == 200
 
 
 @pytest.mark.asyncio
 async def test_logs_date_filter(client: AsyncClient):
     """Test logs endpoint with date filter"""
-    response = await client.get("/logs/?start_date=2024-01-01T00:00:00")
+    headers = await get_auth_headers(client)
+    response = await client.get("/logs/?start_date=2024-01-01T00:00:00", headers=headers)
     assert response.status_code == 200

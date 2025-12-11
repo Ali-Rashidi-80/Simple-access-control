@@ -11,6 +11,17 @@ from starlette.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
 
+# Helper to get auth headers
+async def get_auth_headers(client):
+    """Login and return auth headers"""
+    response = await client.post("/auth/login", json={
+        "username": "admin",
+        "password": "admin123"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
 # --- WEBSOCKET CONNECTION TESTS ---
 
 @pytest.mark.asyncio
@@ -46,19 +57,19 @@ async def test_known_rfid_scan_grants_access(client: AsyncClient):
     from starlette.testclient import TestClient
     from app.main import app
     
-    # First, create a test user with RFID
+    # First, create a test user with RFID (with auth)
+    headers = await get_auth_headers(client)
     user_data = {
         "name": "Test RFID User",
         "rfid_tag": "ABCD1234EF",
         "role": "admin"
     }
-    create_response = await client.post("/users/", json=user_data)
+    create_response = await client.post("/users/", json=user_data, headers=headers)
     assert create_response.status_code == 200
     
     # Connect as hardware and simulate scan
     with TestClient(app) as test_client:
         with test_client.websocket_connect("/ws/hardware") as hw_ws:
-            # Simulate RFID scan
             scan_message = {
                 "type": "scan",
                 "uid": "ABCD1234EF",
@@ -66,12 +77,10 @@ async def test_known_rfid_scan_grants_access(client: AsyncClient):
             }
             hw_ws.send_json(scan_message)
             
-            # Should receive OPEN command back
             try:
                 response = hw_ws.receive_json(timeout=2)
                 assert response.get("cmd") == "OPEN" or response.get("action") == "OPEN"
             except:
-                # If no response, check logs for access granted
                 pass
 
 
@@ -185,7 +194,8 @@ async def test_access_log_created_on_valid_scan(client: AsyncClient):
 @pytest.mark.asyncio
 async def test_duress_flag_in_logs(client: AsyncClient):
     """Test that duress flag is properly recorded in logs"""
-    logs_response = await client.get("/logs/?limit=50")
+    headers = await get_auth_headers(client)
+    logs_response = await client.get("/logs/?limit=50", headers=headers)
     assert logs_response.status_code == 200
     
     data = logs_response.json()

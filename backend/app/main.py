@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func, and_
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import os
 import shutil
@@ -119,13 +119,13 @@ app.include_router(auth_router)
 # --- Static Files for Uploads ---
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
-# --- CORS ---
+# --- CORS (Strict - no wildcard in production!) ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS + ["*"],
+    allow_origins=CORS_ORIGINS,  # ✅ No wildcard - only configured origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 
@@ -162,10 +162,14 @@ async def websocket_endpoint(websocket: WebSocket, client_type: str):
 
 
 # ==========================================
-# 2. REST API (Users)
+# 2. REST API (Users) - PROTECTED
 # ==========================================
 @app.post("/users/", response_model=schemas.UserResponse)
-async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_db)):
+async def create_user(
+    user: schemas.UserCreate, 
+    db: AsyncSession = Depends(get_db),
+    current_user: models.AdminUser = Depends(get_current_user)  # ✅ Auth required
+):
     result = await db.execute(select(models.User).where(models.User.rfid_tag == user.rfid_tag))
     if result.scalars().first():
         raise HTTPException(status_code=400, detail="RFID Tag already registered")
@@ -183,13 +187,22 @@ async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_d
 
 
 @app.get("/users/", response_model=List[schemas.UserResponse])
-async def read_users(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
+async def read_users(
+    skip: int = 0, 
+    limit: int = 100, 
+    db: AsyncSession = Depends(get_db),
+    current_user: models.AdminUser = Depends(get_current_user)  # ✅ Auth required
+):
     result = await db.execute(select(models.User).offset(skip).limit(limit))
     return result.scalars().all()
 
 
 @app.delete("/users/{user_id}")
-async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_user(
+    user_id: int, 
+    db: AsyncSession = Depends(get_db),
+    current_user: models.AdminUser = Depends(get_current_user)  # ✅ Auth required
+):
     result = await db.execute(select(models.User).where(models.User.id == user_id))
     user = result.scalars().first()
     if not user:
@@ -201,7 +214,7 @@ async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
 
 
 # ==========================================
-# 3. REST API (Logs) - Enhanced with Filtering
+# 3. REST API (Logs) - PROTECTED
 # ==========================================
 @app.get("/logs/")
 async def read_logs(
@@ -210,7 +223,8 @@ async def read_logs(
     status: Optional[str] = None,
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: models.AdminUser = Depends(get_current_user)  # ✅ Auth required
 ):
     """
     Get logs with optional filtering by status and date range
@@ -306,7 +320,7 @@ async def update_settings(
         setting = result.scalars().first()
         if setting:
             setting.value = str(value)
-            setting.updated_at = datetime.utcnow()
+            setting.updated_at = datetime.now(timezone.utc)
         else:
             db.add(models.SystemSettings(key=key, value=str(value)))
     
@@ -340,13 +354,21 @@ async def upload_avatar(
     current_user: models.AdminUser = Depends(get_current_user)
 ):
     """Upload user avatar"""
-    # Validate file type
+    # ✅ Validate file type
     allowed_types = ["image/jpeg", "image/png", "image/gif", "image/webp"]
     if file.content_type not in allowed_types:
         raise HTTPException(status_code=400, detail="فقط تصاویر مجاز هستند")
     
+    # ✅ Validate file size (max 20MB)
+    MAX_FILE_SIZE = 20 * 1024 * 1024  # 20MB
+    contents = await file.read()
+    if len(contents) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="حجم فایل نباید بیشتر از 20 مگابایت باشد")
+    
     # Generate filename
     ext = file.filename.split(".")[-1] if file.filename else "jpg"
+    # ✅ Sanitize extension
+    ext = ext.lower()[:4] if ext.isalnum() else "jpg"
     filename = f"avatar_{current_user.id}.{ext}"
     filepath = os.path.join(AVATAR_DIR, filename)
     
@@ -356,9 +378,9 @@ async def upload_avatar(
         if os.path.exists(old_path):
             os.remove(old_path)
     
-    # Save new file
+    # Save new file (already read into memory)
     with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        buffer.write(contents)
     
     # Update user record
     current_user.avatar_path = f"/uploads/avatars/{filename}"
@@ -386,16 +408,28 @@ async def change_password(
 
 
 # ==========================================
-# 6. ROOT & DEBUG
+# 6. ROOT & DEBUG (Protected or Disabled)
 # ==========================================
 @app.get("/")
 async def root():
     return {"message": "SentryGate IoT Backend is Online 🚀"}
 
 
+# ✅ Debug endpoints - PROTECTED and should be disabled in production
+import os as _os
+DEBUG_MODE = _os.getenv("DEBUG_MODE", "false").lower() == "true"
+
+
 @app.post("/api/debug/simulate-scan")
-async def simulate_scan(payload: schemas.HardwareMessage, db: AsyncSession = Depends(get_db)):
-    """Simulate a hardware scan event for testing."""
+async def simulate_scan(
+    payload: schemas.HardwareMessage, 
+    db: AsyncSession = Depends(get_db),
+    current_user: models.AdminUser = Depends(get_current_user)  # ✅ Auth required
+):
+    """Simulate a hardware scan event for testing. REQUIRES AUTHENTICATION."""
+    if not DEBUG_MODE:
+        raise HTTPException(status_code=403, detail="Debug mode disabled in production")
+    
     data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
     await manager.process_hardware_message(data, db)
     return {"ok": True}
