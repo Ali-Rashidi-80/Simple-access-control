@@ -1,1 +1,8 @@
 node_modules
+
+# ESP32 Config (contains WiFi credentials - NEVER COMMIT!)
+micro-python-esp32/config.json
+
+# Environment files with secrets
+.env
+.env.local

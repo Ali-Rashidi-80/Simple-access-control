@@ -42,7 +42,7 @@ if not CONFIG:
 else:
     WIFI_SSID = CONFIG.get("wifi_ssid", "")
     WIFI_PASS = CONFIG.get("wifi_pass", "")
-    SERVER_HOST = CONFIG.get("server_host", "rash32.ir")
+    SERVER_HOST = CONFIG.get("server_host", "rynix.ir")
     SERVER_PORT = CONFIG.get("server_port", 443)
     USE_SSL = CONFIG.get("use_ssl", True)
     WS_PATH = CONFIG.get("ws_path", "/ws/hardware")
@@ -67,7 +67,7 @@ CS_PIN = 5
 RST_PIN = 4
 
 PERIPHERALS = dict(
-    RELAY = 16,
+    RELAY = 15,
     BUZZER = 17,
     TEMP_ADC = 34
 )
@@ -399,7 +399,7 @@ async def telemetry_sender(ws, hw):
                     "temperature": temp 
                 }).encode()
                 await ws.send(msg)
-                print(f"[TEL] Sent temperature: {temp}°C")
+                #print(f"[TEL] Sent temperature: {temp}°C")
             except Exception as e:
                 print(f"[TEL] Error sending telemetry: {e}")
         await asyncio.sleep(30)
@@ -497,3 +497,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Critical Error: {e}")
         machine.reset()
+

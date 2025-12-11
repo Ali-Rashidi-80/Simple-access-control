@@ -1,9 +1,0 @@
-{
-    "wifi_ssid": "ICT",
-    "wifi_pass": "@Mohsen1370",
-    "server_host": "rynix.ir",
-    "server_port": 443,
-    "use_ssl": True,
-    "ws_path": "/ws/hardware"
-}
-

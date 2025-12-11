@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 from typing import List, Optional
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from .database import engine, Base, get_db
@@ -13,6 +14,12 @@ from .services.processor import manager
 # --- Logging Setup ---
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("uvicorn")
+
+# --- CORS Origins from Environment ---
+# Format: comma-separated list, e.g., "http://localhost:5173,https://example.com"
+DEFAULT_CORS_ORIGINS = "http://localhost:5173,http://localhost:3000"
+CORS_ORIGINS = [origin.strip() for origin in os.getenv("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",") if origin.strip()]
+logger.info(f"CORS Origins loaded: {CORS_ORIGINS}")
 
 # --- Lifespan Manager (Startup/Shutdown) ---
 @asynccontextmanager
@@ -35,14 +42,7 @@ app = FastAPI(title="SentryGate IoT API", lifespan=lifespan)
 # --- CORS ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://sentry-frontend.chbk.app",
-        "http://sentry-frontend.chbk.app",
-        "https://rash32.ir",
-        "http://rash32.ir",
-        "*" 
-    ],
+    allow_origins=CORS_ORIGINS + ["*"],  # Keep wildcard for development flexibility
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
