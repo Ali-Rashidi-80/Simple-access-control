@@ -309,8 +309,14 @@ async def google_auth_callback(request: Request, db: AsyncSession):
         # Create JWT token
         jwt_token = create_access_token(data={"sub": user.username, "role": user.role})
         
-        # Redirect to frontend with token in cookie
-        response = RedirectResponse(url="/dashboard?welcome=google", status_code=302)
+        # Redirect to frontend with token in URL (cookies won't work cross-domain)
+        FRONTEND_URL = os.getenv("FRONTEND_URL", "https://rash32.ir")
+        response = RedirectResponse(
+            url=f"{FRONTEND_URL}/dashboard?welcome=google&token={jwt_token}", 
+            status_code=302
+        )
+        
+        # We still set cookie as backup/for same-domain usage
         response.set_cookie(
             key="access_token",
             value=jwt_token,

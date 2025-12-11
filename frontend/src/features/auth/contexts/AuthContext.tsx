@@ -77,6 +77,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check for existing session on mount
     useEffect(() => {
         const checkSession = async () => {
+            // 1. Check URL for token (Google OAuth)
+            const params = new URLSearchParams(window.location.search);
+            const urlToken = params.get('token');
+
+            if (urlToken) {
+                console.log("Found token in URL, logging in...");
+                // Calculate estimated expiry since backend didn't send it in URL params, or decode JWT
+                // For now, allow validateToken to handle expiry or set a default.
+                const defaultExpiry = Date.now() + SESSION_DURATION;
+
+                localStorage.setItem(TOKEN_KEY, urlToken);
+                localStorage.setItem(TOKEN_EXPIRY_KEY, defaultExpiry.toString());
+
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+                // Immediately validate to get user details
+                const isValid = await validateToken();
+                if (isValid) {
+                    setIsLoading(false);
+                    return;
+                }
+                // If validation fails, fall through to checking stored user
+            }
+
             const storedUser = localStorage.getItem(USER_KEY);
             const token = localStorage.getItem(TOKEN_KEY);
 
