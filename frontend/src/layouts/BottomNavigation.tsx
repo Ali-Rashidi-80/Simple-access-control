@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { Home, FileText, Users, Settings } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePerformanceMode } from '../hooks/usePerformanceMode';
+import { useMemo } from 'react';
 
 const navItems = [
   { id: 'home', labelKey: 'home', icon: Home },
@@ -16,6 +18,13 @@ interface BottomNavigationProps {
 
 export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
   const { t } = useLanguage();
+  const { isLowPerformance, prefersReducedMotion } = usePerformanceMode();
+
+  // PERFORMANCE: Disable animations on low-end devices
+  const shouldAnimate = !isLowPerformance && !prefersReducedMotion;
+
+  // PERFORMANCE: Memoize static data
+  const memoizedNavItems = useMemo(() => navItems, []);
 
   return (
     <motion.nav
@@ -39,7 +48,7 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
         }}
       >
         <div className="flex items-center justify-between">
-          {navItems.map((item) => {
+          {memoizedNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
 
@@ -53,18 +62,28 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
                   padding: '8px 4px',
                 }}
               >
-                {/* Active Background Blob */}
+                {/* Active Background Blob - PERF: Static fallback on low-end */}
                 {isActive && (
-                  <motion.div
-                    layoutId="bottom-nav-active"
-                    className="absolute inset-0 rounded-xl"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%)',
-                      boxShadow: 'inset 0 0 20px rgba(0, 240, 255, 0.15), 0 0 16px rgba(0, 240, 255, 0.2)',
-                      border: '1px solid rgba(0, 240, 255, 0.2)',
-                    }}
-                    transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
-                  />
+                  shouldAnimate ? (
+                    <motion.div
+                      layoutId="bottom-nav-active"
+                      className="absolute inset-0 rounded-xl"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%)',
+                        boxShadow: 'inset 0 0 20px rgba(0, 240, 255, 0.15), 0 0 16px rgba(0, 240, 255, 0.2)',
+                        border: '1px solid rgba(0, 240, 255, 0.2)',
+                      }}
+                      transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
+                    />
+                  ) : (
+                    <div
+                      className="absolute inset-0 rounded-xl"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%)',
+                        border: '1px solid rgba(0, 240, 255, 0.2)',
+                      }}
+                    />
+                  )
                 )}
 
                 {/* Icon Container */}

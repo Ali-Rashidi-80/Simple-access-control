@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { Home, FileText, Users, Settings, Shield } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePerformanceMode } from '../hooks/usePerformanceMode';
+import { useMemo } from 'react';
 
 const navItems = [
     { id: 'home', labelKey: 'dashboard', icon: Home },
@@ -16,6 +18,13 @@ interface SidebarProps {
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     const { t, isRTL } = useLanguage();
+    const { isLowPerformance, prefersReducedMotion } = usePerformanceMode();
+
+    // PERFORMANCE: Disable animations on low-end devices
+    const shouldAnimate = !isLowPerformance && !prefersReducedMotion;
+
+    // PERFORMANCE: Memoize static navItems data
+    const memoizedNavItems = useMemo(() => navItems, []);
 
     return (
         <aside
@@ -71,7 +80,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
             {/* Navigation */}
             <nav className="px-3 space-y-1">
-                {navItems.map((item) => {
+                {memoizedNavItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = activeTab === item.id;
 
@@ -82,18 +91,28 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                             className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] ${isRTL ? 'flex-row-reverse text-right' : 'flex-row text-left'
                                 }`}
                         >
-                            {/* Active Background */}
+                            {/* Active Background - PERF: Use CSS transition on low-perf */}
                             {isActive && (
-                                <motion.div
-                                    layoutId="sidebar-active-bg"
-                                    className="absolute inset-0 rounded-xl"
-                                    style={{
-                                        background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%)',
-                                        border: '1px solid rgba(0, 240, 255, 0.25)',
-                                        boxShadow: 'inset 0 0 20px rgba(0, 240, 255, 0.1), 0 0 15px rgba(0, 240, 255, 0.15)',
-                                    }}
-                                    transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
-                                />
+                                shouldAnimate ? (
+                                    <motion.div
+                                        layoutId="sidebar-active-bg"
+                                        className="absolute inset-0 rounded-xl"
+                                        style={{
+                                            background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%)',
+                                            border: '1px solid rgba(0, 240, 255, 0.25)',
+                                            boxShadow: 'inset 0 0 20px rgba(0, 240, 255, 0.1), 0 0 15px rgba(0, 240, 255, 0.15)',
+                                        }}
+                                        transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
+                                    />
+                                ) : (
+                                    <div
+                                        className="absolute inset-0 rounded-xl"
+                                        style={{
+                                            background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%)',
+                                            border: '1px solid rgba(0, 240, 255, 0.25)',
+                                        }}
+                                    />
+                                )
                             )}
 
                             {/* Hover Effect */}
