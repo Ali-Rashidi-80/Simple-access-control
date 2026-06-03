@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../features/auth/contexts/AuthContext';
 import { useAppSettings } from '../features/settings/contexts/AppSettingsContext';
+import { usePerformanceMode } from '../hooks/usePerformanceMode';
 import { Sidebar } from './Sidebar';
 import { BottomNavigation } from './BottomNavigation';
 import { LanguageSwitcher } from '../features/settings/components/LanguageSwitcher';
@@ -14,8 +15,12 @@ export default function RootLayout() {
     const { t, isRTL } = useLanguage();
     const { theme } = useAppSettings();
     const { isAuthenticated, isLoading } = useAuth();
+    const { isLowPerformance, isMobile, isTablet } = usePerformanceMode();
     const navigate = useNavigate();
     const location = useLocation();
+
+    // PERFORMANCE: Only render aurora blobs on high-performance desktop devices
+    const shouldRenderAurora = !isLowPerformance && !isMobile && !isTablet;
 
     console.log('RootLayout Render:', { path: location.pathname, isAuthenticated, isLoading });
 
@@ -76,8 +81,8 @@ export default function RootLayout() {
     if (!isAuthenticated) {
         return (
             <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''}`}>
-                {/* Aurora Background (Neon Theme) */}
-                {theme === 'neon' && (
+                {/* Aurora Background (Neon Theme) - PERF: Only on high-end desktop */}
+                {theme === 'neon' && shouldRenderAurora && (
                     <div className="fixed inset-0 opacity-30 pointer-events-none">
                         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
                         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00FF9D] rounded-full blur-[150px] animate-aurora-2" />
@@ -99,8 +104,8 @@ export default function RootLayout() {
 
     return (
         <div className={`min-h-screen bg-[#050505] text-white relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'} ${theme === 'matrix' ? 'hacker-mode' : ''}`}>
-            {/* Backgrounds */}
-            {theme === 'neon' && (
+            {/* Background Aurora - PERF: Only on high-end desktop */}
+            {theme === 'neon' && shouldRenderAurora && (
                 <div className="fixed inset-0 opacity-30 pointer-events-none">
                     <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00F0FF] rounded-full blur-[150px] animate-aurora-1" />
                 </div>

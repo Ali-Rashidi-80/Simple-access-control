@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode, useMemo } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { api } from '../../../utils/api';
+import { usePerformanceMode } from '../../../hooks/usePerformanceMode';
 
 export type Theme = 'neon' | 'matrix' | 'light';
 
@@ -12,8 +13,11 @@ const DEFAULT_SETTINGS = {
   auto_lock_end: 6,
   timer_duration: 5,
   require_biometric: false,
-  duress_mode: false
+  duress_mode: false,
+  performance_mode: 'auto' as PerformanceMode
 };
+
+export type PerformanceMode = 'auto' | 'high' | 'low';
 
 interface AppSettingsContextType {
   isSecureMode: boolean;
@@ -25,6 +29,11 @@ interface AppSettingsContextType {
   autoLockEnd: number;
   defaultLanguage: string;
   isLoading: boolean;
+  // Performance settings
+  performanceMode: PerformanceMode;
+  isLowPerformance: boolean;
+  setPerformanceMode: (value: PerformanceMode) => void;
+  // Setters
   setRequireBiometric: (value: boolean) => void;
   setIsDuressMode: (value: boolean) => void;
   setTheme: (value: Theme) => void;
@@ -38,6 +47,7 @@ const AppSettingsContext = createContext<AppSettingsContextType | undefined>(und
 
 export function AppSettingsProvider({ children }: { children: ReactNode }) {
   const { setLanguage } = useLanguage();
+  const { isLowPerformance: autoIsLowPerformance, performanceMode: hookPerformanceMode, setPerformanceMode: hookSetPerformanceMode } = usePerformanceMode();
   const [isLoading, setIsLoading] = useState(true);
   const [requireBiometric, setRequireBiometricState] = useState(DEFAULT_SETTINGS.require_biometric);
   const [isDuressMode, setIsDuressModeState] = useState(DEFAULT_SETTINGS.duress_mode);
@@ -138,27 +148,37 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     setAutoLockEnd(end);
   };
 
+  // PERFORMANCE: Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    isSecureMode,
+    requireBiometric,
+    isDuressMode,
+    theme,
+    timerDuration,
+    autoLockStart,
+    autoLockEnd,
+    defaultLanguage,
+    isLoading,
+    // Performance settings from hook
+    performanceMode: hookPerformanceMode,
+    isLowPerformance: autoIsLowPerformance,
+    setPerformanceMode: hookSetPerformanceMode,
+    // Setters
+    setRequireBiometric,
+    setIsDuressMode,
+    setTheme,
+    setTimerDuration,
+    setAutoLockTimes,
+    setDefaultLanguage,
+    saveSettings,
+  }), [
+    isSecureMode, requireBiometric, isDuressMode, theme, timerDuration,
+    autoLockStart, autoLockEnd, defaultLanguage, isLoading,
+    hookPerformanceMode, autoIsLowPerformance, hookSetPerformanceMode, saveSettings
+  ]);
+
   return (
-    <AppSettingsContext.Provider
-      value={{
-        isSecureMode,
-        requireBiometric,
-        isDuressMode,
-        theme,
-        timerDuration,
-        autoLockStart,
-        autoLockEnd,
-        defaultLanguage,
-        isLoading,
-        setRequireBiometric,
-        setIsDuressMode,
-        setTheme,
-        setTimerDuration,
-        setAutoLockTimes,
-        setDefaultLanguage,
-        saveSettings,
-      }}
-    >
+    <AppSettingsContext.Provider value={contextValue}>
       {children}
     </AppSettingsContext.Provider>
   );

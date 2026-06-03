@@ -20,7 +20,9 @@
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        /* Explicit types to prevent auto-discovery of testing types */
+        "types": []
     },
     "include": [
         "src"
