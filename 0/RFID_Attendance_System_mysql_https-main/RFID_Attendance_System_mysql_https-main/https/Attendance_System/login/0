@@ -1,0 +1,108 @@
+<?php
+// dashboard.php
+
+// اتصال به پایگاه داده
+include 'config.php'; // شامل فایل اتصال به پایگاه داده
+
+// شروع جلسه برای بررسی ورود کاربر
+session_start();
+
+
+
+// تنظیم زمان انقضای نشست به 30 دقیقه (1800 ثانیه)
+$session_lifetime = 1800; // 30 دقیقه
+
+// بررسی زمان آخرین فعالیت
+if (isset($_SESSION['last_activity'])) {
+    if (time() - $_SESSION['last_activity'] > $session_lifetime) {
+        // اگر 30 دقیقه از آخرین فعالیت گذشته باشد، نشست منقضی می‌شود
+        session_unset(); // حذف همه داده‌های نشست
+        session_destroy(); // تخریب نشست
+        header("Location: /Attendance_System/login/index.php?error=Session expired."); // هدایت به صفحه ورود
+        exit();
+    }
+}
+// بروزرسانی زمان آخرین فعالیت
+$_SESSION['last_activity'] = time();
+
+
+
+
+// بررسی ورود کاربر
+if (!isset($_SESSION['user_id'])) {
+    // اگر کاربر وارد نشده است، به صفحه ورود هدایت شود
+    header("Location: index.php");
+    exit();
+}
+
+// دریافت اطلاعات کاربر از پایگاه داده
+$user_id = $_SESSION['user_id'];
+$query = "SELECT * FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+if ($stmt) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+    } else {
+        // در صورتی که کاربر در پایگاه داده یافت نشد
+        header("Location: index.php?error=User not found.");
+        exit();
+    }
+    $stmt->close();
+} else {
+    // اگر آماده‌سازی کوئری شکست خورد
+    header("Location: index.php?error=Failed to prepare statement.");
+    exit();
+}
+
+// بررسی و اعمال تنظیمات کاربر (Dark Mode)
+$dark_mode = isset($_COOKIE['dark_mode']) && $_COOKIE['dark_mode'] === 'true' ? true : false;
+?>
+
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="user_dashboard.css">
+</head>
+<body>
+<div class="user_dashboard_user">
+    <div class="sidebar">
+        <h2>داشبورد</h2>
+        <ul>
+            <li><a href="#">پروفایل</a></li>
+            <li><a href="#">تنظیمات</a></li>
+            <li><a href="logout.php">خروج</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>خوش آمدید، <?php echo htmlspecialchars($user['name']); ?> عزیز!</h1>
+        <p>این داشبورد شماست. می‌توانید پروفایل و تنظیمات خود را مدیریت کنید.</p>
+
+        
+        <div class="user">
+            <h2>کاربر</h2>
+            <a href="" class="user">فرم درخواست مرخصی روزانه</a>
+            <a href="" class="user">فرم درخواست مرخصی ساعتی</a>
+            <a href="" class="user">فرم درخواست تغییر شیفت</a>
+            <a href="" class="user">فرم گزارشات پرداخت حقوق</a>
+        </div>
+
+        <div class="settings">
+            <h2>تنظیمات</h2>
+            <label>
+                <input type="checkbox" id="dark-mode-toggle">
+                حالت تاریک
+            </label>
+        </div>
+    </div>
+</div>
+<script src="user_dashboard.js"></script>
+</body>
+</html>

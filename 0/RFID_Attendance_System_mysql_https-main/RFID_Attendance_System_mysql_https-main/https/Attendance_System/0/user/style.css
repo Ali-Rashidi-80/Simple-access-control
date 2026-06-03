@@ -1,0 +1,179 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+
+}
+
+.logo {
+    position: relative; /* تغییر به موقعیت نسبی */
+    display: block; /* تنظیم نمایش به صورت بلوک */
+    top: 20px; /* موقعیت در بالای صفحه */
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 150px;
+    z-index: 1000;
+    opacity: 0.9;
+    margin-bottom: 20px; /* فاصله بین لوگو و جدول */
+    animation: bounce-logo 2s infinite; /* انیمیشن بونس برای لوگو */       
+}
+
+@keyframes bounce-logo {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translate(-50%, 0);
+    }
+    40% {
+        transform: translate(-50%, -10px);
+    }
+    60% {
+        transform: translate(-50%, -5px);
+    }
+}
+
+.panel {
+    background: linear-gradient(90deg, #fc466b, #3f5efb);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    max-width: 1200px;
+    margin: 40px auto; /* افزایش حاشیه بالا برای فاصله با عکس */
+    color: white;
+    animation: fadeIn 1s ease-in-out, pulse-panel 3s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse-panel {
+    0%, 100% {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in-out 0.5s, pulse-heading 3s infinite;
+}
+
+@keyframes pulse-heading {
+    0%, 100% {
+        color: #333;
+    }
+    50% {
+        color: #666;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+th {
+    background: linear-gradient(90deg, #444, #222);
+    color: white;
+    border-radius: 8px;
+    animation: fadeIn 1s ease-in-out 0.5s;
+}
+
+td {
+    background: #fff;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+tr:hover td {
+    background-color: #f0f0f0;
+}
+
+.status-out {
+    color: white;
+    background: linear-gradient(90deg, #d53369, #daae51);
+    animation: pulse-status 2s infinite;
+}
+
+.status-in {
+    color: white;
+    background: linear-gradient(90deg, #9ebd13, #008552);
+    animation: pulse-status 2s infinite;
+}
+
+.status-in, .status-out {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+@keyframes pulse-status {
+    0%, 100% {
+        background-size: 100% 100%;
+    }
+    50% {
+        background-size: 110% 110%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.header {
+    position: flex; /* موقعیت ثابت */
+    top: 0; /* چسباندن به بالای صفحه */
+    left: 0; /* چسباندن به سمت چپ */
+    right: 0; /* چسباندن به سمت راست */
+    display: flex; /* استفاده از فلیکس‌باکس برای تراز کردن محتوا */
+    justify-content: space-between; /* فاصله برابر بین عناصر */
+    align-items: center; /* تراز کردن عمودی */
+    padding: 15px 30px; /* فاصله داخلی */
+    background-color: #a3c1e096; /* رنگ هدر */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* سایه برای جلوه بیشتر */
+    border-radius: 15px; /* گوشه‌های گرد */
+    z-index: 1000; /* بالاتر از سایر عناصر */
+    flex-direction: row-reverse; /* معکوس کردن جهت فلیکس‌باکس */
+}
+
+.button-container {
+    display: flex; /* دکمه‌ها را در یک خط نمایش می‌دهد */
+}
+
+.logout-button {
+    padding: 12px 24px; /* فاصله داخلی بیشتر */
+    background: linear-gradient(135deg, #f2d3a3, #e6b89b); /* رنگ ملایم و جذاب برای دکمه */
+    color: #3b2e2a; /* رنگ متن تیره برای تضاد بیشتر */
+    text-decoration: none; /* حذف زیرخط */
+    border-radius: 8px; /* گوشه‌های گرد دکمه */
+    border: none; /* حذف حاشیه */
+    font-weight: bold; /* پررنگ کردن متن */
+    font-size: 18px; /* اندازه متن دکمه */
+    position: relative; /* برای سایه‌های متحرک */
+    overflow: hidden; /* جلوگیری از نمایش دکمه‌های خارج از محدوده */
+    margin-left: 15px; /* فاصله 15 پیکسلی از دکمه‌های دیگر */
+    transition: box-shadow 0.3s ease, transform 0.2s ease; /* انیمیشن سایه و مقیاس */
+}
+
+.logout-button:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* سایه بیشتر در حالت هاور */
+    transform: translateY(-2px); /* حرکت کمی به سمت بالا */
+}

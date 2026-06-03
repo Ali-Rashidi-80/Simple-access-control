@@ -1,0 +1,27 @@
+[27-Dec-2024 14:31:09 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش‌های اضافه‌کاری/data.php on line 8
+[27-Dec-2024 15:25:34 Asia/Tehran] PHP Warning:  Undefined variable $employees in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش‌های اضافه‌کاری/index.php on line 88
+[27-Dec-2024 15:25:34 Asia/Tehran] PHP Warning:  foreach() argument must be of type array|object, null given in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش‌های اضافه‌کاری/index.php on line 88
+[27-Dec-2024 15:25:35 Asia/Tehran] PHP Warning:  Undefined variable $employees in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش‌های اضافه‌کاری/index.php on line 88
+[27-Dec-2024 15:25:35 Asia/Tehran] PHP Warning:  foreach() argument must be of type array|object, null given in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش‌های اضافه‌کاری/index.php on line 88
+[28-Dec-2024 11:12:06 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 9
+[28-Dec-2024 11:12:06 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 1' at line 1 in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php(13): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 13
+[28-Dec-2024 11:12:07 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 9
+[28-Dec-2024 11:12:07 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 1' at line 1 in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php(13): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 13
+[28-Dec-2024 11:13:03 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 7
+[28-Dec-2024 11:13:03 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 7
+[28-Dec-2024 11:13:22 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 7
+[28-Dec-2024 11:13:22 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 7
+[28-Dec-2024 11:13:57 Asia/Tehran] PHP Warning:  Undefined variable $full_name in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 90
+[28-Dec-2024 11:13:57 Asia/Tehran] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 90
+[28-Dec-2024 11:13:59 Asia/Tehran] PHP Warning:  Undefined variable $full_name in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 90
+[28-Dec-2024 11:13:59 Asia/Tehran] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 90
+[28-Dec-2024 11:14:21 Asia/Tehran] PHP Warning:  Undefined variable $employee_name in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 111
+[28-Dec-2024 11:14:22 Asia/Tehran] PHP Warning:  Undefined variable $employee_name in /home3/ewyjapml/public_html/Attendance_System/user/فرم درخواست مرخصی/index.php on line 111

@@ -1,0 +1,10 @@
+[28-Dec-2024 13:52:00 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'al.previous_check_in_time' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش حضور و غیاب هفتگی و ماهانه و سالانه/data.php:49
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش حضور و غیاب هفتگی و ماهانه و سالانه/data.php(49): mysqli->query('SELECT \r\n      ...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش حضور و غیاب هفتگی و ماهانه و سالانه/data.php on line 49
+[28-Dec-2024 13:52:05 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'al.previous_check_in_time' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش حضور و غیاب هفتگی و ماهانه و سالانه/data.php:49
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش حضور و غیاب هفتگی و ماهانه و سالانه/data.php(49): mysqli->query('SELECT \r\n      ...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش حضور و غیاب هفتگی و ماهانه و سالانه/data.php on line 49

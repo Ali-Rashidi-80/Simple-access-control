@@ -1,0 +1,178 @@
+/* Global Styles */
+
+body {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0 10px; /* بهبود ظاهر در صفحه‌های کوچکتر */
+}
+
+
+
+/* اعمال تصویر و افکت بلور */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("2.jpg"); /* جایگزین کنید با مسیر تصویر خود */
+    background-size: cover; /* تصویر کل صفحه را می‌پوشاند */
+    background-position: top; /* موقعیت تصویر */
+    background-repeat: no-repeat; /* جلوگیری از تکرار تصویر */
+    filter: blur(5px); /* افکت بلور */
+    z-index: -2; /* زیر تمام محتوای صفحه قرار می‌گیرد */
+}
+
+/* لایه نیمه شفاف */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3); /* شفافیت */
+    z-index: -1; /* بالای لایه بلور قرار می‌گیرد */
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Form Container */
+.form-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 650px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* To include padding in width calculation */
+}
+
+.form-container:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Label Styles */
+label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 8px;
+    display: block;
+    padding-left: 10px; /* Add padding to the left */
+}
+
+/* Input, Select, and Textarea Styles */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* To include padding in width calculation */
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+    outline: none;
+}
+
+/* Custom Number Input (for overtime hours) */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Button Styles */
+button {
+    padding: 12px 25px;
+    border: none;
+    background-color: #4CAF50;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+button[type="reset"] {
+    background-color: #f44336;
+}
+
+button[type="reset"]:hover {
+    background-color: #da190b;
+    transform: scale(1.05);
+}
+
+/* Success and Error Messages */
+.success-message, .error-message {
+    display: none;
+    padding: 15px;
+    font-size: 14px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Form Actions Container */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 25px;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}

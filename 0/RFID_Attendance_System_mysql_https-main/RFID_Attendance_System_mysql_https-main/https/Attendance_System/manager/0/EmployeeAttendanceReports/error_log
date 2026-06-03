@@ -1,0 +1,134 @@
+[10-Oct-2024 18:02:58 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:00 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:02 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:05 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:07 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:09 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:11 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:13 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:14 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:15 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:17 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:18 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:20 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:23 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:25 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[11-Oct-2024 15:25:56 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:25:56 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:25:56 Asia/Tehran] PHP Warning:  include(): Failed opening 'config.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:25:56 Asia/Tehran] PHP Warning:  Undefined variable $conn in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:25:56 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:25:57 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:25:57 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:25:57 Asia/Tehran] PHP Warning:  include(): Failed opening 'config.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:25:57 Asia/Tehran] PHP Warning:  Undefined variable $conn in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:25:57 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:26:39 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:26:39 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:26:39 Asia/Tehran] PHP Warning:  include(): Failed opening 'config.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:26:39 Asia/Tehran] PHP Warning:  Undefined variable $conn in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:26:39 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:26:40 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:26:40 Asia/Tehran] PHP Warning:  include(config.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:26:40 Asia/Tehran] PHP Warning:  include(): Failed opening 'config.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 6
+[11-Oct-2024 15:26:40 Asia/Tehran] PHP Warning:  Undefined variable $conn in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:26:40 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php:11
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 11
+[11-Oct-2024 15:43:09 Asia/Tehran] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/logout_dashboard.php on line 4
+[11-Oct-2024 15:43:09 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/logout_dashboard.php:4) in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/logout_dashboard.php on line 7
+[11-Oct-2024 15:43:10 Asia/Tehran] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/logout_dashboard.php on line 4
+[11-Oct-2024 15:43:10 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/logout_dashboard.php:4) in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/logout_dashboard.php on line 7
+[11-Oct-2024 15:45:38 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 8
+[11-Oct-2024 15:45:38 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 8
+[11-Oct-2024 15:45:38 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php:8) in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 19
+[11-Oct-2024 15:45:38 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 8
+[11-Oct-2024 15:45:38 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 8
+[11-Oct-2024 15:45:38 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php:8) in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/index.php on line 19
+[26-Dec-2024 22:21:00 Asia/Tehran] PHP Warning:  Undefined variable $employee_id in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php on line 41
+[26-Dec-2024 22:21:45 Asia/Tehran] PHP Warning:  Undefined variable $employee_id in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php on line 34
+[26-Dec-2024 23:49:29 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: You cannot use the window function 'lead' in this context.' in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php:51
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php(51): mysqli->query('\r\n             ...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php on line 51
+[26-Dec-2024 23:49:40 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: You cannot use the window function 'lead' in this context.' in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php:51
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php(51): mysqli->query('\r\n             ...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php on line 51
+[26-Dec-2024 23:49:46 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: You cannot use the window function 'lead' in this context.' in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php:51
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php(51): mysqli->query('\r\n             ...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/EmployeeAttendanceReports/data.php on line 51

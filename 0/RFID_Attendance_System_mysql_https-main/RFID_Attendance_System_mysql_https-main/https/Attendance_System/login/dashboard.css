@@ -1,0 +1,255 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazir', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Vazir', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 100%;
+    overflow-x: hidden; /* جلوگیری از اسکرول افقی غیرضروری */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #2c3e50, #4e5d6c);
+    color: #ecf0f1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: width 0.3s ease;
+}
+
+.sidebar h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar nav ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar nav ul li a:hover {
+    background-color: #3e5066;
+    transform: scale(1.05);
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #ecf0f1;
+    overflow-y: auto;
+    transition: padding 0.3s ease;
+}
+
+.main-content header {
+    margin-bottom: 20px;
+}
+
+.main-content h1 {
+    font-size: 32px;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+.main-content p {
+    font-size: 18px;
+    color: #7f8c8d;
+}
+
+/* Section */
+.section {
+    margin-bottom: 30px;
+}
+
+.section h2 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: bold;
+    position: relative;
+}
+
+.section h2::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: #3498db;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #3498db, #2e86de);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    font-size: 16px;
+}
+
+.button:hover {
+    background: linear-gradient(135deg, #2980b9, #1e6fba);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.settings {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.settings h2 {
+    margin-right: 10px;
+}
+
+#dark-mode-toggle {
+    width: 20px;
+    height: 20px;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(135deg, #1a252f, #34495e);
+    color: #ecf0f1;
+}
+
+body.dark-mode .main-content {
+    background-color: #34495e;
+    color: #ecf0f1;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode p {
+    color: #ecf0f1;
+}
+
+body.dark-mode .button {
+    background: linear-gradient(135deg, #1f5f85, #2980b9);
+    color: white;
+}
+
+body.dark-mode .button:hover {
+    background: linear-gradient(135deg, #1e6fba, #3498db);
+}
+
+body.dark-mode .sidebar nav ul li a {
+    color: #ecf0f1;
+}
+
+body.dark-mode .sidebar nav ul li a:hover {
+    background-color: #3e5066;
+    color: white;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 200px; /* کاهش عرض سایدبار برای نمایشگرهای متوسط */
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .main-content h1 {
+        font-size: 28px;
+    }
+
+    .main-content p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* ستون شدن محتوا برای نمایشگرهای کوچک */
+    }
+
+    .sidebar {
+        width: 100%;
+        box-shadow: none;
+        padding: 10px;
+    }
+
+    .dashboard-container {
+        flex-direction: column;
+        overflow-x: hidden; /* جلوگیری از اسکرول افقی غیرضروری */
+    }
+
+    .main-content {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .button-group {
+        justify-content: center; /* دکمه‌ها در وسط چین می‌شوند */
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content h1 {
+        font-size: 24px;
+    }
+
+    .main-content p {
+        font-size: 14px;
+    }
+
+    .button {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .section h2 {
+        font-size: 20px;
+    }
+}

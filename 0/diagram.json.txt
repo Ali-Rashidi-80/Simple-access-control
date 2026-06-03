@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-arduino-uno",
+      "id": "uno",
+      "top": 0.6,
+      "left": -0.6,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": -176,
+      "left": -13.6,
+      "attrs": { "pins": "i2c" }
+    },
+    { "type": "wokwi-membrane-keypad", "id": "keypad1", "top": -11.6, "left": 322.4, "attrs": {} },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -36,
+      "left": 232.2,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-analog-joystick",
+      "id": "joystick1",
+      "top": -173.4,
+      "left": 322.2,
+      "attrs": {}
+    },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": -153.4, "left": 441.6, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -214.8,
+      "left": 493.4,
+      "attrs": { "color": "purple" }
+    },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": -210.44, "left": 528, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": -201.6, "left": 469.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "lcd1:GND", "uno:GND.1", "black", [ "h-9.6", "v-38.4", "h316.8", "v172.8" ] ],
+    [ "lcd1:VCC", "uno:5V", "red", [ "h-19.2", "v-57.5", "h336", "v153.6", "h-278.4", "v163.2" ] ],
+    [ "lcd1:SDA", "uno:A4", "#8f4814", [ "h-19.2", "v259.4" ] ],
+    [ "lcd1:SCL", "uno:A5", "yellow", [ "h-9.6", "v345.9" ] ],
+    [ "joystick1:GND", "uno:GND.1", "black", [ "v9.6", "h-96", "v124.8" ] ],
+    [ "bz1:1", "uno:GND.1", "black", [ "v0" ] ],
+    [ "joystick1:VCC", "lcd1:VCC", "red", [ "v19.2", "h-48", "v-153.6", "h-336", "v57.6" ] ],
+    [ "joystick1:SEL", "uno:12", "cyan", [ "v28.8", "h-76.8", "v134.4" ] ],
+    [ "keypad1:R1", "uno:2", "green", [ "v9.6", "h-105.6", "v-211.2" ] ],
+    [ "keypad1:R2", "uno:3", "green", [ "v19.2", "h-125.2", "v-153.6" ] ],
+    [ "keypad1:R3", "uno:4", "green", [ "v28.8", "h-144.3", "v-172.8" ] ],
+    [ "keypad1:R4", "uno:5", "green", [ "v38.4", "h-163.4", "v-192" ] ],
+    [ "keypad1:C1", "uno:6", "green", [ "v48", "h-182.5", "v-211.2" ] ],
+    [ "keypad1:C2", "uno:7", "green", [ "v57.6", "h-201.6", "v-230.4" ] ],
+    [ "keypad1:C3", "uno:8", "green", [ "v67.2", "h-220.95", "v-249.6" ] ],
+    [ "keypad1:C4", "uno:9", "green", [ "v76.8", "h-240.3", "v-278.4" ] ],
+    [ "relay1:VCC", "joystick1:VCC", "red", [ "h0", "v-57.6", "h-134.4", "v153.6", "h48" ] ],
+    [ "relay1:GND", "joystick1:GND", "black", [ "h-9.6", "v76.4", "h-38.4" ] ],
+    [ "relay1:IN", "uno:A3", "gray", [ "h-9.6", "v-96.2", "h-470.4", "v393.6" ] ],
+    [ "led1:A", "relay1:NO", "green", [ "v9.6", "h57.6", "v28.8" ] ],
+    [ "vcc1:VCC", "relay1:COM", "red", [ "v9.6", "h48", "v48" ] ],
+    [ "gnd1:GND", "led1:C", "black", [ "v-9.6", "h19.2", "v48", "h9.6" ] ],
+    [ "joystick1:VERT", "uno:A1", "green", [ "v38.4", "h-48", "v-201.6", "h-364.8", "v403.2" ] ],
+    [ "joystick1:HORZ", "uno:A0", "green", [ "v48", "h-48", "v422.4", "h-326.4", "v-249.6" ] ],
+    [ "bz1:2", "uno:10", "red", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}

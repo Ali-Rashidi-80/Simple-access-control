@@ -1,0 +1,75 @@
+[10-Oct-2024 18:02:58 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:00 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:02 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:05 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:07 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:09 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:11 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:13 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:14 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:15 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:17 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:18 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:20 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:23 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25
+[10-Oct-2024 18:03:25 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'First_Name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php:25
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php(25): mysqli->query('SELECT * FROM U...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/Attendance_report_view_form/data.php on line 25

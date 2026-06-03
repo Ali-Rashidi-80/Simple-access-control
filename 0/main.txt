@@ -1,0 +1,492 @@
+//https://grok.com/share/c2hhcmQtNQ%3D%3D_435ac2a9-222f-4403-ac95-5d8e2b0d3403
+//https://wokwi.com/projects/446035642992423937
+
+/*
+ * Project: Advanced Room Door Control System (ULTIMATE PRO - FIXED)
+ * Author: @a_ra_80
+ * Date: October 29, 2025
+ * 
+ * FIXED:
+ * - Joystick Button: In ANY state → MENU (reset to main menu)
+ * - Added strong debounce for button
+ * - NO accidental menu entry during password input
+ * - Button ignored in ENTER_PASS state
+ * - Perfect state isolation
+ * - Up/Down: Navigate
+ * - Left: Back
+ * - Right: Enter
+ */
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <Keypad.h>
+#include <EEPROM.h>
+#include <stdlib.h>
+
+// === DIRECTION ENUM ===
+enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
+
+// === PINS ===
+#define BUZZER_PIN      10
+#define JOYSTICK_X      A0
+#define JOYSTICK_Y      A1
+#define JOYSTICK_BTN    12
+#define RELAY_PIN       A3
+
+// === LCD ===
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// === KEYPAD ===
+const byte ROWS = 4, COLS = 4;
+char keys[ROWS][COLS] = {
+  {'1','2','3','A'}, {'4','5','6','B'},
+  {'7','8','9','C'}, {'*','0','#','D'}
+};
+byte rowPins[ROWS] = {2, 3, 4, 5};
+byte colPins[COLS] = {6, 7, 8, 9};
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+// === EEPROM ===
+#define ADDR_TYPE       0
+#define ADDR_KP_PASS    1   // 16 bytes
+#define ADDR_JOY_PAT    17  // 16 bytes
+#define ADDR_JOY_LEN    33
+#define ADDR_SET_PASS   34  // 16 bytes
+#define MAX_PASS_LEN    16
+
+// === CONSTANTS ===
+#define IDLE_TIMEOUT    7000UL
+#define RELAY_TIME      5000UL
+#define DEBOUNCE        150
+#define BTN_DEBOUNCE    200
+
+// === RECOVERY PATTERN ===
+const byte RECOVERY_PATTERN[8] = {UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT};
+
+// === STATES ===
+enum State { IDLE_STATE, MENU, SETTINGS, CHG_PASS, CHG_TYPE, TEST_JOY, TEST_KP, ENTER_PASS };
+State state = IDLE_STATE;
+
+// === GLOBAL VARIABLES ===
+int menuIdx = 0;
+bool isKp = true;
+bool systemActivated = false;
+
+// === DATA ===
+byte authType = 0;
+char kpPass[MAX_PASS_LEN + 1] = "1234";
+char setPass[MAX_PASS_LEN + 1] = "0000";
+byte joyPat[MAX_PASS_LEN] = {0,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0};
+byte joyLen = 4;
+char inputBuffer[MAX_PASS_LEN + 1];
+byte inputIdx = 0;
+Direction joyBuffer[MAX_PASS_LEN];
+byte joyIdx = 0;
+
+// === INPUT TRACKING ===
+unsigned long lastAct = 0;
+bool idleMode = true;
+Direction lastDir = NONE;
+unsigned long toneStart = 0;
+bool tonePlaying = false;
+
+// === MELODIES ===
+const int startupMelodies[3][4] = {
+  {523, 659, 784, 1047}, {392, 523, 659, 880}, {440, 554, 659, 880}
+};
+const int successMelodies[3][4] = {
+  {784, 880, 988, 1175}, {659, 784, 880, 1047}, {523, 659, 784, 932}
+};
+const int errorMelodies[3][3] = {
+  {200, 150, 100}, {300, 250, 200}, {400, 300, 200}
+};
+const int recoveryMelodies[3][4] = {
+  {300, 400, 300, 400}, {349, 392, 440, 494}, {262, 330, 392, 494}
+};
+const int joyTones[4] = {523, 659, 784, 988};
+
+// === DISPLAY BUFFER ===
+char lastL1[17] = "", lastL2[17] = "";
+
+void setup() {
+  randomSeed(analogRead(0));
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(JOYSTICK_BTN, INPUT_PULLUP);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+
+  lcd.init();
+  lcd.noBacklight();
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print("Welcome");
+  lcd.setCursor(0,1); lcd.print("Joy Btn=Menu");
+  loadEEPROM();
+  lastAct = millis();
+}
+
+void loop() {
+  Direction dir = readJoystick();
+  char key = keypad.getKey();
+  bool btnPressed = (digitalRead(JOYSTICK_BTN) == LOW);
+
+  // First activation
+  if (!systemActivated && (dir != NONE || key != NO_KEY || btnPressed)) {
+    systemActivated = true;
+    lcd.backlight();
+    playRandomMelody(startupMelodies, 3, 4);
+    updateLCD("Room Control", "Ready");
+  }
+
+  // Non-blocking tone
+  if (tonePlaying && millis() - toneStart > 100) {
+    noTone(BUZZER_PIN);
+    tonePlaying = false;
+  }
+
+  if (dir != NONE || key != NO_KEY || btnPressed) {
+    lastAct = millis();
+    if (idleMode) wakeUp();
+  }
+
+  if (millis() - lastAct > IDLE_TIMEOUT && !idleMode) goIdle();
+
+  // === BUTTON PRESS: ALWAYS GO TO MENU FROM ANY STATE ===
+  static unsigned long lastBtnTime = 0;
+  if (btnPressed && (millis() - lastBtnTime > BTN_DEBOUNCE)) {
+    if (state != MENU) {  // If not already in MENU, go to MENU
+      state = MENU;
+      idleMode = false;
+      menuIdx = 0;
+      updateLCD("Menu", "1.Settings");
+      playTone(700, 120);
+    } else {
+      // In MENU, button = select
+      switch (menuIdx) {
+        case 0: if (authSettings()) { state = SETTINGS; menuIdx = 0; } break;
+        case 1: state = TEST_JOY; break;
+        case 2: state = TEST_KP; break;
+      }
+    }
+    lastBtnTime = millis();
+  }
+
+  // * = Back
+  if (key == '*') {
+    backToPrevious();
+    return;
+  }
+
+  // === STATE HANDLING ===
+  switch (state) {
+    case MENU:       handleMenu(dir, false); break; // Btn handled in loop
+    case SETTINGS:   handleSettings(dir, false); break;
+    case CHG_PASS:   handleChangePass(dir, key); break;
+    case CHG_TYPE:   handleChangeType(dir); break;
+    case TEST_JOY:   handleTestJoy(dir, false); break;
+    case TEST_KP:    handleTestKp(key); break;
+    case ENTER_PASS: handleEnterPass(dir, key); break;
+  }
+
+  delay(50);
+}
+
+// === EEPROM ===
+void loadEEPROM() {
+  authType = EEPROM.read(ADDR_TYPE); if (authType > 2) authType = 0;
+  for (int i = 0; i < MAX_PASS_LEN; i++) {
+    byte b = EEPROM.read(ADDR_KP_PASS + i);
+    kpPass[i] = (b == 0xFF) ? '\0' : (char)b;
+    b = EEPROM.read(ADDR_JOY_PAT + i);
+    joyPat[i] = (b == 0xFF) ? 0 : b;
+    b = EEPROM.read(ADDR_SET_PASS + i);
+    setPass[i] = (b == 0xFF) ? '\0' : (char)b;
+  }
+  kpPass[MAX_PASS_LEN] = setPass[MAX_PASS_LEN] = '\0';
+  joyLen = EEPROM.read(ADDR_JOY_LEN); if (joyLen == 0 || joyLen > MAX_PASS_LEN) joyLen = 4;
+
+  if (kpPass[0] == '\0') strcpy(kpPass, "1234");
+  if (setPass[0] == '\0') strcpy(setPass, "0000");
+}
+
+void saveEEPROM() {
+  EEPROM.update(ADDR_TYPE, authType);
+  for (int i = 0; i < MAX_PASS_LEN; i++) {
+    EEPROM.update(ADDR_KP_PASS + i, kpPass[i]);
+    EEPROM.update(ADDR_JOY_PAT + i, joyPat[i]);
+    EEPROM.update(ADDR_SET_PASS + i, setPass[i]);
+  }
+  EEPROM.update(ADDR_JOY_LEN, joyLen);
+}
+
+// === JOYSTICK ===
+Direction readJoystick() {
+  static unsigned long lastTime = 0;
+  if (millis() - lastTime < DEBOUNCE) return NONE;
+
+  int x = analogRead(JOYSTICK_X);
+  int y = analogRead(JOYSTICK_Y);
+  Direction d = NONE;
+
+  if (y < 200) d = UP;
+  else if (y > 800) d = DOWN;
+  else if (x < 200) d = LEFT;
+  else if (x > 800) d = RIGHT;
+
+  if (d != NONE && d != lastDir) {
+    playTone(joyTones[d-1], 80);
+    lastTime = millis();
+    lastDir = d;
+    return d;
+  }
+  if (d == NONE) lastDir = NONE;
+  return NONE;
+}
+
+// === TONE ===
+void playTone(int freq, int duration) {
+  tone(BUZZER_PIN, freq, duration);
+  toneStart = millis();
+  tonePlaying = true;
+}
+
+void playRandomMelody(const int melodies[][4], int count, int len) {
+  int idx = random(count);
+  for (int i = 0; i < len; i++) {
+    playTone(melodies[idx][i], 180);
+    while (tonePlaying && millis() - toneStart < 200) { delay(1); }
+    delay(50);
+  }
+}
+
+void playErrorMelody() {
+  int idx = random(3);
+  for (int i = 0; i < 3; i++) {
+    playTone(errorMelodies[idx][i], 200);
+    while (tonePlaying && millis() - toneStart < 250) { delay(1); }
+    delay(80);
+  }
+}
+
+// === LCD ===
+void updateLCD(const char* l1, const char* l2) {
+  if (strcmp(l1, lastL1) == 0 && strcmp(l2, lastL2) == 0) return;
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print(l1);
+  lcd.setCursor(0,1); lcd.print(l2);
+  strncpy(lastL1, l1, 16); lastL1[16] = '\0';
+  strncpy(lastL2, l2, 16); lastL2[16] = '\0';
+}
+
+// === NAVIGATION ===
+void backToPrevious() {
+  inputIdx = joyIdx = 0;
+  if (state == ENTER_PASS || state == MENU) goIdle();
+  else { state = MENU; menuIdx = 0; updateLCD("Menu", "1.Settings"); }
+}
+
+void goIdle() {
+  idleMode = true;
+  state = ENTER_PASS;
+  inputIdx = joyIdx = 0;
+  updateLCD("Enter Password", "Joy Btn=Menu");
+  delay(800);
+  lcd.noBacklight();
+}
+
+void wakeUp() {
+  lcd.backlight();
+  idleMode = false;
+  state = ENTER_PASS;
+  inputIdx = joyIdx = 0;
+  updateLCD("Enter Password", "");
+}
+
+// === MENU ===
+void handleMenu(Direction d, bool btn) {
+  const char* opts[] = {"1.Settings", "2.Test Joy", "3.Test Keypad"};
+  if (d == UP) menuIdx = (menuIdx - 1 + 3) % 3;
+  if (d == DOWN) menuIdx = (menuIdx + 1) % 3;
+  if (d == LEFT) { backToPrevious(); return; }
+  if (d == RIGHT || btn) {
+    switch (menuIdx) {
+      case 0: if (authSettings()) { state = SETTINGS; menuIdx = 0; } break;
+      case 1: state = TEST_JOY; break;
+      case 2: state = TEST_KP; break;
+    }
+  }
+  updateLCD("Menu", opts[menuIdx]);
+}
+
+// === SETTINGS AUTH ===
+bool authSettings() {
+  updateLCD("Settings PW:", "____");
+  char input[17] = {}; int pos = 0;
+  while (pos < 16) {
+    char k = keypad.getKey();
+    if (k && k != '*' && k != '#' && k >= ' ' && k <= '~') {
+      input[pos++] = k;
+      lcd.setCursor(pos-1, 1); lcd.print('*');
+      playTone(joyTones[(k >= '0' && k <= '9') ? k-'0' % 4 : 2], 80);
+      delay(150);
+    }
+  }
+  bool ok = strcmp(input, setPass) == 0;
+  if (ok) playRandomMelody(successMelodies, 3, 4);
+  else playErrorMelody();
+  updateLCD(ok ? "Access OK!" : "Wrong PW!", ok ? "Welcome" : "Try Again");
+  delay(1500);
+  return ok;
+}
+
+// === ENTER PASSWORD (NO BUTTON) ===
+void handleEnterPass(Direction d, char k) {
+  bool needKp = (authType == 0 || authType == 2);
+  bool needJoy = (authType == 1 || authType == 2);
+
+  if (needKp && k && k != '*' && k != '#') {
+    if (inputIdx < MAX_PASS_LEN) {
+      inputBuffer[inputIdx++] = k;
+      lcd.setCursor(inputIdx-1, 1); lcd.print('*');
+      playTone(joyTones[(k >= '0' && k <= '9') ? k-'0' % 4 : 1], 80);
+    }
+  }
+  if (needJoy && d != NONE) {
+    if (joyIdx < MAX_PASS_LEN) {
+      joyBuffer[joyIdx++] = d;
+      char s = (d==UP?'^':d==DOWN?'v':d==LEFT?'<':'>');
+      lcd.setCursor(joyIdx-1, 1); lcd.print(s);
+      playTone(joyTones[d-1], 80);
+    }
+  }
+
+  int req = needJoy ? joyLen : strlen(kpPass);
+  char buf[17]; sprintf(buf, "%d/%d", inputIdx + joyIdx, req);
+  updateLCD("Enter Pattern", buf);
+
+  if ((needKp ? inputIdx : joyIdx) >= req) {
+    bool ok = true;
+    if (needKp && strncmp(inputBuffer, kpPass, strlen(kpPass)) != 0) ok = false;
+    if (needJoy) for (int i = 0; i < joyLen; i++) if (joyBuffer[i] != joyPat[i]) ok = false;
+
+    if (!ok && joyIdx >= 8) {
+      bool match = true;
+      for (int i = 0; i < 8; i++) if (joyBuffer[i] != RECOVERY_PATTERN[i]) { match = false; break; }
+      if (match) { factoryReset(); return; }
+    }
+
+    if (ok) playRandomMelody(successMelodies, 3, 4);
+    else playErrorMelody();
+
+    updateLCD(ok ? "Door Open!" : "Access Denied", ok ? "5 sec..." : "Try Again");
+    if (ok) { digitalWrite(RELAY_PIN, HIGH); delay(RELAY_TIME); digitalWrite(RELAY_PIN, LOW); }
+    else delay(1500);
+
+    inputIdx = joyIdx = 0;
+    goIdle();
+  }
+}
+
+// === SETTINGS MENU ===
+void handleSettings(Direction d, bool btn) {
+  const char* opts[] = {"Change Pass", "Change Type", "Factory Reset", "Back"};
+  if (d == UP) menuIdx = (menuIdx - 1 + 4) % 4;
+  if (d == DOWN) menuIdx = (menuIdx + 1) % 4;
+  if (d == LEFT) { backToPrevious(); return; }
+  if (d == RIGHT || btn) {
+    switch (menuIdx) {
+      case 0: state = CHG_PASS; inputIdx = 0; isKp = true; break;
+      case 1: state = CHG_TYPE; menuIdx = authType; break;
+      case 2: factoryReset(); break;
+      case 3: backToPrevious(); break;
+    }
+  }
+  updateLCD("Settings", opts[menuIdx]);
+}
+
+// === CHANGE PASS ===
+void handleChangePass(Direction d, char k) {
+  char buf[17];
+  if (isKp && k && k != '*' && k != '#') {
+    if (inputIdx < MAX_PASS_LEN) {
+      inputBuffer[inputIdx++] = k;
+      lcd.setCursor(inputIdx-1,1); lcd.print('*');
+      playTone(joyTones[(k >= '0' && k <= '9') ? k-'0' % 4 : 3], 80);
+    }
+  } else if (!isKp && d != NONE) {
+    if (joyIdx < MAX_PASS_LEN) {
+      joyBuffer[joyIdx++] = d;
+      char s = (d==UP?'^':d==DOWN?'v':d==LEFT?'<':'>');
+      lcd.setCursor(joyIdx-1,1); lcd.print(s);
+      playTone(joyTones[d-1], 80);
+    }
+  }
+
+  sprintf(buf, "%d/%d", isKp ? inputIdx : joyIdx, MAX_PASS_LEN);
+  updateLCD(isKp ? "New KP Pass" : "New Joy Pat", buf);
+
+  if ((isKp ? inputIdx : joyIdx) >= 4) {
+    if (isKp) {
+      strncpy(kpPass, inputBuffer, MAX_PASS_LEN); kpPass[MAX_PASS_LEN] = '\0';
+      if (authType == 0) {
+        saveEEPROM(); state = SETTINGS;
+        playRandomMelody(successMelodies, 3, 4);
+        updateLCD("Saved!", ""); delay(1000);
+      } else {
+        isKp = false; joyIdx = 0;
+        updateLCD("Now Joy Pat", "Move...");
+      }
+    } else {
+      joyLen = joyIdx > 0 ? joyIdx : 4;
+      memcpy(joyPat, joyBuffer, joyLen);
+      saveEEPROM(); state = SETTINGS;
+      playRandomMelody(successMelodies, 3, 4);
+      updateLCD("Saved!", ""); delay(1000);
+      isKp = true;
+    }
+    inputIdx = joyIdx = 0;
+  }
+}
+
+// === CHANGE TYPE ===
+void handleChangeType(Direction d) {
+  const char* types[] = {"Keypad", "Joystick", "Both"};
+  if (d == UP) menuIdx = (menuIdx - 1 + 3) % 3;
+  if (d == DOWN) menuIdx = (menuIdx + 1) % 3;
+  if (d == LEFT) { backToPrevious(); return; }
+  if (d == RIGHT) {
+    authType = menuIdx; saveEEPROM(); state = SETTINGS;
+    playRandomMelody(successMelodies, 3, 4);
+    updateLCD("Type Set", types[menuIdx]); delay(1000);
+  }
+  updateLCD("Auth Type", types[menuIdx]);
+}
+
+// === TEST JOYSTICK ===
+void handleTestJoy(Direction d, bool btn) {
+  if (d != NONE) {
+    const char* dirName = (d==UP?"UP":d==DOWN?"DN":d==LEFT?"LF":"RT");
+    updateLCD("Joy: ", dirName);
+  }
+  if (btn || d == LEFT) { backToPrevious(); }
+}
+
+// === TEST KEYPAD ===
+void handleTestKp(char k) {
+  if (k) {
+    char buf[17]; sprintf(buf, "Key: %c", k);
+    updateLCD(buf, "* = Back");
+  }
+}
+
+// === FACTORY RESET ===
+void factoryReset() {
+  strcpy(kpPass, "1234");
+  strcpy(setPass, "0000");
+  joyPat[0]=0; joyPat[1]=1; joyPat[2]=2; joyPat[3]=3; joyLen=4;
+  authType = 0;
+  saveEEPROM();
+  playRandomMelody(recoveryMelodies, 3, 4);
+  updateLCD("Factory Reset", "Done!");
+  delay(2000);
+  goIdle();
+}

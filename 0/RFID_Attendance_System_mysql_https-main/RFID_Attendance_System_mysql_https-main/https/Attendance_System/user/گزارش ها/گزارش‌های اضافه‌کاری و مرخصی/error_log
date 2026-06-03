@@ -1,0 +1,52 @@
+[28-Dec-2024 00:17:30 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php on line 3
+[28-Dec-2024 00:17:30 Asia/Tehran] PHP Warning:  Undefined array key "employee_id" in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php on line 3
+[28-Dec-2024 00:25:54 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php(12): mysqli->prepare('SELECT overtime...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php on line 12
+[28-Dec-2024 00:25:54 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php(13): mysqli->prepare('SELECT vacation...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php on line 13
+[28-Dec-2024 00:32:01 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php(12): mysqli->prepare('SELECT overtime...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php on line 12
+[28-Dec-2024 00:32:01 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php(13): mysqli->prepare('SELECT vacation...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php on line 13
+[28-Dec-2024 00:46:39 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php(12): mysqli->prepare('SELECT overtime...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php on line 12
+[28-Dec-2024 00:46:39 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php(13): mysqli->prepare('SELECT vacation...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php on line 13
+[28-Dec-2024 10:13:46 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php(12): mysqli->prepare('SELECT overtime...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php on line 12
+[28-Dec-2024 10:13:46 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php(13): mysqli->prepare('SELECT vacation...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php on line 13
+[28-Dec-2024 10:19:44 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php(12): mysqli->prepare('SELECT overtime...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_overtime.php on line 12
+[28-Dec-2024 10:19:44 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php(13): mysqli->prepare('SELECT vacation...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/user/گزارش ها/گزارش‌های اضافه‌کاری و مرخصی/fetch_vacation.php on line 13

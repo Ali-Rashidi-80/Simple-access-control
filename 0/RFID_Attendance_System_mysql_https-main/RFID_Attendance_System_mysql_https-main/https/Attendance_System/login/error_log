@@ -1,0 +1,118 @@
+[26-Dec-2024 08:05:16 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 3
+[26-Dec-2024 08:05:16 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 3
+[26-Dec-2024 08:05:16 Asia/Tehran] PHP Warning:  include(): Failed opening 'session_check.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 3
+[26-Dec-2024 08:05:16 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 9
+[26-Dec-2024 08:05:16 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 9
+[26-Dec-2024 08:05:16 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php:3) in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 22
+[26-Dec-2024 08:05:17 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 3
+[26-Dec-2024 08:05:17 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 3
+[26-Dec-2024 08:05:17 Asia/Tehran] PHP Warning:  include(): Failed opening 'session_check.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 3
+[26-Dec-2024 08:05:17 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 9
+[26-Dec-2024 08:05:17 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 9
+[26-Dec-2024 08:05:17 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php:3) in /home3/ewyjapml/public_html/Attendance_System/login/manager_dashboard.php on line 22
+[26-Dec-2024 18:40:26 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 27
+[26-Dec-2024 18:40:26 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 29
+[26-Dec-2024 18:40:26 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:27) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 32
+[26-Dec-2024 18:42:12 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 28
+[26-Dec-2024 18:42:12 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 30
+[26-Dec-2024 18:42:12 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:28) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 33
+[26-Dec-2024 18:43:43 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 33
+[26-Dec-2024 18:43:43 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 35
+[26-Dec-2024 18:43:43 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:33) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 38
+[26-Dec-2024 18:45:41 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 34
+[26-Dec-2024 18:45:41 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 36
+[26-Dec-2024 18:45:41 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:34) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 39
+[26-Dec-2024 18:46:33 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 36
+[26-Dec-2024 18:46:33 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 38
+[26-Dec-2024 18:46:33 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:36) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 41
+[26-Dec-2024 18:47:29 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 39
+[26-Dec-2024 18:47:29 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 42
+[26-Dec-2024 18:47:29 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:39) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 46
+[26-Dec-2024 18:47:36 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 39
+[26-Dec-2024 18:47:36 Asia/Tehran] PHP Warning:  Undefined array key "role" in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 42
+[26-Dec-2024 18:47:36 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:39) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 46
+[26-Dec-2024 18:50:44 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:39) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 50
+[26-Dec-2024 18:53:09 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:39) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 49
+[27-Dec-2024 18:05:24 Asia/Tehran] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 39
+[27-Dec-2024 18:05:24 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php:39) in /home3/ewyjapml/public_html/Attendance_System/login/manager_login.php on line 44
+[28-Dec-2024 01:21:42 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:9
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(9): mysqli->__construct('localhost', 'root', '', 'attendance_syst...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 9
+[28-Dec-2024 01:21:43 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:9
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(9): mysqli->__construct('localhost', 'root', '', 'attendance_syst...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 9
+[28-Dec-2024 01:29:43 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.users' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:14
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(14): mysqli->prepare('SELECT * FROM u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 14
+[28-Dec-2024 08:38:09 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:19
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(19): mysqli->prepare('SELECT * FROM e...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 19
+[28-Dec-2024 08:38:42 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'name' in 'where clause' in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:19
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(19): mysqli->prepare('SELECT * FROM E...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 19
+[28-Dec-2024 08:53:32 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 40
+[28-Dec-2024 08:53:32 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:40) in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 43
+[28-Dec-2024 09:04:36 Asia/Tehran] PHP Warning:  session_regenerate_id(): Session ID cannot be regenerated after headers have already been sent in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 37
+[28-Dec-2024 09:04:36 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:27) in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 42
+[28-Dec-2024 09:08:03 Asia/Tehran] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:16
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(16): mysqli_stmt->bind_param('s', 'u@u.com')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 16
+[28-Dec-2024 09:09:42 Asia/Tehran] PHP Warning:  Undefined array key "username" in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 10
+[28-Dec-2024 09:09:42 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:10) in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 33
+[28-Dec-2024 09:14:29 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SSELECT * FROM Employees WHERE username = 'u' AND email = 'u@u.com'' at line 1 in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:21
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(21): mysqli->prepare('SSELECT * FROM ...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 21
+[28-Dec-2024 09:14:50 Asia/Tehran] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:24
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/login/user_login.php(24): mysqli_stmt->bind_param('ss', 'u', 'u@u.com')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 24
+[28-Dec-2024 09:34:30 Asia/Tehran] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 11
+[28-Dec-2024 09:34:30 Asia/Tehran] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 14
+[28-Dec-2024 09:34:30 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_login.php:11) in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 32
+[28-Dec-2024 09:34:30 Asia/Tehran] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 11
+[28-Dec-2024 09:34:30 Asia/Tehran] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home3/ewyjapml/public_html/Attendance_System/login/user_login.php on line 14
+[28-Dec-2024 09:40:34 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 8
+[28-Dec-2024 09:40:34 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 8
+[28-Dec-2024 09:40:34 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php:8) in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 21
+[28-Dec-2024 09:40:34 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 8
+[28-Dec-2024 09:40:34 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 8
+[28-Dec-2024 09:40:34 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php:8) in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 21
+[28-Dec-2024 09:41:20 Asia/Tehran] PHP Warning:  Undefined array key "user_id" in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 9
+[28-Dec-2024 09:41:20 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php:9) in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 22
+[28-Dec-2024 09:41:21 Asia/Tehran] PHP Warning:  Undefined array key "user_id" in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 9
+[28-Dec-2024 09:41:21 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php:9) in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 22
+[28-Dec-2024 09:42:35 Asia/Tehran] PHP Warning:  Undefined array key "username" in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 9
+[28-Dec-2024 09:42:35 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php:9) in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 22
+[28-Dec-2024 09:42:36 Asia/Tehran] PHP Warning:  Undefined array key "username" in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 9
+[28-Dec-2024 09:42:36 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php:9) in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 22
+[28-Dec-2024 09:49:58 Asia/Tehran] PHP Warning:  Undefined variable $user in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 215
+[28-Dec-2024 09:49:58 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 215
+[28-Dec-2024 09:49:58 Asia/Tehran] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 215
+[28-Dec-2024 09:49:59 Asia/Tehran] PHP Warning:  Undefined variable $user in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 215
+[28-Dec-2024 09:49:59 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 215
+[28-Dec-2024 09:49:59 Asia/Tehran] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 215
+[28-Dec-2024 09:52:09 Asia/Tehran] PHP Warning:  Undefined variable $user in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 287
+[28-Dec-2024 09:52:09 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 287
+[28-Dec-2024 09:52:09 Asia/Tehran] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 287
+[28-Dec-2024 09:52:11 Asia/Tehran] PHP Warning:  Undefined variable $user in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 287
+[28-Dec-2024 09:52:11 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 287
+[28-Dec-2024 09:52:11 Asia/Tehran] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 287
+[28-Dec-2024 09:54:16 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 306
+[28-Dec-2024 09:54:18 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 306
+[28-Dec-2024 09:55:34 Asia/Tehran] PHP Parse error:  Unclosed '{' on line 27 in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 352
+[28-Dec-2024 09:55:35 Asia/Tehran] PHP Parse error:  Unclosed '{' on line 27 in /home3/ewyjapml/public_html/Attendance_System/login/user_dashboard.php on line 352

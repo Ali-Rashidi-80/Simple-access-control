@@ -1,0 +1,309 @@
+/* تنظیمات پایه */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #e0f7fa; /* رنگ آبی ملایم */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.logo {
+    position: relative; 
+    display: block; 
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 180px;
+    z-index: 1000;
+    opacity: 0.9;
+    margin-bottom: 20px; 
+    animation: bounce-logo 2s infinite; 
+}
+
+@keyframes bounce-logo {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translate(-50%, 0);
+    }
+    40% {
+        transform: translate(-50%, -10px);
+    }
+    60% {
+        transform: translate(-50%, -5px);
+    }
+}
+
+.panel {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    margin: 40px auto;
+    color: white;
+    animation: fadeIn 1s ease-in-out, pulse-panel 3s infinite;
+    display: flex; /* اضافه کردن Flexbox */
+    flex-direction: column; /* چیدمان عمودی */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse-panel {
+    0%, 100% {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+}
+
+h1, h2 {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in-out 0.5s, pulse-heading 3s infinite;
+    color: white;
+}
+
+@keyframes pulse-heading {
+    0%, 100% {
+        color: #fff;
+    }
+    50% {
+        color: #ddd;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow-x: auto;
+    display: block;
+    max-width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+th {
+    background: linear-gradient(90deg, #444, #222);
+    color: white;
+    border-radius: 8px;
+    animation: fadeIn 1s ease-in-out 0.5s;
+}
+
+td {
+    background: #fff;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+tr:hover td {
+    background-color: #f0f0f0;
+}
+
+.status-out {
+    color: white;
+    background: linear-gradient(90deg, #d53369, #daae51);
+    animation: pulse-status 2s infinite;
+}
+
+.status-in {
+    color: white;
+    background: linear-gradient(90deg, #9ebd13, #008552);
+    animation: pulse-status 2s infinite;
+}
+
+.status-in, .status-out {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+@keyframes pulse-status {
+    0%, 100% {
+        background-size: 100% 100%;
+    }
+    50% {
+        background-size: 110% 110%;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #2e95ffa6;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    z-index: 1000;
+    flex-direction: row-reverse;
+}
+
+.button-container {
+    display: flex;
+}
+
+.logout-button {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #f2d3a3, #e6b89b);
+    color: #3b2e2a;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+    position: relative;
+    overflow: hidden;
+    margin-left: 15px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+/* استایل ورودی فرم‌ها */
+input[type="date"],
+textarea,
+select {
+    width: calc(100% - 30px); /* کاهش عرض به منظور اضافه کردن فاصله */
+    padding: 12px 15px; /* padding چپ و راست بیشتر */
+    margin: 10px 0; /* فاصله یکسان از بالا و پایین */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+button[type="submit"] {
+    width: calc(100%); /* اندازه ثابت برای دکمه ارسال */
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    padding: 12px 15px; /* padding چپ و راست بیشتر */
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* استایل جستجو */
+input[type="text"] {
+    width: 90%;
+    max-width: 180px;
+    padding: 10px;
+    margin: 0 auto 20px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* واکنش‌گرایی */
+@media (max-width: 1200px) {
+    .panel {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    th, td {
+        font-size: 14px;
+    }
+
+    .logout-button {
+        font-size: 16px;
+    }
+
+    input[type="text"] {
+        width: 95%;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .logout-button {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        max-width: 150px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .logout-button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 10px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 6px;
+    }
+
+    table {
+        font-size: 10px;
+        overflow-x: auto;
+        display: block;
+    }
+}

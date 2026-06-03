@@ -1,0 +1,88 @@
+[28-Dec-2024 15:40:18 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 3
+[28-Dec-2024 15:40:18 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 3
+[28-Dec-2024 15:40:18 Asia/Tehran] PHP Warning:  include(): Failed opening 'session_check.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 3
+[28-Dec-2024 15:40:18 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 9
+[28-Dec-2024 15:40:18 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 9
+[28-Dec-2024 15:40:18 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php:3) in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 20
+[28-Dec-2024 15:40:19 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 3
+[28-Dec-2024 15:40:19 Asia/Tehran] PHP Warning:  include(session_check.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 3
+[28-Dec-2024 15:40:19 Asia/Tehran] PHP Warning:  include(): Failed opening 'session_check.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 3
+[28-Dec-2024 15:40:19 Asia/Tehran] PHP Warning:  Undefined global variable $_SESSION in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 9
+[28-Dec-2024 15:40:19 Asia/Tehran] PHP Warning:  Trying to access array offset on value of type null in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 9
+[28-Dec-2024 15:40:19 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php:3) in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 20
+[28-Dec-2024 15:46:17 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php:56
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php(56): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 56
+[28-Dec-2024 15:46:18 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php:56
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php(56): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php on line 56
+[28-Dec-2024 15:50:52 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:6
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(6): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 6
+[28-Dec-2024 15:52:41 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:15
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(15): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 15
+[28-Dec-2024 15:53:42 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:15
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(15): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 15
+[28-Dec-2024 16:00:00 Asia/Tehran] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/session_check.php on line 3
+[28-Dec-2024 16:00:01 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(13): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 13
+[28-Dec-2024 16:00:01 Asia/Tehran] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/session_check.php on line 3
+[28-Dec-2024 16:00:34 Asia/Tehran] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/session_check.php on line 3
+[28-Dec-2024 16:00:34 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php:1) in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/session_check.php on line 24
+[28-Dec-2024 16:00:35 Asia/Tehran] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/session_check.php on line 3
+[28-Dec-2024 16:00:35 Asia/Tehran] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/index.php:1) in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/session_check.php on line 24
+[28-Dec-2024 16:01:03 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(13): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 13
+[28-Dec-2024 16:01:07 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:13
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(13): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 13
+[28-Dec-2024 16:01:41 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:15
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(15): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 15
+[28-Dec-2024 16:04:49 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:15
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(15): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 15
+[28-Dec-2024 16:06:32 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:15
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(15): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 15
+[28-Dec-2024 16:31:46 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.Employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php:15
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php(15): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/محاسبه ساعت کاری و اضافه کاری و حقوق براساس ساعات کار/get_employees.php on line 15
+[28-Dec-2024 16:44:22 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.EmployeeAttendanceReports' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/فرم مدیریت کاربران/get_employees.php:5
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/فرم مدیریت کاربران/get_employees.php(5): mysqli->query('SELECT * FROM E...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/فرم مدیریت کاربران/get_employees.php on line 5
+[28-Dec-2024 16:48:28 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_esp32.EmployeeAttendanceReports' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/فرم مدیریت کاربران/get_employees.php:5
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/فرم مدیریت کاربران/get_employees.php(5): mysqli->query('SELECT employee...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/فرم مدیریت کاربران/get_employees.php on line 5

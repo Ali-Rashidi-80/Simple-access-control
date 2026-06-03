@@ -1,0 +1,121 @@
+/* اضافه کردن فونت‌های Google */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333; /* رنگ مشکی با شفافیت کمتر برای خوانایی بهتر */
+    line-height: 1.6;
+}
+
+h2 {
+    text-align: center;
+    color: #007BFF; /* رنگ آبی برای جلب توجه */
+    margin-bottom: 20px;
+    font-size: 24px; /* اندازه بزرگتر برای عناوین */
+    font-weight: 600;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* طراحی جدول */
+table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* سایه ملایم برای برجسته کردن جدول */
+    overflow: hidden;
+}
+
+/* استایل header جدول */
+thead {
+    background-color: #007BFF;
+    color: black; /* تغییر رنگ عنوان جدول به مشکی */
+    text-align: center;
+    font-weight: 600;
+}
+
+thead th {
+    padding: 12px 15px;
+    font-size: 16px; /* اندازه بزرگتر برای خوانایی بیشتر */
+}
+
+/* استایل برای سلول‌های جدول */
+td {
+    text-align: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* افکت برای سطرهای جدول */
+tr:nth-child(even) {
+    background-color: #f7f7f7;
+}
+
+tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+/* افکت hover برای سطرها */
+tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transform: scale(1.02); /* بزرگ شدن سطر هنگام اشاره */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* افکت برای دکمه‌ها */
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* سایه بیشتر هنگام هاور */
+}
+
+/* طراحی واکنش‌گرا */
+@media (max-width: 768px) {
+    table {
+        font-size: 12px;
+    }
+    td, th {
+        padding: 8px;
+    }
+    button {
+        padding: 8px 16px;
+    }
+}
+
+/* استایل فوتر */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #777;
+    font-size: 14px;
+    padding: 20px 0;
+    background-color: #f1f1f1;
+    border-top: 2px solid #ccc;
+}
+
+/* افزودن افکت سایه به متن‌ها */
+h2, td, button {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* سایه ملایم برای زیبایی بیشتر */
+}

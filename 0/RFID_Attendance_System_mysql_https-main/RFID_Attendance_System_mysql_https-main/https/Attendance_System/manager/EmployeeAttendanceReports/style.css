@@ -1,0 +1,297 @@
+/* تعریف متغیرهای جدید */
+:root {
+    --padding: 20px; /* مقدار یکنواخت برای پدینگ */
+    --margin: 3px; /* مقدار یکنواخت برای مارجین */
+    --font-size-large: 2rem; /* اندازه بزرگ برای عنوان */
+    --font-size-medium: 1.25rem; /* اندازه متوسط برای متن */
+    --font-size-small: 0.875rem; /* اندازه کوچک برای متن */
+    --color-primary: #3f5efb; /* رنگ اصلی */
+    --color-secondary: #fc466b; /* رنگ ثانویه */
+    --color-background: #f0f4f8; /* رنگ پس‌زمینه */
+    --color-card: #fff; /* رنگ کارت‌ها */
+    --color-text: #333; /* رنگ متن */
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* سایه‌ها */
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--color-background);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    position: relative;
+    display: block;
+    max-width: 220px;
+    z-index: 1000;
+    opacity: 0.9;
+    margin: 50px 0;
+    border-radius: 50%;
+    animation: bounce-logo 2s infinite;
+}
+
+@keyframes bounce-logo {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translate(0, 0);
+    }
+    40% {
+        transform: translate(0, -10px);
+    }
+    60% {
+        transform: translate(0, -5px);
+    }
+}
+
+.panel {
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+    padding: var(--padding);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 740px;
+    margin: var(--margin) 0;
+    color: white;
+    animation: fadeIn 1s ease-in-out, pulse-panel 3s infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    transition: transform 0.2s;
+}
+
+.panel:hover {
+    transform: scale(1.02); /* افزایش سایز پنل هنگام هاور */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse-panel {
+    0%, 100% {
+        box-shadow: var(--shadow);
+    }
+    50% {
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: var(--font-size-large);
+    margin-bottom: var(--margin);
+    animation: fadeIn 1s ease-in-out 0.5s;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* سایه برای متن عنوان */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+    overflow-x: auto;
+    display: block;
+    border-radius: 8px;
+    margin: var(--margin);
+}
+
+th, td {
+    padding: var(--padding);
+    text-align: center;
+    font-size: var(--font-size-medium);
+    transition: background-color 0.3s ease, transform 0.2s;
+    vertical-align: middle; /* وسط‌چینی عمودی محتویات سلول */
+}
+
+th {
+    background: linear-gradient(135deg, #444, #222);
+    color: white;
+    border-radius: 8px;
+    animation: fadeIn 1s ease-in-out 0.5s;
+}
+
+td {
+    background: var(--color-card);
+    color: var(--color-text);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+tr:hover td {
+    background-color: #f0f0f0;
+    transform: translateY(-3px); /* حرکت به سمت بالا هنگام هاور */
+}
+
+.status-out {
+    color: white;
+    background: linear-gradient(135deg, #d53369, #daae51);
+    animation: pulse-status 2s infinite;
+}
+
+.status-in {
+    color: white;
+    background: linear-gradient(135deg, #9ebd13, #008552);
+    animation: pulse-status 2s infinite;
+}
+
+.status-in, .status-out {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+@keyframes pulse-status {
+    0%, 100% {
+        background-size: 100% 100%;
+    }
+    50% {
+        background-size: 110% 110%;
+    }
+}
+
+.header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: var(--padding); 
+    background-color: #2e95ffa6; 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); 
+    border-radius: 0 0 15px 15px;
+    z-index: 1000; 
+    flex-direction: row-reverse; 
+    width: 100%; 
+    padding-left: 15px; 
+    padding-right: 15px; 
+    box-sizing: border-box; 
+}
+
+.button-container {
+    display: flex; 
+    justify-content: center; /* وسط‌چینی افقی دکمه‌ها */
+    margin-top: var(--margin); /* فاصله بالای دکمه‌ها */
+}
+
+.logout-button {
+    padding: var(--padding); 
+    background: linear-gradient(135deg, #f2d3a3, #e6b89b); 
+    color: #3b2e2a; 
+    text-decoration: none; 
+    border-radius: 8px; 
+    border: none; 
+    font-weight: bold; 
+    font-size: var(--font-size-medium); 
+    position: relative; 
+    overflow: hidden; 
+    margin-left: var(--margin); 
+    transition: box-shadow 0.3s ease, transform 0.2s ease; 
+}
+
+.logout-button:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); 
+    transform: translateY(-2px); 
+}
+
+/* ورودی جستجو */
+input[type="text"] {
+    width: 90%; 
+    max-width: 180px; 
+    padding: var(--padding); 
+    margin: 0 auto var(--margin); 
+    display: block; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    transition: border-color 0.3s; /* انیمیشن برای تغییر حاشیه */
+}
+
+input[type="text"]:focus {
+    border-color: var(--color-primary); /* تغییر رنگ حاشیه هنگام فوکوس */
+    outline: none; /* حذف حاشیه پیش‌فرض */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    .panel {
+        width: 50%;
+        margin: var(--margin); 
+        padding: var(--padding); 
+    }
+
+    h1 {
+        font-size: 1.5rem; /* تنظیم اندازه عنوان */
+    }
+
+    th, td {
+        font-size: var(--font-size-small); /* تنظیم اندازه متن */
+    }
+
+    .logout-button {
+        font-size: var(--font-size-small); 
+    }
+
+    input[type="text"] {
+        width: 95%; /* تنظیم برای صفحه‌های کوچک‌تر */
+        padding: 8px; /* کاهش padding */
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column; 
+        align-items: flex-start; 
+        padding: 10px; 
+    }
+
+    .logout-button {
+        margin-left: 0; 
+        margin-top: 10px; 
+    }
+
+    h1 {
+        font-size: 1.25rem; /* تنظیم اندازه عنوان */
+    }
+
+    th, td {
+        padding: 10px; 
+        font-size: var(--font-size-small); 
+    }
+
+    input[type="text"] {
+        width: 100%; /* استفاده از عرض کامل در صفحه‌های کوچک */
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        max-width: 150px; 
+    }
+
+    h1 {
+        font-size: 1.125rem; /* تنظیم اندازه عنوان */
+    }
+
+    .logout-button {
+        font-size: var(--font-size-small); 
+        padding: 10px 20px; 
+    }
+
+    th, td {
+        padding: 8px; 
+        font-size: 0.75rem; /* اندازه کوچک‌تر برای موبایل */
+    }
+
+    input[type="text"] {
+        width: 100%; /* عرض کامل برای موبایل */
+        padding: 6px; /* کاهش padding */
+    }
+
+    table {
+        font-size: 0.75rem; /* کاهش اندازه کل جدول */
+        overflow-x: auto; /* بهبود ریسپانسیو */
+        display: block; /* بهبود ریسپانسیو */
+    }
+}

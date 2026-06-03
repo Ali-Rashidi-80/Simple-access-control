@@ -1,0 +1,125 @@
+/* Reset and general styles */
+body {
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Container to center content */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Heading styles */
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Date input section */
+.date-select {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.date-select input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 250px;
+    transition: border-color 0.3s ease;
+}
+
+.date-select input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Button styles */
+button {
+    padding: 12px 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Table styling */
+#report-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#report-section th, #report-section td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #555;
+}
+
+#report-section th {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#report-section td {
+    background-color: #f9f9f9;
+}
+
+#report-section tr:hover td {
+    background-color: #f1f1f1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding-top: 20px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .date-select input {
+        width: 80%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    #report-section th, #report-section td {
+        font-size: 14px;
+        padding: 8px;
+    }
+}

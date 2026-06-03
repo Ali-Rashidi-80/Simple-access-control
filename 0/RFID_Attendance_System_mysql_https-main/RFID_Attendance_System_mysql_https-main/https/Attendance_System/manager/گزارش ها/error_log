@@ -1,0 +1,255 @@
+[27-Dec-2024 21:28:48 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:8
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(8): mysqli->__construct('localhost', 'root', '', 'your_database_n...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 8
+[27-Dec-2024 21:28:49 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:8
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(8): mysqli->__construct('localhost', 'root', '', 'your_database_n...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 8
+[27-Dec-2024 21:29:41 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:8
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(8): mysqli->__construct('localhost', 'root', '', 'your_database_n...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 8
+[27-Dec-2024 21:29:42 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:8
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(8): mysqli->__construct('localhost', 'root', '', 'your_database_n...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 8
+[27-Dec-2024 21:47:59 Asia/Tehran] PHP Warning:  Undefined variable $pdo in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 9
+[27-Dec-2024 21:47:59 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 9
+[27-Dec-2024 21:48:00 Asia/Tehran] PHP Warning:  Undefined variable $pdo in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 9
+[27-Dec-2024 21:48:00 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 9
+[27-Dec-2024 21:59:25 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.overtime_reports' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_reports.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_reports.php(12): mysqli->query('SELECT * FROM o...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_reports.php on line 12
+[27-Dec-2024 21:59:27 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.overtime_reports' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_reports.php:12
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_reports.php(12): mysqli->query('SELECT * FROM o...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_reports.php on line 12
+[27-Dec-2024 22:10:29 Asia/Tehran] PHP Warning:  Undefined variable $mysqli in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php on line 10
+[27-Dec-2024 22:10:29 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php:10
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php on line 10
+[27-Dec-2024 22:11:02 Asia/Tehran] PHP Warning:  Undefined variable $mysqli in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php on line 10
+[27-Dec-2024 22:11:02 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php:10
+Stack trace:
+#0 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php on line 10
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 23
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 26
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:21:51 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 23
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 26
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 23
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 26
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 16
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 19
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "name" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 30
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "entry_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 32
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "exit_time" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 33
+[27-Dec-2024 22:22:07 Asia/Tehran] PHP Warning:  Undefined array key "status" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_data.php on line 34
+[27-Dec-2024 22:25:20 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'username'@'localhost' (using password: YES) in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:8
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(8): mysqli->__construct('localhost', 'username', 'password', 'your_database')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 8
+[27-Dec-2024 22:25:21 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'username'@'localhost' (using password: YES) in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:8
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(8): mysqli->__construct('localhost', 'username', 'password', 'your_database')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 8
+[27-Dec-2024 22:25:39 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:7
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(7): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 7
+[27-Dec-2024 22:25:39 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:7
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(7): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 7
+[27-Dec-2024 22:34:46 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.employees' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_vacation_reports.php:7
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_vacation_reports.php(7): mysqli->query('SELECT e.full_n...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/get_vacation_reports.php on line 7
+[27-Dec-2024 22:52:32 Asia/Tehran] PHP Warning:  Undefined variable $start_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:32 Asia/Tehran] PHP Warning:  Undefined variable $end_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:32 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php:10
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php(10): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 10
+[27-Dec-2024 22:52:42 Asia/Tehran] PHP Warning:  Undefined variable $start_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:42 Asia/Tehran] PHP Warning:  Undefined variable $end_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:42 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php:10
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php(10): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 10
+[27-Dec-2024 22:52:43 Asia/Tehran] PHP Warning:  Undefined variable $start_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:43 Asia/Tehran] PHP Warning:  Undefined variable $end_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:43 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php:10
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php(10): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 10
+[27-Dec-2024 22:52:43 Asia/Tehran] PHP Warning:  Undefined variable $start_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:43 Asia/Tehran] PHP Warning:  Undefined variable $end_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:43 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php:10
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php(10): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 10
+[27-Dec-2024 22:52:44 Asia/Tehran] PHP Warning:  Undefined variable $start_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:44 Asia/Tehran] PHP Warning:  Undefined variable $end_date in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 9
+[27-Dec-2024 22:52:44 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php:10
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php(10): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/load_reports.php on line 10
+[27-Dec-2024 22:57:59 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php:27
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php(27): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php on line 27
+[27-Dec-2024 22:57:59 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Full_name' in 'field list' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php:40
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php(40): mysqli->query('SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/fetch_reports.php on line 40
+[27-Dec-2024 23:00:01 Asia/Tehran] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 56
+[27-Dec-2024 23:00:01 Asia/Tehran] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 56
+[27-Dec-2024 23:00:01 Asia/Tehran] PHP Warning:  include(): Failed opening 'db_connection.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 56
+[27-Dec-2024 23:00:01 Asia/Tehran] PHP Warning:  Undefined variable $conn in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 61
+[27-Dec-2024 23:00:01 Asia/Tehran] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, null given in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:61
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(61): mysqli_query(NULL, 'SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 61
+[27-Dec-2024 23:00:02 Asia/Tehran] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 56
+[27-Dec-2024 23:00:02 Asia/Tehran] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 56
+[27-Dec-2024 23:00:02 Asia/Tehran] PHP Warning:  include(): Failed opening 'db_connection.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 56
+[27-Dec-2024 23:00:02 Asia/Tehran] PHP Warning:  Undefined variable $conn in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 61
+[27-Dec-2024 23:00:02 Asia/Tehran] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, null given in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:61
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(61): mysqli_query(NULL, 'SELECT Full_nam...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 61
+[27-Dec-2024 23:31:33 Asia/Tehran] PHP Warning:  Undefined array key "type" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 6
+[27-Dec-2024 23:31:34 Asia/Tehran] PHP Warning:  Undefined array key "type" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 6
+[27-Dec-2024 23:31:34 Asia/Tehran] PHP Warning:  Undefined array key "type" in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 6
+[28-Dec-2024 14:37:43 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.Employee' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:33
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(33): mysqli_query(Object(mysqli), 'SELECT a.rfid_u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 33
+[28-Dec-2024 14:37:44 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.Employee' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:33
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(33): mysqli_query(Object(mysqli), 'SELECT a.rfid_u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 33
+[28-Dec-2024 14:41:11 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Incorrect DATETIME value: '08:15:00' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:33
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(33): mysqli_query(Object(mysqli), 'SELECT a.rfid_u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 33
+[28-Dec-2024 14:41:12 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Incorrect DATETIME value: '08:15:00' in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:33
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(33): mysqli_query(Object(mysqli), 'SELECT a.rfid_u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 33
+[28-Dec-2024 14:42:20 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.Employee' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:33
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(33): mysqli_query(Object(mysqli), 'SELECT a.rfid_u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 33
+[28-Dec-2024 14:42:21 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'ewyjapml_Attendance_System.Employee' doesn't exist in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php:33
+Stack trace:
+#0 /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php(33): mysqli_query(Object(mysqli), 'SELECT a.rfid_u...')
+#1 {main}
+  thrown in /home3/ewyjapml/public_html/Attendance_System/manager/گزارش ها/index.php on line 33

@@ -1,0 +1,26 @@
+[10-Oct-2024 02:18:34 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 17
+[10-Oct-2024 02:18:34 Asia/Tehran] PHP Warning:  Undefined array key "date" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 18
+[10-Oct-2024 02:18:34 Asia/Tehran] PHP Warning:  Undefined array key "reason" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 19
+[10-Oct-2024 02:18:34 Asia/Tehran] PHP Warning:  Undefined array key "description" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 20
+[10-Oct-2024 02:23:47 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 17
+[10-Oct-2024 02:23:47 Asia/Tehran] PHP Warning:  Undefined array key "date" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 18
+[10-Oct-2024 02:23:47 Asia/Tehran] PHP Warning:  Undefined array key "reason" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 19
+[10-Oct-2024 02:23:47 Asia/Tehran] PHP Warning:  Undefined array key "description" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 20
+[10-Oct-2024 02:23:51 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 17
+[10-Oct-2024 02:23:51 Asia/Tehran] PHP Warning:  Undefined array key "date" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 18
+[10-Oct-2024 02:23:51 Asia/Tehran] PHP Warning:  Undefined array key "reason" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 19
+[10-Oct-2024 02:23:51 Asia/Tehran] PHP Warning:  Undefined array key "description" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 20
+[10-Oct-2024 02:23:54 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 17
+[10-Oct-2024 02:23:54 Asia/Tehran] PHP Warning:  Undefined array key "date" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 18
+[10-Oct-2024 02:23:54 Asia/Tehran] PHP Warning:  Undefined array key "reason" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 19
+[10-Oct-2024 02:23:54 Asia/Tehran] PHP Warning:  Undefined array key "description" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 20
+[10-Oct-2024 02:24:04 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 17
+[10-Oct-2024 02:24:04 Asia/Tehran] PHP Warning:  Undefined array key "date" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 18
+[10-Oct-2024 02:24:04 Asia/Tehran] PHP Warning:  Undefined array key "reason" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 19
+[10-Oct-2024 02:24:04 Asia/Tehran] PHP Warning:  Undefined array key "description" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 20
+[10-Oct-2024 02:29:48 Asia/Tehran] PHP Warning:  Undefined array key "user_name" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 17
+[10-Oct-2024 02:29:48 Asia/Tehran] PHP Warning:  Undefined array key "date" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 18
+[10-Oct-2024 02:29:48 Asia/Tehran] PHP Warning:  Undefined array key "reason" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 19
+[10-Oct-2024 02:29:48 Asia/Tehran] PHP Warning:  Undefined array key "description" in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/submit_absence.php on line 20
+[10-Oct-2024 02:55:36 Asia/Tehran] PHP Warning:  Undefined variable $message in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 70
+[10-Oct-2024 02:55:38 Asia/Tehran] PHP Warning:  Undefined variable $message in /home3/ewyjapml/public_html/Attendance_System/manager/Absence_record_form/index.php on line 70
