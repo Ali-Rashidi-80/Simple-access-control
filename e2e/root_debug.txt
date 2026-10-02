@@ -1,0 +1,184 @@
+
+Running 1 test using 1 worker
+
+Step 1: Navigating to / (Root)
+Step 1.5: Waiting for App to Load (Spinner)
+PAGE LOG: WS Connected
+Step 2: Login Form Detected. Logging in...
+Step 2.5: Waiting for Dashboard
+Step 3: Navigating to /users via Sidebar
+PAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+PAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+Step 4: Clicking Add User
+Step 5: Checking Modal
+PAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+Step 6: Simulating Scan via API
+PAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+PAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+Step 7: Verify RFID injection
+Step 8: Fill and Save
+PAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+Test Failed: ExpectError: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeEnabled[2m([22m[2m)[22m failed
+
+Locator:  locator('button:has(svg.lucide-save)')
+Expected: enabled
+Received: disabled
+Timeout:  5000ms
+
+Call log:
+[2m  - Expect "toBeEnabled" with timeout 5000ms[22m
+[2m  - waiting for locator('button:has(svg.lucide-save)')[22m
+[2m    9 × locator resolved to <button disabled class="flex-1 py-3 px-4 rounded-xl bg-[#00F0FF] text-black hover:bg-[#00F0FF]/90 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">…</button>[22m
+[2m      - unexpected value "disabled"[22m
+
+    at [90mD:\0\door_control\Sentrygateuiuxdesign\e2e\[39mtests\flow.spec.ts:81:38 {
+  matcherResult: {
+    message: [32m'\x1B[2mexpect(\x1B[22m\x1B[31mlocator\x1B[39m\x1B[2m).\x1B[22mtoBeEnabled\x1B[2m(\x1B[22m\x1B[2m)\x1B[22m failed\n'[39m +
+      [32m'\n'[39m +
+      [32m"Locator:  locator('button:has(svg.lucide-save)')\n"[39m +
+      [32m'Expected: enabled\n'[39m +
+      [32m'Received: disabled\n'[39m +
+      [32m'Timeout:  5000ms\n'[39m +
+      [32m'\n'[39m +
+      [32m'Call log:\n'[39m +
+      [32m'\x1B[2m  - Expect "toBeEnabled" with timeout 5000ms\x1B[22m\n'[39m +
+      [32m"\x1B[2m  - waiting for locator('button:has(svg.lucide-save)')\x1B[22m\n"[39m +
+      [32m'\x1B[2m    9 × locator resolved to <button disabled class="flex-1 py-3 px-4 rounded-xl bg-[#00F0FF] text-black hover:bg-[#00F0FF]/90 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">…</button>\x1B[22m\n'[39m +
+      [32m'\x1B[2m      - unexpected value "disabled"\x1B[22m\n'[39m,
+    pass: [33mfalse[39m,
+    actual: [32m'disabled'[39m,
+    name: [32m'toBeEnabled'[39m,
+    expected: [32m'enabled'[39m,
+    log: [
+      [32m'  - Expect "toBeEnabled" with timeout 5000ms'[39m,
+      [32m"  - waiting for locator('button:has(svg.lucide-save)')"[39m,
+      [32m'    9 × locator resolved to <button disabled class="flex-1 py-3 px-4 rounded-xl bg-[#00F0FF] text-black hover:bg-[#00F0FF]/90 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">…</button>'[39m,
+      [32m'      - unexpected value "disabled"'[39m
+    ],
+    timeout: [33m5000[39m
+  },
+  [32mSymbol(step)[39m: {
+    category: [32m'expect'[39m,
+    apiName: [32m'expect.toBeEnabled'[39m,
+    title: [32m`Expect "toBeEnabled" locator('button:has(svg.lucide-save)')`[39m,
+    shortTitle: [32m'Expect "toBeEnabled"'[39m,
+    params: { expected: [36m[Object][39m },
+    infectParentStepsWithError: [90mundefined[39m,
+    stepId: [32m'expect@53'[39m,
+    group: [90mundefined[39m,
+    boxedStack: [90mundefined[39m,
+    location: {
+      file: [32m'D:\\0\\door_control\\Sentrygateuiuxdesign\\e2e\\tests\\flow.spec.ts'[39m,
+      line: [33m81[39m,
+      column: [33m38[39m
+    },
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'expect@53'[39m,
+      _title: [32m`Expect "toBeEnabled" locator('button:has(svg.lucide-save)')`[39m,
+      _parentStep: [90mundefined[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1765282218944[39m,
+    error: {
+      message: [32m'Error: \x1B[2mexpect(\x1B[22m\x1B[31mlocator\x1B[39m\x1B[2m).\x1B[22mtoBeEnabled\x1B[2m(\x1B[22m\x1B[2m)\x1B[22m failed\n'[39m +
+        [32m'\n'[39m +
+        [32m"Locator:  locator('button:has(svg.lucide-save)')\n"[39m +
+        [32m'Expected: enabled\n'[39m +
+        [32m'Received: disabled\n'[39m +
+        [32m'Timeout:  5000ms\n'[39m +
+        [32m'\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - Expect "toBeEnabled" with timeout 5000ms\x1B[22m\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('button:has(svg.lucide-save)')\x1B[22m\n"[39m +
+        [32m'\x1B[2m    9 × locator resolved to <button disabled class="flex-1 py-3 px-4 rounded-xl bg-[#00F0FF] text-black hover:bg-[#00F0FF]/90 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">…</button>\x1B[22m\n'[39m +
+        [32m'\x1B[2m      - unexpected value "disabled"\x1B[22m\n'[39m,
+      stack: [32m'Error: \x1B[2mexpect(\x1B[22m\x1B[31mlocator\x1B[39m\x1B[2m).\x1B[22mtoBeEnabled\x1B[2m(\x1B[22m\x1B[2m)\x1B[22m failed\n'[39m +
+        [32m'\n'[39m +
+        [32m"Locator:  locator('button:has(svg.lucide-save)')\n"[39m +
+        [32m'Expected: enabled\n'[39m +
+        [32m'Received: disabled\n'[39m +
+        [32m'Timeout:  5000ms\n'[39m +
+        [32m'\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - Expect "toBeEnabled" with timeout 5000ms\x1B[22m\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('button:has(svg.lucide-save)')\x1B[22m\n"[39m +
+        [32m'\x1B[2m    9 × locator resolved to <button disabled class="flex-1 py-3 px-4 rounded-xl bg-[#00F0FF] text-black hover:bg-[#00F0FF]/90 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">…</button>\x1B[22m\n'[39m +
+        [32m'\x1B[2m      - unexpected value "disabled"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at D:\\0\\door_control\\Sentrygateuiuxdesign\\e2e\\tests\\flow.spec.ts:81:38'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+PAGE BODY TEXT ON FAILURE: SentryGate
+
+نسخه2.4.1
+
+داشبورد
+گزارش دسترسی
+کاربران
+تنظیمات
+SentryGate
+نئون
+EN
+sy
+مدیر سیستم
+@admin
+کاربران مجاز
+افزودن کاربر
+a
+admin
+نقش: admin
+ADMIN_TAG_001
+E
+E2E Test User
+نقش: user
+123456
+ثبت کارت جدید
+RFID Tag
+---
+Waiting for scan...
+نام و نام خانوادگی
+نقش
+User
+Admin
+Guest
+انصراف
+ذخیره
+  ✘  1 [chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI (10.0s)
+
+
+  1) [chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeEnabled[2m([22m[2m)[22m failed
+
+    Locator:  locator('button:has(svg.lucide-save)')
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toBeEnabled" with timeout 5000ms[22m
+    [2m  - waiting for locator('button:has(svg.lucide-save)')[22m
+    [2m    9 × locator resolved to <button disabled class="flex-1 py-3 px-4 rounded-xl bg-[#00F0FF] text-black hover:bg-[#00F0FF]/90 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">…</button>[22m
+    [2m      - unexpected value "disabled"[22m
+
+
+      79 |             const saveButton = page.locator('button:has(svg.lucide-save)');
+      80 |             await expect(saveButton).toBeVisible();
+    > 81 |             await expect(saveButton).toBeEnabled({ timeout: 5000 });
+         |                                      ^
+      82 |             await saveButton.click();
+      83 |
+      84 |             console.log('Step 9: Verify Success');
+        at D:\0\door_control\Sentrygateuiuxdesign\e2e\tests\flow.spec.ts:81:38
+
+    Error Context: test-results\flow-Critical-User-Flow-sh-6f554-in-and-create-a-user-via-UI-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI 

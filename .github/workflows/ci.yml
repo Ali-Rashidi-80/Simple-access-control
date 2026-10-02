@@ -1,0 +1,60 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-qa:
+    name: Backend Lint, Type Check & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install ruff black isort mypy pylint pytest pytest-asyncio respx httpx Faker coverage
+
+      - name: Python Compileall Check
+        run: python -m compileall backend
+
+      - name: Ruff Linter Check
+        run: python -m ruff check backend
+
+      - name: Ruff Format Check
+        run: python -m ruff format --check backend
+
+      - name: Black Format Check
+        run: python -m black backend --check
+
+      - name: Isort Import Order Check
+        run: python -m isort backend --check-only
+
+      - name: Mypy Static Type Analysis
+        run: python -m mypy backend/app
+
+      - name: Pylint Integrity Check
+        run: python -m pylint backend/app --errors-only
+
+      - name: Run Pytest Test Suite
+        env:
+          SECRET_KEY: test-secret-key-for-ci-pipeline-only-not-production
+          ALGORITHM: HS256
+          HARDWARE_TOKEN: test-hardware-ci-token
+          DATABASE_URL: sqlite+aiosqlite:///./ci_test.db
+        run: python -m pytest backend/tests --cov=backend/app --cov-report=term-missing

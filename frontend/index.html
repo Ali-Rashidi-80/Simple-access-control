@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- PERFORMANCE: Preload critical fonts to prevent FOIT -->
+  <link rel="preload" href="/fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin />
+  
+  <!-- PERFORMANCE: DNS prefetch for external font CDNs -->
+  <link rel="dns-prefetch" href="https://cdn.fontcdn.ir" />
+  <link rel="preconnect" href="https://cdn.fontcdn.ir" crossorigin />
+  
+  <title>SentryGate UI/UX Design</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+{
+    "wifi_ssid": "YOUR_WIFI_SSID",
+    "wifi_pass": "YOUR_WIFI_PASSWORD",
+    "server_host": "rynix.ir",
+    "server_port": 443,
+    "use_ssl": true,
+    "ws_path": "/ws/hardware"
+}

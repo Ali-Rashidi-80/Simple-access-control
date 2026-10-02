@@ -1,0 +1,97 @@
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+exclude = [
+    ".git",
+    "__pycache__",
+    "backend/alembic",
+    "backend/app/services/melipayamak",
+    "backend/app/services/melipayamak_sdk",
+    "micro-python-esp32",
+    "node_modules",
+    "build",
+    "dist",
+    "e2e"
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",  # Line length
+    "E402",  # Module level import not at top of file (needed for sys.path fixes)
+    "E712",  # Comparison to True/False (needed for SQLAlchemy boolean filters)
+    "E711"   # Comparison to None (needed for SQLAlchemy is_null filters)
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | backend/alembic
+  | backend/app/services/melipayamak
+  | micro-python-esp32
+  | node_modules
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip = [
+    ".git",
+    "backend/alembic",
+    "backend/app/services/melipayamak",
+    "micro-python-esp32",
+    "node_modules"
+]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+follow_imports = "silent"
+warn_unused_ignores = false
+show_error_codes = true
+disable_error_code = ["assignment", "arg-type", "import-untyped", "var-annotated"]
+exclude = [
+    "^backend/alembic/",
+    "^backend/app/services/melipayamak/",
+    "^micro-python-esp32/",
+    "^e2e/"
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["backend/tests"]
+python_files = ["test_*.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::pytest.PytestReturnNotNoneWarning"
+]
+
+[tool.pylint."messages control"]
+disable = [
+    "C0114",  # missing-module-docstring
+    "C0115",  # missing-class-docstring
+    "C0116",  # missing-function-docstring
+    "C0103",  # invalid-name
+    "R0903",  # too-few-public-methods
+    "R0913",  # too-many-arguments
+    "E1102",  # not-callable (SQLAlchemy func.count false positive)
+    "W0718"   # broad-exception-caught
+]
+
+[tool.pylint.master]
+ignore = ["alembic", "melipayamak", "melipayamak_sdk"]
+

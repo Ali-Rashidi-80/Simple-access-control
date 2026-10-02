@@ -1,0 +1,51 @@
+{
+  "name": "liquid-neon-persian-picker",
+  "version": "1.0.0",
+  "description": "The Ultimate High-End Jalali Date Range Picker for React with Glassmorphism and Neon Aesthetics",
+  "private": false,
+  "type": "module",
+  "keywords": [
+    "react",
+    "datepicker",
+    "date-picker",
+    "jalali",
+    "persian",
+    "shamsi",
+    "calendar",
+    "date-range",
+    "glassmorphism",
+    "neon",
+    "ui",
+    "component",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "components/NeonDatePicker/index.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "date-fns-jalali": "^4.1.0-0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.400.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

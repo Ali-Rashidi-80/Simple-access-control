@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.git
+.env
+.vscode
+coverage
+test-results
+playwright-report
+blob-report

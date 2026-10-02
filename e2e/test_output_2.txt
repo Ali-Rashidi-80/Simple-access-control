@@ -1,0 +1,134 @@
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI
+[1A[2K[chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI
+Step 1: Navigating to / (Root)
+
+[1A[2KStep 1.5: Waiting for App to Load (Spinner)
+
+[1A[2KPAGE LOG: WS Connected
+
+[1A[2KStep 2: Login Form Detected. Logging in...
+
+[1A[2KStep 2.5: Waiting for Dashboard
+
+[1A[2KPAGE LOG: WS Connected
+
+[1A[2KStep 3: Navigating to /users via Sidebar
+
+[1A[2KPAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+
+[1A[2KPAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+
+[1A[2KStep 4: Clicking Add User
+
+[1A[2KStep 5: Checking Modal
+
+[1A[2KPAGE LOG: DEBUG_MODAL: {rfid: , loading: false, initialRfid: undefined, lastUnknownTag: null}
+
+[1A[2KStep 6: Simulating Scan via API
+
+[1A[2KTest Failed: ExpectError: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31mfalse[39m
+    at [90mD:\0\door_control\Sentrygateuiuxdesign\e2e\[39mtests\flow.spec.ts:72:30 {
+  matcherResult: {
+    message: [32m'\x1B[2mexpect(\x1B[22m\x1B[31mreceived\x1B[39m\x1B[2m).\x1B[22mtoBeTruthy\x1B[2m()\x1B[22m\n'[39m +
+      [32m'\n'[39m +
+      [32m'Received: \x1B[31mfalse\x1B[39m'[39m,
+    pass: [33mfalse[39m
+  },
+  [32mSymbol(step)[39m: {
+    category: [32m'expect'[39m,
+    apiName: [32m'expect.toBeTruthy'[39m,
+    title: [32m'Expect "toBeTruthy"'[39m,
+    shortTitle: [32m'Expect "toBeTruthy"'[39m,
+    params: [90mundefined[39m,
+    infectParentStepsWithError: [90mundefined[39m,
+    stepId: [32m'expect@51'[39m,
+    group: [90mundefined[39m,
+    boxedStack: [90mundefined[39m,
+    location: {
+      file: [32m'D:\\0\\door_control\\Sentrygateuiuxdesign\\e2e\\tests\\flow.spec.ts'[39m,
+      line: [33m72[39m,
+      column: [33m30[39m
+    },
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'expect@51'[39m,
+      _title: [32m'Expect "toBeTruthy"'[39m,
+      _parentStep: [90mundefined[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1765281792914[39m,
+    error: {
+      message: [32m'Error: \x1B[2mexpect(\x1B[22m\x1B[31mreceived\x1B[39m\x1B[2m).\x1B[22mtoBeTruthy\x1B[2m()\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'Received: \x1B[31mfalse\x1B[39m'[39m,
+      stack: [32m'Error: \x1B[2mexpect(\x1B[22m\x1B[31mreceived\x1B[39m\x1B[2m).\x1B[22mtoBeTruthy\x1B[2m()\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'Received: \x1B[31mfalse\x1B[39m\n'[39m +
+        [32m'    at D:\\0\\door_control\\Sentrygateuiuxdesign\\e2e\\tests\\flow.spec.ts:72:30'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+
+[1A[2KPAGE BODY TEXT ON FAILURE: SentryGate
+
+نسخه2.4.1
+
+داشبورد
+گزارش دسترسی
+کاربران
+تنظیمات
+SentryGate
+نئون
+EN
+sy
+مدیر سیستم
+@admin
+کاربران مجاز
+افزودن کاربر
+a
+admin
+نقش: admin
+ADMIN_TAG_001
+ثبت کارت جدید
+RFID Tag
+---
+Waiting for scan...
+نام و نام خانوادگی
+نقش
+User
+Admin
+Guest
+انصراف
+ذخیره
+متصل
+
+[1A[2K  1) [chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      70 |                 data: { type: "scan", rfid: "123456", temperature: 25.5, is_duress: false }
+      71 |             });
+    > 72 |             expect(res.ok()).toBeTruthy();
+         |                              ^
+      73 |
+      74 |             console.log('Step 7: Verify RFID injection');
+      75 |             // Wait for WS propagation and UI update
+        at D:\0\door_control\Sentrygateuiuxdesign\e2e\tests\flow.spec.ts:72:30
+
+    Error Context: test-results\flow-Critical-User-Flow-sh-6f554-in-and-create-a-user-via-UI-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests\flow.spec.ts:5:9 › Critical User Flow › should login and create a user via UI 
