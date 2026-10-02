@@ -34,8 +34,20 @@ interface WebSocketContextType {
     sendMessage: (msg: { cmd: "OPEN" }) => void;
 }
 
+const getWsUrl = (): string => {
+    if (import.meta.env.VITE_WS_URL) return import.meta.env.VITE_WS_URL;
+    if (typeof window !== 'undefined') {
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'ws://localhost:8000/ws/frontend';
+        }
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        return `${protocol}//${window.location.host}/ws/frontend`;
+    }
+    return 'wss://rynix.ir/ws/frontend';
+};
+
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
-const WS_URL = import.meta.env.VITE_WS_URL || 'wss://rynix.ir/ws/frontend';
+const WS_URL = getWsUrl();
 
 export function WebSocketProvider({ children }: { children: ReactNode }) {
     const { t } = useLanguage();

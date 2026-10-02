@@ -1,14 +1,63 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { useAppSettings } from '../../settings/contexts/AppSettingsContext';
+import { LanguageSwitcher } from '../../settings/components/LanguageSwitcher';
+import { ThemeSwitcher } from '../../settings/components/ThemeSwitcher';
 import { OTPInput } from './OTPInput';
 import {
     X, Mail, Lock, User, Phone, Key, ArrowLeft, ArrowRight,
-    Shield, Clock, CheckCircle, AlertCircle, Loader, Eye, EyeOff
+    Shield, Clock, CheckCircle, AlertCircle, Loader, Eye, EyeOff, Film
 } from 'lucide-react';
 import './LoginPanel.css';
+
+/**
+ * Bulletproof, flicker-free typewriter hook with deterministic timer lifecycle
+ */
+function useTypewriter(words: string[], typingSpeed = 75, deletingSpeed = 35, pauseDelay = 2400) {
+    const [text, setText] = useState('');
+    const [wordIndex, setWordIndex] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        setText('');
+        setWordIndex(0);
+        setIsDeleting(false);
+    }, [words]);
+
+    useEffect(() => {
+        if (!words || words.length === 0) return;
+        const currentWord = words[wordIndex % words.length];
+
+        let timeoutId: any;
+
+        if (!isDeleting) {
+            if (text.length < currentWord.length) {
+                timeoutId = setTimeout(() => {
+                    setText(currentWord.slice(0, text.length + 1));
+                }, typingSpeed);
+            } else {
+                timeoutId = setTimeout(() => {
+                    setIsDeleting(true);
+                }, pauseDelay);
+            }
+        } else {
+            if (text.length > 0) {
+                timeoutId = setTimeout(() => {
+                    setText(currentWord.slice(0, text.length - 1));
+                }, deletingSpeed);
+            } else {
+                setIsDeleting(false);
+                setWordIndex(prev => (prev + 1) % words.length);
+            }
+        }
+
+        return () => clearTimeout(timeoutId);
+    }, [text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pauseDelay]);
+
+    return text;
+}
 
 type LoginMode = 'login' | 'otp' | '2fa' | 'recovery' | 'register';
 
@@ -18,7 +67,7 @@ interface LoginPanelProps {
 }
 
 export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
-    const { t, isRTL } = useLanguage();
+    const { t, isRTL, language } = useLanguage();
     const { theme } = useAppSettings();
     const { login, loginWithOTP, loginWith2FA, loginWithGoogle, requestOTP, verifyOTP, requestPasswordReset, resetPassword } = useAuth();
 
@@ -38,23 +87,44 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    const [currentBg, setCurrentBg] = useState('login-bg');
+    const [currentBg, setCurrentBg] = useState<'login-bg' | 'b'>('login-bg');
 
-    // Typing animation states
-    const [titleIndex, setTitleIndex] = useState(0);
-    const [subtitleIndex, setSubtitleIndex] = useState(0);
-    const [displayedTitle, setDisplayedTitle] = useState('');
-    const [displayedSubtitle, setDisplayedSubtitle] = useState('');
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [colorPhase, setColorPhase] = useState(0);
+    // Auto-select Video 2 ('b') on Matrix theme activation, and Video 1 ('login-bg') on Neon theme
+    useEffect(() => {
+        if (theme === 'matrix') {
+            setCurrentBg('b');
+        } else {
+            setCurrentBg('login-bg');
+        }
+    }, [theme]);
 
-    const titles = ['SENTRYGATE', 'SMART ACCESS', 'SECURE ENTRY', 'ACCESS CONTROL'];
-    const subtitles = [
-        'Secure Access Control System',
-        'Advanced Security Platform',
-        'Intelligent Door Management',
-        'Enterprise Access Solution'
-    ];
+    // Memoized words for smooth typing
+    const titles = useMemo(() => language === 'en' ? [
+        'ACCESS CONTROL SYSTEM',
+        'SECURE AUTHENTICATION',
+        'GATE MANAGEMENT'
+    ] : [
+        'سامانه کنترل تردد',
+        'ورود امن به سامانه',
+        'مدیریت گیت‌های تردد'
+    ], [language]);
+
+    const subtitles = useMemo(() => language === 'en' ? [
+        'Intelligent Access Control and Telemetry System',
+        'Real-time Access Event Monitoring and Audit',
+        'Unified Hardware Gate Management'
+    ] : [
+        'سیستم هوشمند کنترل تردد و تله‌متری',
+        'پایش و ثبت بلادرنگ رویدادهای ورود و خروج',
+        'مدیریت یکپارچه دسترسی و گیت‌های سخت‌افزاری'
+    ], [language]);
+
+    const displayedTitle = useTypewriter(titles, 75, 35, 2400);
+    const displayedSubtitle = useTypewriter(subtitles, 50, 25, 3200);
+
+    const toggleBackground = () => {
+        setCurrentBg(prev => prev === 'login-bg' ? 'b' : 'login-bg');
+    };
 
     // OTP Timer
     const [otpTimer, setOtpTimer] = useState(0);
@@ -67,58 +137,6 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
         setOtpCode('');
         setTwoFACode('');
     }, [mode]);
-
-    // Typing animation effect
-    useEffect(() => {
-        const currentTitle = titles[titleIndex];
-        const typingSpeed = isDeleting ? 50 : 100;
-
-        const timer = setTimeout(() => {
-            if (!isDeleting) {
-                if (displayedTitle.length < currentTitle.length) {
-                    setDisplayedTitle(currentTitle.slice(0, displayedTitle.length + 1));
-                } else {
-                    setTimeout(() => setIsDeleting(true), 2000);
-                }
-            } else {
-                if (displayedTitle.length > 0) {
-                    setDisplayedTitle(currentTitle.slice(0, displayedTitle.length - 1));
-                } else {
-                    setIsDeleting(false);
-                    setTitleIndex((prev) => (prev + 1) % titles.length);
-                }
-            }
-        }, typingSpeed);
-
-        return () => clearTimeout(timer);
-    }, [displayedTitle, isDeleting, titleIndex]);
-
-    // Subtitle typing effect
-    useEffect(() => {
-        const currentSubtitle = subtitles[subtitleIndex];
-        const typingSpeed = 80;
-
-        const timer = setTimeout(() => {
-            if (displayedSubtitle.length < currentSubtitle.length) {
-                setDisplayedSubtitle(currentSubtitle.slice(0, displayedSubtitle.length + 1));
-            } else {
-                setTimeout(() => {
-                    setDisplayedSubtitle('');
-                    setSubtitleIndex((prev) => (prev + 1) % subtitles.length);
-                }, 3000);
-            }
-        }, typingSpeed);
-
-        return () => clearTimeout(timer);
-    }, [displayedSubtitle, subtitleIndex]);
-
-    // Color phase animation
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setColorPhase(prev => (prev + 1) % 360);
-        }, 50);
-        return () => clearInterval(interval);
-    }, []);
 
     // OTP countdown timer
     useEffect(() => {
@@ -268,10 +286,6 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const toggleBackground = () => {
-        setCurrentBg(prev => prev === 'login-bg' ? 'b' : 'login-bg');
-    };
-
     // Google Login Handler - redirects to Google OAuth
     const handleGoogleLogin = () => {
         setIsLoading(true);
@@ -294,7 +308,7 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
             whileTap={{ scale: 0.95 }}
         >
             <ArrowRight className="w-4 h-4" />
-            <span>بازگشت</span>
+            <span>{language === 'fa' ? 'بازگشت' : 'Back'}</span>
         </motion.button>
     );
 
@@ -310,7 +324,33 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
             >
-                {/* Enhanced Background */}
+                {/* Floating Top Controls: Language, Theme & Video Background Switcher */}
+                <div className="login-panel-top-bar">
+                    <LanguageSwitcher />
+                    <ThemeSwitcher />
+                    <motion.button
+                        type="button"
+                        onClick={toggleBackground}
+                        className={`glass-card backdrop-blur-xl border border-white/10 rounded-full px-3.5 py-2 flex items-center gap-2 transition-all duration-300 cursor-pointer ${
+                            theme === 'matrix'
+                                ? 'hover:border-[#00FF66]/50 text-emerald-200/90 hover:text-white'
+                                : 'hover:border-[#00F0FF]/40 text-white/80 hover:text-white'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                            boxShadow: theme === 'matrix' ? '0 4px 12px rgba(0, 255, 102, 0.15)' : '0 4px 12px rgba(0, 240, 255, 0.1)',
+                        }}
+                        title={language === 'fa' ? 'تغییر ویدیوی پس‌زمینه' : 'Switch Background Video'}
+                    >
+                        <Film className={`w-4 h-4 ${theme === 'matrix' ? 'text-[#00FF66]' : 'text-[#00F0FF]'}`} />
+                        <span className="text-xs font-medium tracking-wide">
+                            {language === 'fa' ? (currentBg === 'login-bg' ? 'ویدیو ۱' : 'ویدیو ۲') : (currentBg === 'login-bg' ? 'Video 1' : 'Video 2')}
+                        </span>
+                    </motion.button>
+                </div>
+
+                {/* Enhanced Background Video */}
                 <div className="login-panel-background">
                     <video
                         autoPlay
@@ -367,27 +407,20 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                         style={{ minHeight: '80px' }}
                     >
                         <h1
-                            className="login-panel-title"
+                            className="login-panel-title notranslate"
+                            translate="no"
                             onClick={toggleBackground}
-                            style={{
-                                cursor: 'pointer',
-                                userSelect: 'none',
-                                color: `hsl(${colorPhase}, 70%, 60%)`,
-                                minHeight: '2rem',
-                                transition: 'color 0.5s ease'
-                            }}
+                            title="تغییر پس‌زمینه"
                         >
-                            {displayedTitle}<span className="animate-pulse">|</span>
+                            <span>{displayedTitle}</span>
+                            <span className="login-panel-cursor">|</span>
                         </h1>
                         <p
-                            className="login-panel-subtitle"
-                            style={{
-                                color: `hsl(${(colorPhase + 180) % 360}, 60%, 50%)`,
-                                minHeight: '1.5rem',
-                                transition: 'color 0.5s ease'
-                            }}
+                            className="login-panel-subtitle notranslate"
+                            translate="no"
                         >
-                            {displayedSubtitle}<span className="animate-pulse text-xs">|</span>
+                            <span>{displayedSubtitle}</span>
+                            <span className="login-panel-subtitle-cursor">|</span>
                         </p>
                     </motion.div>
 
@@ -402,17 +435,20 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                         {/* Card Glow Effect */}
                         <div className={`login-panel-card-glow ${themeClass}`} />
 
-
-                        <div className="login-panel-card">
+                        <div className={`login-panel-card ${themeClass}`}>
                             {/* Content */}
                             <div className="login-panel-card-content">
 
                                 {/* Login Mode */}
                                 {mode === 'login' && (
                                     <form onSubmit={handleLogin} className="space-y-2 w-full">
-                                        <div className="text-center mb-2">
-                                            <h2 className="text-base font-bold text-white mb-0.5">ورود</h2>
-                                            <p className="text-white/50 text-[0.6rem]">لطفاً اطلاعات خود را وارد کنید</p>
+                                        <div className="text-center mb-1">
+                                            <h2 className={`text-base font-bold mb-0.5 tracking-wide ${theme === 'matrix' ? 'text-[#ECFDF5] drop-shadow-[0_0_12px_rgba(0,255,102,0.6)]' : 'text-white drop-shadow-[0_0_12px_rgba(0,240,255,0.4)]'}`}>
+                                                {language === 'fa' ? 'ورود به سامانه' : 'Sign In'}
+                                            </h2>
+                                            <p className={`${theme === 'matrix' ? 'text-emerald-200/75' : 'text-white/70'} text-[0.65rem]`}>
+                                                {language === 'fa' ? 'اطلاعات کاربری خود را وارد کنید' : 'Enter your account credentials'}
+                                            </p>
                                         </div>
 
                                         <div className="space-y-0.5">
@@ -425,7 +461,7 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                                                     value={username}
                                                     onChange={e => setUsername(e.target.value)}
                                                     className="login-panel-input has-left-icon"
-                                                    placeholder={t('usernamePlaceholder') || 'نام کاربری'}
+                                                    placeholder={t('usernamePlaceholder') || (language === 'fa' ? 'نام کاربری' : 'Username')}
                                                     required
                                                 />
                                             </div>
@@ -441,7 +477,7 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                                                     value={password}
                                                     onChange={e => setPassword(e.target.value)}
                                                     className="login-panel-input has-left-icon has-right-icon"
-                                                    placeholder={t('passwordPlaceholder') || 'رمز عبور'}
+                                                    placeholder={t('passwordPlaceholder') || (language === 'fa' ? 'رمز عبور' : 'Password')}
                                                     required
                                                 />
                                                 <div
@@ -453,28 +489,25 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center justify-between pt-0.5 px-0.5">
-                                            <label className="flex items-center gap-1 cursor-pointer group">
-                                                <div className="relative flex items-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={rememberMe}
-                                                        onChange={e => setRememberMe(e.target.checked)}
-                                                        className="peer h-2 w-2 cursor-pointer appearance-none rounded border border-white/20 bg-white/5 checked:border-[#00F0FF] checked:bg-[#00F0FF] transition-all"
-                                                    />
-                                                    <CheckCircle className="pointer-events-none absolute h-1.5 w-1.5 text-black opacity-0 peer-checked:opacity-100 transition-opacity left-[1px]" />
-                                                </div>
-                                                <span className="text-white/60 text-[0.6rem] group-hover:text-white/80 transition-colors">
-                                                    {t('rememberMe') || 'مرا به خاطر بسپار'}
+                                        <div className="flex items-center justify-between pt-1 px-1 w-[85%] mx-auto">
+                                            <label className="flex items-center gap-1.5 cursor-pointer group select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={rememberMe}
+                                                    onChange={e => setRememberMe(e.target.checked)}
+                                                    className={`w-3.5 h-3.5 rounded border border-white/30 bg-black/40 focus:ring-0 cursor-pointer ${theme === 'matrix' ? 'accent-[#00FF66] text-[#00FF66]' : 'accent-[#00F0FF] text-[#00F0FF]'}`}
+                                                />
+                                                <span className={`${theme === 'matrix' ? 'text-emerald-100/90 group-hover:text-emerald-50' : 'text-white/80 group-hover:text-white'} text-[0.68rem] transition-colors`}>
+                                                    {t('rememberMe') || (language === 'fa' ? 'مرا به خاطر بسپار' : 'Remember me')}
                                                 </span>
                                             </label>
 
                                             <button
                                                 type="button"
                                                 onClick={() => setMode('recovery')}
-                                                className="text-[#00F0FF] text-[0.65rem] hover:text-[#00FF9D] hover:underline transition-colors"
+                                                className={`${theme === 'matrix' ? 'text-[#00FF66] hover:text-[#34D399]' : 'text-[#00F0FF] hover:text-[#00FF9D]'} text-[0.68rem] hover:underline transition-colors font-medium cursor-pointer`}
                                             >
-                                                {t('forgotPassword') || 'فراموشی رمز عبور؟'}
+                                                {t('forgotPassword') || (language === 'fa' ? 'فراموشی رمز عبور؟' : 'Forgot password?')}
                                             </button>
                                         </div>
 
@@ -488,25 +521,25 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                                             {isLoading ? (
                                                 <div className="flex items-center justify-center gap-1.5">
                                                     <Loader className="w-3.5 h-3.5 animate-spin" />
-                                                    <span className="text-xs">...</span>
+                                                    <span className="text-xs">{language === 'fa' ? 'در حال ورود...' : 'Signing in...'}</span>
                                                 </div>
                                             ) : (
-                                                t('login') || 'ورود'
+                                                language === 'fa' ? 'ورود به سامانه' : 'Sign In'
                                             )}
                                         </motion.button>
 
-                                        <div className="relative my-2">
+                                        <div className="relative my-1.5 w-[85%] mx-auto">
                                             <div className="absolute inset-0 flex items-center">
-                                                <div className="w-full border-t border-white/10"></div>
+                                                <div className={`w-full border-t ${theme === 'matrix' ? 'border-emerald-500/20' : 'border-white/15'}`}></div>
                                             </div>
                                             <div className="relative flex justify-center text-[0.6rem]">
-                                                <span className="px-1.5 bg-[#0a0a0a] text-white/30">
-                                                    {t('or') || 'یا'}
+                                                <span className={`px-2 rounded-full border ${theme === 'matrix' ? 'bg-[#03150a]/90 text-emerald-300/80 border-emerald-500/25' : 'bg-[#0a1220]/90 text-white/60 border-white/10'}`}>
+                                                    {t('or') || (language === 'fa' ? 'یا ورود با' : 'or continue with')}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <div className="login-auth-icons" style={{ marginTop: '0.5rem' }}>
+                                        <div className="login-auth-icons" style={{ marginTop: '0.25rem' }}>
                                             {/* Google Login Button */}
                                             <motion.button
                                                 type="button"
@@ -514,11 +547,11 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                                                 className="login-icon-button google-btn"
                                                 whileHover={{ scale: 1.1 }}
                                                 whileTap={{ scale: 0.95 }}
-                                                title="ورود با Google"
+                                                title={language === 'fa' ? 'ورود با حساب گوگل' : 'Sign in with Google'}
                                                 disabled={isLoading}
                                             >
-                                                {isLoading ? <Loader className="w-5 h-5 animate-spin text-white/50" /> : (
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                {isLoading ? <Loader className="w-4 h-4 animate-spin text-white/50" /> : (
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                                                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
                                                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
@@ -534,10 +567,10 @@ export function LoginPanel({ isOpen, onClose }: LoginPanelProps) {
                                                 className="login-icon-button"
                                                 whileHover={{ scale: 1.1 }}
                                                 whileTap={{ scale: 0.95 }}
-                                                title="ورود با کد یکبار مصرف پیامکی"
+                                                title={language === 'fa' ? 'ورود با کد یکبار مصرف پیامکی' : 'Sign in with SMS OTP'}
                                                 disabled={isLoading}
                                             >
-                                                <Phone className="w-6 h-6" />
+                                                <Phone className={`w-5 h-5 ${theme === 'matrix' ? 'text-[#00FF66]' : 'text-[#00F0FF]'}`} />
                                             </motion.button>
                                         </div>
                                     </form>

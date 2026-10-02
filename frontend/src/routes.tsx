@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import RootLayout from './layouts/RootLayout';
+import { RouteErrorBoundary } from './components/common/RouteErrorBoundary';
 
 /**
  * PERFORMANCE: Lazy load non-critical routes
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <RootLayout />,
+        errorElement: <RouteErrorBoundary />,
         children: [
             {
                 path: "dashboard",

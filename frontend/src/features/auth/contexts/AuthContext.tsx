@@ -33,9 +33,15 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const TOKEN_KEY = 'sentry_token';
 const USER_KEY = 'sentry_user';
-const TOKEN_EXPIRY_KEY = 'sentry_token_expiry';
-const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in ms
-const API_URL = import.meta.env.VITE_API_URL || 'https://rynix.ir';
+const getApiUrl = (): string => {
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+    if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        return 'http://localhost:8000';
+    }
+    return 'https://rynix.ir';
+};
+
+const API_URL = getApiUrl();
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);

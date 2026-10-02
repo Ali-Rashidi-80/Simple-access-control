@@ -4,9 +4,7 @@ import { useAuth } from '../../auth/contexts/AuthContext';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { UserAvatar } from '../../user/components/UserAvatar';
 import { User, Mail, Shield, Key, Save, Camera, Loader } from 'lucide-react';
-import { toast } from 'sonner';
-
-const API_BASE = 'https://rynix.ir';
+const API_BASE = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:8000' : 'https://rynix.ir');
 
 export function ProfileSettings() {
     const { user, updateProfile } = useAuth();

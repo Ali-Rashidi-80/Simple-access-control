@@ -426,28 +426,29 @@ body.hacker-mode {
   background: #000000 !important;
 }
 
-body.hacker-mode * {
-  font-family: 'Courier New', 'Consolas', monospace !important;
+:root[dir="ltr"] body.hacker-mode .font-mono,
+:root[dir="ltr"] body.hacker-mode code,
+:root[dir="ltr"] body.hacker-mode pre,
+:root[dir="ltr"] body.hacker-mode .matrix-mono {
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+
+body.rtl,
+:root[dir="rtl"],
+body.rtl.hacker-mode,
+:root[dir="rtl"] body.hacker-mode,
+body.rtl * {
+  font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
 body.hacker-mode .glass-card {
-  background: rgba(0, 255, 0, 0.03) !important;
-  border-color: rgba(0, 255, 0, 0.2) !important;
-  box-shadow: 0 0 20px rgba(0, 255, 0, 0.1) !important;
-}
-
-body.hacker-mode h1,
-body.hacker-mode h2,
-body.hacker-mode h3,
-body.hacker-mode p,
-body.hacker-mode span,
-body.hacker-mode div {
-  color: #00FF00 !important;
-  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5) !important;
+  background: rgba(0, 30, 15, 0.35) !important;
+  border-color: rgba(0, 255, 102, 0.25) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.12) !important;
 }
 
 body.hacker-mode button {
-  border-color: rgba(0, 255, 0, 0.3) !important;
+  border-color: rgba(0, 255, 102, 0.3) !important;
 }
 
 /* Hacker Mode Matrix Grid */
