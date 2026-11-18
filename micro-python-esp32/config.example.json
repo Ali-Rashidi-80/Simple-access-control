@@ -1,0 +1,13 @@
+{
+  "wifi_ssid": "change-me-wifi-ssid",
+  "wifi_pass": "change-me-wifi-password",
+  "server_host": "your-server.example.com",
+  "server_port": 443,
+  "use_ssl": true,
+  "ws_path": "/ws/hardware",
+  "hardware_token": "change-me-hardware-token",
+  "device_role": "door",
+  "keypad_enabled": true,
+  "softap_ssid": "SentryGate-Setup",
+  "softap_pass": "change-me-setup-pass"
+}

@@ -1,84 +1,95 @@
-# 🏗️ معماری سیستم SentryGate (System Architecture)
+# SentryGate Door — Architecture
 
-این سند به بررسی عمیق فنی و معماری سیستم SentryGate می‌پردازد. این سیستم بر اساس آخرین استانداردهای توسعه نرم‌افزار و سخت‌افزار طراحی شده است تا پایداری و امنیت حداکثری را فراهم کند.
+## Components
 
----
-
-## 🧩 نمای کلی سیستم (System Overview)
-
-سیستم از چهار جزء اصلی تشکیل شده است که در تعامل دائمی با یکدیگر هستند:
-
-1.  **سخت‌افزار (Firmware Layer):** مبتنی بر ESP32 و MicroPython. وظیفه خواندن کارت‌های RFID، کنترل رله (قفل برقی) و پخش هشدارها را بر عهده دارد.
-2.  **سرور مرکزی (Backend Layer):** مبتنی بر FastAPI (Python). مغز متفکر سیستم که وظیفه احراز هویت، ثبت لاگ‌ها و مدیریت ارتباطات WebSocket را دارد.
-3.  **رابط کاربری (Presentation Layer):** مبتنی بر React و Vite. داشبورد مدیریتی برای مشاهده لحظه‌ای ترددها و مدیریت کاربران.
-4.  **زیرساخت (Infrastructure):** مبتنی بر Docker و Nginx. کانتینرایز کردن تمام سرویس‌ها برای استقرار آسان و ایزوله.
-
----
-
-## 🔄 جریان داده‌ها (Data Flow)
-
-در زیر مسیر کامل یک درخواست از لحظه کشیدن کارت تا باز شدن درب تشریح شده است:
-
-1.  **اسکن کارت (Card Scan):** ماژول RC522 کد UID کارت را می‌خواند.
-2.  **ارسال به سرور (Network Transmission):** فریمور ESP32 یک پیام JSON شامل `rfid` و دمای محیط را از طریق WebSocket ایمن به سرور می‌فرستد.
-3.  **پردازش در سرور (Processing):**
-    *   سرور (`socket_manager.py`) پیام را دریافت می‌کند.
-    *   یک کوئری Async به دیتابیس SQLite می‌زند.
-4.  **تصمیم‌گیری (Decision Making):**
-    *   **اگر کاربر مجاز باشد:** دستور `OPEN` به سخت‌افزار ارسال می‌شود و لاگ `GRANTED` ثبت می‌گردد.
-    *   **اگر کاربر ناشناس باشد:** دستور `DENY` ارسال می‌شود و لاگ `DENIED` ثبت می‌گردد.
-5.  **پخش همگانی (Broadcasting):** همزمان، سرور یک رویداد به تمام کلاینت‌های فرانت‌‌اند (داشبوردها) می‌فرستد تا لاگ تردد را به صورت آنی نمایش دهند.
-6.  **اجرای فیزیکی (Actuation):** سخت‌افزار با دریافت دستور `OPEN`، رله را به مدت ۳ ثانیه فعال کرده و ملودی موفقیت را پخش می‌کند.
-
----
-
-## 📊 نمودار توالی (Sequence Diagram)
-
-```mermaid
-sequenceDiagram
-    participant Firmware as ESP32 (Hardware)
-    participant Backend as FastAPI Server
-    participant DB as SQLite DB
-    participant Frontend as React Dashboard
-
-    Note over Firmware: کاربر کارت می‌زند
-    Firmware->>Backend: WS Message {"rfid": "UID123"}
-    
-    Backend->>DB: Query User WHERE rfid="UID123"
-    DB-->>Backend: Result (User Found / Not Found)
-    
-    alt User FOUND (Access Configured)
-        Backend->>Firmware: WS Command {"cmd": "OPEN", "duration": 3}
-        Backend->>DB: Insert AccessLog (GRANTED)
-        Backend->>Frontend: WS Event (ACCESS_LOG: GRANTED)
-        Firmware->>Firmware: Activate Relay & Play Chime
-    else User NOT FOUND
-        Backend->>Firmware: WS Command {"cmd": "DENY"}
-        Backend->>DB: Insert AccessLog (DENIED)
-        Backend->>Frontend: WS Event (UNKNOWN_TAG)
-        Firmware->>Firmware: Play Error Sound
-    end
+```
+┌─────────────┐     HTTPS/WSS      ┌──────────────┐     SQL      ┌──────────┐
+│  web/ (SPA) │ ◄────────────────► │ FastAPI      │ ◄──────────► │ Postgres │
+│  nginx      │   /api  /ws        │ workers=1    │              └──────────┘
+└─────────────┘                    │              │     Redis    ┌──────────┐
+                                   │              │ ◄──────────► │ Redis    │
+┌─────────────┐   WSS + REST       └──────────────┘              └──────────┘
+│ ESP32 door  │ ◄────────────────►       ▲
+│ MicroPython │   allowlist sync         │ sg_access JWT
+└─────────────┘                          │
 ```
 
----
-
-## 🛡️ تدابیر امنیتی و پایداری (Security & Reliability)
-
-### 1. امنیت نرم‌افزار (Software Security)
-*   **SQL Injection Protection:** تمام کوئری‌های دیتابیس از طریق **SQLAlchemy ORM** انجام می‌شوند که به صورت خودکار ورودی‌ها را Escape کرده و از حملات تزریق SQL جلوگیری می‌کند.
-*   **Network Isolation:** سرور Backend روی پورت ۸۰۰۰ ایزوله شده و فقط از طریق شبکه داخلی داکر (`sentrygate-network`) در دسترس Nginx است. دسترسی مستقیم از بیرون مسدود است.
-
-### 2. پایداری سخت‌افزار (Hardware Reliability)
-*   **Watchdog Timer (WDT):** یک تایمر نگهبان ۱۵ ثانیه‌ای در فرمور فعال است. اگر پردازنده به هر دلیلی (نویز، هنگ کردن) متوقف شود، سیستم به طور خودکار ریست شده و در کمتر از ۲ ثانیه به مدار باز می‌گردد.
-*   **Self-Healing WiFi:** مکانیزم اتصال وای‌فای به گونه‌ای طراحی شده که در صورت قطع شدن مودم، سیستم وارد چرخه تلاش مجدد می‌شود و تا زمان وصل شدن مجدد، به کار خود ادامه می‌دهد.
+| Layer | Role |
+|-------|------|
+| **web/** | Next.js static export (`trailingSlash: true`); nginx serves static `out/` routes (including `/users/`, `/logs/`, `/settings/`, `/profile/` HTML & `.txt` RSC payloads) and reverse-proxies API/upload/health calls plus `/ws` Upgrade to backend |
+| **Backend** | Auth, users, logs, allowlist build, temp PINs, WebSocket hub |
+| **ESP32** | RFID, keypad, relay, buzzer, offline allowlist, SoftAP provision |
+| **Redis** | OTP / rate-limit / session helpers (required in compose stack) |
 
 ---
 
-## 📂 ساختار دیتابیس (Database Schema)
+## Four unlock channels + SoftAP
 
-مدل داده‌ای سیستم ساده و کارآمد طراحی شده است:
+| # | Channel | Flow |
+|---|---------|------|
+| 1 | **RFID** | RC522 UID → allowlist tag lookup → `OPEN` or `DENY` |
+| 2 | **Keypad PIN** | 4×3 matrix → HMAC verify → `OPEN` or lockout |
+| 3 | **Temp PIN** | Admin creates PIN → synced in allowlist → device verifies & decrements `uses_remaining` |
+| 4 | **Remote OPEN** | Authenticated admin sends `{cmd:"OPEN"}` on dashboard WebSocket → backend forwards to door hardware |
+| — | **SoftAP** | GPIO 33 held ≥3 s at boot (or Wi‑Fi fail streak) → captive portal for Wi‑Fi/credentials only |
 
-*   **جدول Users:** شامل `id`, `name`, `role`, `rfid_tag`, `created_at`.
-*   **جدول AccessLogs:** شامل `id`, `user_name`, `action` (GRANTED/DENIED), `timestamp`, `temperature`.
+Optional: **RFID + PIN** when `require_pin_with_rfid` is enabled — card scan then PIN within 10 s.
 
-این ساختار بهینه‌ترین حالت برای کوئری‌های سریع و گزارش‌گیری است.
+Secure-hours window (`auto_lock_start` / `auto_lock_end`) blocks RFID/PIN/remote open during configured hours.
+
+---
+
+## Admin authentication
+
+- **Cookie:** `sg_access` — HttpOnly JWT set on login (`auth_deps.set_auth_cookie`).
+- **Bearer:** `Authorization: Bearer …` also accepted (tests, scripts).
+- **`COOKIE_SECURE`:** set `true` when the site is served over HTTPS.
+- **`TRUSTED_PROXY_IPS`:** comma-separated IPs that may send `X-Forwarded-For` (default `127.0.0.1,::1`).
+
+### CSRF (Origin check)
+
+For mutating requests (`POST`, `PUT`, `PATCH`, `DELETE`), `enforce_csrf` requires `Origin` or `Referer` to prefix-match an entry in `CORS_ORIGINS` (plus `FRONTEND_URL` if set). Requests with no Origin/Referer pass (same-origin tools, curl).
+
+---
+
+## Hardware allowlist (offline)
+
+1. Backend builds JSON at `GET /api/hardware/allowlist` (header `X-Hardware-Token`).
+2. ESP32 stores it in `allowlist.json` with `_synced_at`.
+3. When WebSocket is down, `allowlist.py` evaluates RFID/PIN locally.
+4. Stale allowlist (`max_stale_seconds`, default 86400) denies access until resync.
+5. Buffered events flush via `POST /api/hardware/events` when online.
+
+Payload includes: `tags` (rfid, pin_hash, expiry), `temp_pins`, `device_hmac_key`, duress flags, secure-hours settings.
+
+---
+
+## HMAC PIN
+
+Server (`pin_crypto.py`) and firmware (`pin_hmac.py`) use the same scheme:
+
+```
+device_hmac_key = HMAC-SHA256(key=PIN_PEPPER, msg="door:" + HARDWARE_TOKEN)
+pin_hash        = HMAC-SHA256(key=device_hmac_key, msg=pin_digits)
+```
+
+- **`PIN_PEPPER`** / **`PIN_PEPPER_ID`:** server-side secrets; pepper id is included in allowlist for rotation.
+- Firmware receives `device_hmac_key` (hex) in the allowlist — never the raw pepper.
+- PIN format: 4–8 digits. Failed PIN attempts trigger tiered lockout on device.
+
+---
+
+## WebSocket paths
+
+| Client | Path | Auth |
+|--------|------|------|
+| Admin dashboard | `/ws/frontend` | Short-lived WS ticket (`POST /auth/ws-ticket`) or JWT (cookie/Bearer) |
+| Door ESP32 | `/ws/hardware?token=…` | `HARDWARE_TOKEN` |
+
+Single uvicorn worker (`--workers 1`) — in-memory WebSocket registry; do not scale workers without Redis pub/sub fanout.
+
+---
+
+## Database (door)
+
+Core tables: admin users, RFID tags/users, access logs, temporary PINs, operators. Migrations via Alembic (`backend/alembic/`).

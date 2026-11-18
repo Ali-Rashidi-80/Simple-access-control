@@ -1,65 +1,83 @@
-# 🛠️ راهنمای سخت‌افزار (Hardware Guide)
+# SentryGate Door — Hardware Guide
 
-این مستند شامل تمام جزئیات لازم برای مونتاژ و سیم‌کشی بخش سخت‌افزار پروژه SentryGate است.
+## Bill of materials
 
----
-
-## 📦 لیست قطعات (Bill of Materials - BOM)
-
-برای ساخت این پروژه به قطعات زیر نیاز دارید:
-
-| قطعه | تعداد | توضیحات |
-| :--- | :---: | :--- |
-| **ESP32 DevKit V1** | ۱ عدد | پردازنده اصلی (Wi-Fi + Bluetooth) |
-| **RC522 RFID Module** | ۱ عدد | ماژول کارت‌خوان (SPI Interface) |
-| **Relay Module (5V/3V)** | ۱ عدد | ماژول رله تک کانال برای کنترل قفل برقی |
-| **Passive Buzzer** | ۱ عدد | بازر پسیو برای پخش ملودی |
-| **LM35 / LM335** | ۱ عدد | سنسور دما (اختیاری) |
-| **Lock (Solenoid/Magnetic)** | ۱ عدد | قفل برقی ۱۲ ولت |
-| **Power Supply (12V)** | ۱ عدد | منبع تغذیه برای قفل و سیستم |
+| Part | Qty | Notes |
+|------|:---:|-------|
+| ESP32 DevKit | 1 | Wi‑Fi; 3.3 V logic |
+| RC522 RFID (SPI) | 1 | MIFARE UID reader |
+| Relay module | 1 | Active-high, 3.3 V coil driver |
+| Passive buzzer | 1 | PWM melodies |
+| LM35 / LM335 (optional) | 1 | Ambient temp on ADC |
+| Electric lock | 1 | 12 V solenoid or magnetic |
+| 12 V PSU + buck | 1 | Isolate lock noise from ESP32 |
 
 ---
 
-## 🔌 نقشه سیم‌کشی (Wiring Diagram)
+## GPIO pinout (matches `micro-python-esp32/main.py`)
 
-تصالات زیر بر اساس فایل کانفیگ `main.py` تنظیم شده‌اند. لطفاً دقیقاً مطابق جدول زیر سیم‌کشی کنید:
+### RC522 (SPI)
 
-### ۱. اتصال کارت‌خوان (RC522 به ESP32)
+| RC522 | ESP32 GPIO |
+|-------|------------|
+| RST | **4** |
+| SDA / SS | **5** |
+| SCK | **18** |
+| MISO | **19** |
+| MOSI | **23** |
+| 3.3 V / GND | 3.3 V / GND |
 
-| پایه RC522 | پایه ESP32 | توضیحات |
-| :--- | :--- | :--- |
-| **SDA (SS)** | GPIO **5** | Chip Select |
-| **SCK** | GPIO **18** | Clock |
-| **MOSI** | GPIO **23** | Master Out Slave In |
-| **MISO** | GPIO **19** | Master In Slave Out |
-| **GND** | GND | زمین مشترک |
-| **RST** | GPIO **4** | Reset |
-| **3.3V** | 3.3V | تغذیه (⚠️ به 5V وصل نکنید) |
+### Peripherals
 
-### ۲. اتصال رله و بازر (Peripherals)
+| Function | GPIO | Notes |
+|----------|------|-------|
+| Relay | **15** | HIGH = energized |
+| Buzzer (PWM) | **17** | Passive buzzer only |
+| Temp sensor | **34** | ADC input only |
 
-| قطعه | پایه ماژول | پایه ESP32 | توضیحات |
-| :--- | :--- | :--- | :--- |
-| **Relay** | IN | GPIO **16** | فعال‌سازی با سیگنال High |
-| **Buzzer** | + / SIG | GPIO **17** | خروجی PWM |
-| **Temp Sensor** | Vout | GPIO **34** | ورودی آنالوگ (ADC) |
+### 4×3 keypad (matrix)
 
----
+| Rows (OUT) | **13**, **14**, **16**, **27** |
+| Cols (IN, pull-up) | **25**, **26**, **32** |
 
-## 💡 نکات مهم مونتاژ (Assembly Tips)
+Layout: `1 2 3` / `4 5 6` / `7 8 9` / `* 0 #` — `#` submits PIN, `*` clears.
 
-### ⚡ تغذیه و نویز (Power & Noise)
-*   **دیود هرزگرد (Flyback Diode):** حتماً یک دیود (مانند 1N4007) را به صورت معکوس در دو سر بوبین قفل برقی قرار دهید. این کار از بازگشت ولتاژهای ناگهانی به مدار و ریست شدن ESP32 جلوگیری می‌کند.
-*   **منبع تغذیه:** ترجیحاً از یک منبع تغذیه ۱۲ ولت برای قفل و یک مبدل کاهنده (Buck Converter) برای تامین ۵ ولت ESP32 استفاده کنید تا نویز قفل روی پردازنده تاثیر نگذارد.
+### Provision button
 
-### 🌡️ سنسور دما
-*   از آنجایی که ESP32 ورودی آنالوگ حداکثر ۳.۳ ولت دارد، خروجی سنسور دما نباید از این مقدار تجاوز کند.
-
-### 🔊 بازر (Buzzer)
-*   حتماً از **Passive Buzzer** استفاده کنید. بازرهای Active (که فقط با ولتاژ بوق ممتد می‌زنند) قابلیت پخش ملودی‌های تعریف شده در کد را ندارند.
+| Function | GPIO |
+|----------|------|
+| SoftAP trigger | **33** | Hold LOW ≥3 s at boot → SoftAP setup mode |
 
 ---
 
-<div align="center">
-⚠️ **هشدار:** در هنگام لحیم‌کاری و سیم‌کشی، حتماً برق دستگاه را قطع کنید.
-</div>
+## Forbidden GPIOs
+
+Do **not** use these for wiring — boot/strapping pins on ESP32:
+
+| GPIO | Reason |
+|------|--------|
+| **0** | Boot mode strap |
+| **2** | Boot / onboard LED on many boards |
+| **12** | Flash voltage strap |
+
+---
+
+## Assembly tips
+
+- Flyback diode (1N4007) across lock coil — prevents ESP32 resets from inductive kickback.
+- Power ESP32 from a buck converter; do not feed 12 V to 3.3 V pins.
+- RC522 is **3.3 V only** — do not connect 5 V logic.
+- Copy `config.example.json` → `config.json`; set `hardware_token` to match server `HARDWARE_TOKEN`.
+
+---
+
+## Firmware files
+
+| File | Purpose |
+|------|---------|
+| `main.py` | Boot, WebSocket, RFID, relay, buzzer |
+| `keypad.py` | Matrix scan |
+| `allowlist.py` | Offline access decisions |
+| `pin_hmac.py` | PIN HMAC verify (no `hmac` module) |
+| `softap.py` | GPIO 33 provision portal |
+| `config.json` | Wi‑Fi, server, token (**gitignored**) |

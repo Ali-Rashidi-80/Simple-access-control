@@ -26,9 +26,9 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)  # فعال کردن WLAN
 
 # تنظیمات WiFi
-ssid = "SAMSUNG"
-password = "panzer790"
-server_url = "https://www.rash32.ir/Attendance_System/manager/EmployeeAttendanceReports/data.php"
+ssid = "CHANGE_ME_WIFI_SSID"
+password = "CHANGE_ME_WIFI_PASSWORD"
+server_url = "https://your-server.example.com/api/hardware/events"
 
 
 

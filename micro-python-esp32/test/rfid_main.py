@@ -19,8 +19,8 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)  # فعال کردن WLAN
 
 # تنظیمات WiFi
-ssid = "SAMSUNG"
-password = "panzer790"
+ssid = "CHANGE_ME_WIFI_SSID"
+password = "CHANGE_ME_WIFI_PASSWORD"
 server_url = ""
 
 

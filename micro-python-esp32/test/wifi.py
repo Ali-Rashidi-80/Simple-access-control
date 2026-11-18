@@ -5,8 +5,8 @@ import time
 import uasyncio as asyncio
 
 # اطلاعات شبکه WiFi
-ssid = "SAMSUNG"  # نام شبکه WiFi
-password = "panzer790"  # رمز عبور شبکه WiFi
+ssid = "CHANGE_ME_WIFI_SSID"  # نام شبکه WiFi
+password = "CHANGE_ME_WIFI_PASSWORD"  # رمز عبور شبکه WiFi
 
 # مقداردهی اولیه WLAN
 wlan = network.WLAN(network.STA_IF)

@@ -1,51 +1,125 @@
+# ============================================================
+# SentryGate — full stack (db + redis + backend + frontend)
+# Images via Chabokan mirror2.chabokan.net
+#
+#   docker compose --env-file .env up -d --build
+# ============================================================
+
+name: sentrygate
+
 services:
+  db:
+    image: ${LOCAL_POSTGRES_IMAGE:-mirror2.chabokan.net/postgres:16-bookworm}
+    container_name: sentry_db
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-door_control}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - sentry_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-door_control}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  redis:
+    image: ${LOCAL_REDIS_IMAGE:-mirror2.chabokan.net/redis:latest}
+    container_name: sentry_redis
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    command: >
+      sh -c 'redis-server --appendonly yes --requirepass "$${REDIS_PASSWORD:?Set REDIS_PASSWORD}"'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Set REDIS_PASSWORD}
+    volumes:
+      - sentry_redis:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep PONG" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: sentry_backend
-    ports:
-      - "8000:8000"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db/door_control
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-door_control}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      SEED_DEFAULT_ADMIN: ${SEED_DEFAULT_ADMIN:-true}
+      AUTO_CREATE_SCHEMA: ${AUTO_CREATE_SCHEMA:-false}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      HARDWARE_TOKEN: ${HARDWARE_TOKEN:?Set HARDWARE_TOKEN}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY}
+      PIN_PEPPER: ${PIN_PEPPER:-change-me-pin-pepper}
+      PIN_PEPPER_ID: ${PIN_PEPPER_ID:-v1}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      TRUSTED_PROXY_IPS: ${TRUSTED_PROXY_IPS:-127.0.0.1,::1}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      DEBUG_MODE: ${DEBUG_MODE:-false}
+    volumes:
+      - appdata:/app/data
+    ports:
+      - "${BACKEND_PUBLISH_PORT:-8000}:8000"
     depends_on:
       db:
         condition: service_healthy
-    restart: always
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://127.0.0.1:8000/health" ]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 45s
 
   frontend:
     build:
-      context: ./frontend
+      context: ./web
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: https://rynix.ir/api
-        VITE_WS_URL: wss://rynix.ir/ws/frontend
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-}
     container_name: sentry_frontend
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
-      - "5173:80"
-    environment:
-      - VITE_API_URL=http://localhost:8000
+      - "${FRONTEND_PUBLISH_PORT:-5173}:80"
     depends_on:
-      - backend
-    restart: always
-
-  db:
-    image: postgres:15-alpine
-    container_name: sentry_db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: door_control
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data_new:/var/lib/postgresql/data
+      backend:
+        condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d door_control" ]
-      interval: 5s
+      test: [ "CMD-SHELL", "curl -fsS http://127.0.0.1/ >/dev/null || exit 1" ]
+      interval: 15s
       timeout: 5s
-      retries: 5
-    restart: always
+      retries: 8
+      start_period: 20s
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "${DOCKER_NETWORK_MTU:-1500}"
 
 volumes:
-  postgres_data_new:
+  sentry_pgdata:
+    driver: local
+  sentry_redis:
+    driver: local
+  appdata:
+    driver: local

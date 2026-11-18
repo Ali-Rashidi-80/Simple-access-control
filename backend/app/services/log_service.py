@@ -1,19 +1,35 @@
+"""Access log persistence service."""
+
+from __future__ import annotations
+
+from typing import Optional
+
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, timezone
+
 from .. import models
 
+
 class LogService:
-    def __init__(self, db: AsyncSession):
+    """Create and persist AccessLog rows."""
+
+    def __init__(self, db: AsyncSession) -> None:
         self.db = db
 
-    async def create_access_log(self, user_name: str, rfid: str, action: str, is_duress: bool, temperature: float | None):
+    async def create_access_log(
+        self,
+        user_name: str,
+        rfid: str,
+        action: str,
+        is_duress: bool,
+        temperature: Optional[float],
+    ) -> models.AccessLog:
         log_entry = models.AccessLog(
             user_name=user_name,
             rfid_tag=rfid,
             action=action,
             is_duress=is_duress,
             temperature=temperature,
-            timestamp=datetime.now(timezone.utc)
+            timestamp=models.utc_now(),
         )
         self.db.add(log_entry)
         await self.db.commit()

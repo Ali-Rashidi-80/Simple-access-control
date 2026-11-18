@@ -1,8 +1,63 @@
-node_modules
+# Dependencies
+node_modules/
 
-# ESP32 Config (contains WiFi credentials - NEVER COMMIT!)
+# Next.js static export & build cache
+web/out/
+web/.next/
+*.tsbuildinfo
+
+# ESP32 secrets
 micro-python-esp32/config.json
 
-# Environment files with secrets
+# Environment / secrets
 .env
 .env.local
+.env.local-mirror
+.env.chabokan
+.env.chabokan.*
+!.env.example
+!.env.local-mirror.example
+!.env.chabokan.split.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+web/.env
+web/.env.*
+!web/.env.example
+secrets/
+
+# Python & linter caches
+**/__pycache__/
+**/*.py[cod]
+backend/.venv/
+*.egg-info/
+.pytest_cache/
+**/.pytest_cache/
+.mypy_cache/
+**/.mypy_cache/
+.ruff_cache/
+**/.ruff_cache/
+
+# Runtime data & databases
+data/
+backend/data/
+*.db
+backend/*.db
+e2e/*.db
+
+# Build / test artifacts
+coverage/
+e2e/test-results/
+e2e/playwright-report/
+backend/test_results.txt
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+.cursor/
+
+# Archives / backups / logs
+0/
+*.zip
+*.log

@@ -1,148 +1,131 @@
-"""
-SMS OTP Service
-Handles SMS OTP authentication with MeliPayamak integration.
-"""
-import os
-import random
+"""SMS OTP Service with CSPRNG generation, constant-time verify, atomic consume & IP rate limits."""
+
+from __future__ import annotations
+
+import hmac
 import logging
+import os
 import re
-from datetime import datetime, timezone, timedelta
-from typing import Optional, Tuple
-from fastapi import Request, HTTPException
+import secrets
+from datetime import timedelta
+from typing import Any, Tuple
+
+from fastapi import HTTPException, Request
+from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, or_
 
 from .. import models
+from .redis_store import incr_with_ttl
 from .security import create_access_token, hash_password
-from .melipayamak import Api
 
 logger = logging.getLogger("uvicorn")
 
-# SMS Configuration from environment
 SMS_USERNAME = os.getenv("SMS_USERNAME")
 SMS_PASSWORD = os.getenv("SMS_PASSWORD")
 SMS_SENDER_NUMBER = os.getenv("SMS_SENDER_NUMBER")
 
-# OTP Configuration
 OTP_LENGTH = 6
 OTP_EXPIRY_MINUTES = 5
 MAX_OTP_ATTEMPTS = 3
 MAX_OTP_PER_HOUR = 5
+MAX_OTP_PER_IP_HOUR = int(os.getenv("MAX_OTP_PER_IP_HOUR", "20"))
+ALLOW_OTP_AUTO_REGISTER = os.getenv("ALLOW_OTP_AUTO_REGISTER", "false").lower() == "true"
 
-# Token expiry
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-# Check if SMS is configured
 SMS_ENABLED = bool(SMS_USERNAME and SMS_PASSWORD and SMS_SENDER_NUMBER)
 if not SMS_ENABLED:
-    logger.warning("⚠️ SMS not configured - set SMS_USERNAME, SMS_PASSWORD, SMS_SENDER_NUMBER")
+    logger.warning("SMS not configured - set SMS_USERNAME, SMS_PASSWORD, SMS_SENDER_NUMBER")
 
 
 def get_client_ip(request: Request) -> str:
-    """Get client IP from request"""
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
+    """Get client IP; honor X-Forwarded-For only from trusted proxies."""
+    from .auth_deps import get_client_ip as _trusted_ip
+
+    return _trusted_ip(request)
 
 
 def mask_phone(phone: str) -> str:
-    """Mask phone number: 9123456789 -> 9123****89"""
+    """Mask phone number: 9123456789 -> 9123****89."""
     if len(phone) >= 10:
         return f"{phone[:4]}****{phone[-2:]}"
-    return phone
+    return "****"
 
 
 def normalize_phone(phone: str) -> str:
     """
-    Normalize Iranian phone number to 10 digits (9xxxxxxxxx)
+    Normalize Iranian phone number to 10 digits (9xxxxxxxxx).
     Accepts: 0912..., 98912..., +98912..., 912...
     """
     if not phone:
         return ""
-    
-    phone = phone.strip()
-    # Remove non-digits except leading +
-    if phone.startswith('+'):
-        phone = '+' + re.sub(r'[^\d]', '', phone[1:])
+    cleaned = phone.strip()
+    if cleaned.startswith("+"):
+        cleaned = "+" + re.sub(r"[^\d]", "", cleaned[1:])
     else:
-        phone = re.sub(r'[^\d]', '', phone)
-    
-    # Remove country code
-    if phone.startswith('+98'):
-        phone = phone[3:]
-    elif phone.startswith('0098'):
-        phone = phone[4:]
-    elif phone.startswith('98') and len(phone) == 12:
-        phone = phone[2:]
-    elif phone.startswith('0'):
-        phone = phone[1:]
-    
-    # Validate: 10 digits starting with 9
-    if len(phone) == 10 and phone.startswith('9'):
-        return phone
+        cleaned = re.sub(r"[^\d]", "", cleaned)
+
+    if cleaned.startswith("+98"):
+        cleaned = cleaned[3:]
+    elif cleaned.startswith("0098"):
+        cleaned = cleaned[4:]
+    elif cleaned.startswith("98") and len(cleaned) == 12:
+        cleaned = cleaned[2:]
+    elif cleaned.startswith("0"):
+        cleaned = cleaned[1:]
+
+    if len(cleaned) == 10 and cleaned.startswith("9"):
+        return cleaned
     return ""
 
 
 def generate_otp() -> str:
-    """Generate 6-digit OTP"""
-    return ''.join([str(random.randint(0, 9)) for _ in range(OTP_LENGTH)])
+    """Generate 6-digit OTP using CSPRNG."""
+    return "".join(secrets.choice("0123456789") for _ in range(OTP_LENGTH))
 
 
 async def send_sms(phone: str, message: str) -> bool:
-    """Send SMS using MeliPayamak API"""
+    """Send SMS using MeliPayamak API without ever logging OTP or message body."""
+    masked = mask_phone(phone)
     if not SMS_ENABLED:
-        logger.warning(f"SMS not configured, would send to {phone}: {message}")
+        logger.warning(
+            "SMS not configured; skipped send to %s (len=%s)", masked, len(message or "")
+        )
         return False
-    
+
     try:
-        # Format phone for SMS API (with leading 0)
-        sms_phone = '0' + phone if not phone.startswith('0') else phone
-        
+        from .melipayamak import Api
+
+        sms_phone = "0" + phone if not phone.startswith("0") else phone
         api = Api(SMS_USERNAME, SMS_PASSWORD)
         sms = api.sms()
         response = sms.send(sms_phone, SMS_SENDER_NUMBER, message)
-        
-        if response and 'error' not in str(response).lower():
-            logger.info(f"SMS sent successfully to {mask_phone(phone)}")
+        if response and "error" not in str(response).lower():
+            logger.info("SMS sent successfully to %s (len=%s)", masked, len(message or ""))
             return True
-        else:
-            logger.error(f"SMS send failed: {response}")
-            return False
-            
+        logger.error("SMS send failed for %s", masked)
+        return False
     except Exception as e:
-        logger.error(f"SMS send error: {e}")
+        logger.error("SMS send error for %s: %s", masked, type(e).__name__)
         return False
 
 
 async def check_otp_rate_limit(phone: str, db: AsyncSession) -> Tuple[bool, int]:
-    """
-    Check if phone has exceeded OTP rate limit.
-    Returns: (is_allowed, attempts_remaining)
-    """
-    one_hour_ago = datetime.now(timezone.utc) - timedelta(hours=1)
-    
-    # Count OTPs sent in the last hour
+    """Check if phone has exceeded OTP rate limit."""
+    one_hour_ago = models.utc_now() - timedelta(hours=1)
     result = await db.execute(
         select(models.MobileOTP).where(
             models.MobileOTP.phone == phone,
-            models.MobileOTP.created_at >= one_hour_ago
+            models.MobileOTP.created_at >= one_hour_ago,
         )
     )
-    recent_otps = result.scalars().all()
-    count = len(recent_otps)
-    
+    count = len(result.scalars().all())
     remaining = MAX_OTP_PER_HOUR - count
     return (remaining > 0, max(0, remaining))
 
 
-async def cleanup_expired_otps(db: AsyncSession):
-    """Delete expired OTPs"""
-    await db.execute(
-        delete(models.MobileOTP).where(
-            models.MobileOTP.expires_at < datetime.now(timezone.utc)
-        )
-    )
+async def cleanup_expired_otps(db: AsyncSession) -> None:
+    """Delete expired OTPs."""
+    await db.execute(delete(models.MobileOTP).where(models.MobileOTP.expires_at < models.utc_now()))
     await db.commit()
 
 
@@ -150,63 +133,56 @@ async def send_otp(
     phone: str,
     db: AsyncSession,
     client_ip: str,
-    user_agent: str
-) -> dict:
-    """Send OTP to phone number"""
-    
-    # Normalize phone
+    user_agent: str,
+) -> dict[str, Any]:
+    """Send OTP to phone number."""
     normalized_phone = normalize_phone(phone)
     if not normalized_phone:
         raise HTTPException(status_code=400, detail="فرمت شماره تلفن نامعتبر است")
-    
-    # Clean up expired OTPs
+
+    ip_rl_key = f"otp_ip_rl:{client_ip}"
+    if incr_with_ttl(ip_rl_key, 3600) > MAX_OTP_PER_IP_HOUR:
+        raise HTTPException(
+            status_code=429,
+            detail="تعداد درخواست‌های کد تأیید از این آدرس بیش از حد مجاز است. لطفاً بعداً تلاش کنید.",
+        )
+
     await cleanup_expired_otps(db)
-    
-    # Check rate limit
-    is_allowed, remaining = await check_otp_rate_limit(normalized_phone, db)
+
+    is_allowed, _ = await check_otp_rate_limit(normalized_phone, db)
     if not is_allowed:
         raise HTTPException(
-            status_code=429, 
-            detail="تعداد درخواست‌های کد تأیید به حداکثر رسیده است. لطفاً ۱ ساعت صبر کنید."
+            status_code=429,
+            detail="تعداد درخواست‌های کد تأیید به حداکثر رسیده است. لطفاً ۱ ساعت صبر کنید.",
         )
-    
-    # Generate OTP
+
     otp = generate_otp()
-    expires_at = datetime.now(timezone.utc) + timedelta(minutes=OTP_EXPIRY_MINUTES)
-    
-    # Store OTP
+    expires_at = models.utc_now() + timedelta(minutes=OTP_EXPIRY_MINUTES)
+
     new_otp = models.MobileOTP(
         phone=normalized_phone,
         otp=otp,
         expires_at=expires_at,
         client_ip=client_ip,
-        user_agent=user_agent
+        user_agent=user_agent,
     )
     db.add(new_otp)
     await db.commit()
-    
-    # Create SMS message
+
     message = (
-        f"🔐 SentryGate\n\n"
+        f"SentryGate\n\n"
         f"کد تأیید شما: {otp}\n\n"
-        f"⏰ انقضا: {OTP_EXPIRY_MINUTES} دقیقه\n\n"
-        f"اگر شما درخواست نکرده‌اید، نادیده بگیرید."
-        f"\n\n\n"
-        f"لغو11"
+        f"انقضا: {OTP_EXPIRY_MINUTES} دقیقه\n\n"
+        f"اگر شما درخواست نکرده‌اید، نادیده بگیرید.\n\nلغو11"
     )
-    
-    # Send SMS
-    sms_sent = await send_sms(normalized_phone, message)
-    
-    logger.info(f"OTP sent to {mask_phone(normalized_phone)} from {client_ip}")
-    
+    await send_sms(normalized_phone, message)
+    logger.info("OTP requested for %s from %s", mask_phone(normalized_phone), client_ip)
+
     return {
         "success": True,
         "message": "کد تأیید ارسال شد",
         "phone_masked": mask_phone(normalized_phone),
         "expires_in": OTP_EXPIRY_MINUTES * 60,
-        # For testing - remove in production
-        "otp": otp if not sms_sent else None
     }
 
 
@@ -215,69 +191,77 @@ async def verify_otp(
     otp: str,
     db: AsyncSession,
     client_ip: str,
-    user_agent: str
-) -> dict:
-    """Verify OTP and return JWT token"""
-    
-    # Normalize phone
+    user_agent: str,
+) -> dict[str, Any]:
+    """Verify OTP atomically and return JWT token."""
     normalized_phone = normalize_phone(phone)
     if not normalized_phone:
         raise HTTPException(status_code=400, detail="فرمت شماره تلفن نامعتبر است")
-    
-    # Clean up expired OTPs
+
     await cleanup_expired_otps(db)
-    
-    # Find latest OTP for this phone
+
     result = await db.execute(
-        select(models.MobileOTP).where(
-            models.MobileOTP.phone == normalized_phone
-        ).order_by(models.MobileOTP.created_at.desc())
+        select(models.MobileOTP)
+        .where(models.MobileOTP.phone == normalized_phone)
+        .order_by(models.MobileOTP.created_at.desc())
     )
     otp_record = result.scalars().first()
-    
     if not otp_record:
-        raise HTTPException(status_code=400, detail="کد تأیید یافت نشد. لطفاً کد جدید درخواست کنید.")
-    
-    # Check expiry (handle both naive and aware datetimes)
+        raise HTTPException(
+            status_code=400, detail="کد تأیید یافت نشد. لطفاً کد جدید درخواست کنید."
+        )
+
     expires_at = otp_record.expires_at
-    if expires_at.tzinfo is None:
-        expires_at = expires_at.replace(tzinfo=timezone.utc)
-    if expires_at < datetime.now(timezone.utc):
-        raise HTTPException(status_code=400, detail="کد تأیید منقضی شده است. لطفاً کد جدید درخواست کنید.")
-    
-    # Check attempts
-    if otp_record.attempts >= MAX_OTP_ATTEMPTS:
+    if expires_at.tzinfo is not None:
+        expires_at = expires_at.replace(tzinfo=None)
+    if expires_at < models.utc_now():
         raise HTTPException(
-            status_code=400, 
-            detail="تعداد تلاش‌های ناموفق به حداکثر رسیده است. لطفاً کد جدید درخواست کنید."
+            status_code=400,
+            detail="کد تأیید منقضی شده است. لطفاً کد جدید درخواست کنید.",
         )
-    
-    # Increment attempts
-    otp_record.attempts += 1
+
+    inc_res = await db.execute(
+        update(models.MobileOTP)
+        .where(
+            models.MobileOTP.id == otp_record.id,
+            models.MobileOTP.attempts < MAX_OTP_ATTEMPTS,
+        )
+        .values(attempts=models.MobileOTP.attempts + 1)
+        .returning(models.MobileOTP.attempts)
+    )
+    new_attempts = inc_res.scalar()
     await db.commit()
-    
-    # Verify OTP
-    if otp_record.otp != otp:
-        remaining = MAX_OTP_ATTEMPTS - otp_record.attempts
+    if new_attempts is None:
         raise HTTPException(
-            status_code=400, 
-            detail=f"کد تأیید اشتباه است. {remaining} تلاش باقی‌مانده."
+            status_code=400,
+            detail="تعداد تلاش‌های ناموفق به حداکثر رسیده است. لطفاً کد جدید درخواست کنید.",
         )
-    
-    # OTP is valid - find or create user
-    user = await find_or_create_sms_user(normalized_phone, db, client_ip, user_agent)
-    
-    # Delete used OTP
-    await db.execute(
-        delete(models.MobileOTP).where(models.MobileOTP.phone == normalized_phone)
+
+    if not hmac.compare_digest(otp_record.otp, otp):
+        remaining = max(0, MAX_OTP_ATTEMPTS - int(new_attempts))
+        raise HTTPException(
+            status_code=400,
+            detail=f"کد تأیید اشتباه است. {remaining} تلاش باقی‌مانده.",
+        )
+
+    consume_res = await db.execute(
+        delete(models.MobileOTP).where(
+            models.MobileOTP.id == otp_record.id,
+            models.MobileOTP.otp == otp,
+        )
     )
     await db.commit()
-    
-    # Create JWT token
+    if not getattr(consume_res, "rowcount", 0):
+        raise HTTPException(status_code=400, detail="کد تأیید قبلاً استفاده شده است.")
+
+    await db.execute(delete(models.MobileOTP).where(models.MobileOTP.phone == normalized_phone))
+    await db.commit()
+
+    user = await find_or_create_sms_user(normalized_phone, db, client_ip, user_agent)
+
     jwt_token = create_access_token(data={"sub": user.username, "role": user.role})
-    
-    logger.info(f"OTP verified for {mask_phone(normalized_phone)} - user: {user.username}")
-    
+    logger.info("OTP verified for %s - user: %s", mask_phone(normalized_phone), user.username)
+
     return {
         "success": True,
         "message": "ورود موفقیت‌آمیز",
@@ -293,8 +277,8 @@ async def verify_otp(
             "clearanceLevel": user.clearance_level,
             "avatar": user.avatar_path,
             "lastLogin": user.last_login.isoformat() if user.last_login else None,
-            "isOnline": True
-        }
+            "isOnline": True,
+        },
     }
 
 
@@ -302,67 +286,40 @@ async def find_or_create_sms_user(
     phone: str,
     db: AsyncSession,
     client_ip: str,
-    user_agent: str
+    user_agent: str,
 ) -> models.AdminUser:
-    """
-    Smart identity linking for SMS login:
-    1. Find by phone
-    2. Find by recent IP/UserAgent (72 hours)
-    3. Create new user
-    """
-    
-    # 1. Check by phone
+    """Find user by phone, or create new operator when ALLOW_OTP_AUTO_REGISTER is enabled."""
     result = await db.execute(
         select(models.AdminUser).where(
             models.AdminUser.phone == phone,
-            models.AdminUser.is_active == True
+            models.AdminUser.is_active == True,  # noqa: E712
         )
     )
     user = result.scalars().first()
-    
     if user:
-        logger.info(f"SMS Login: Found user by phone: {user.username}")
+        logger.info("SMS Login: Found user by phone: %s", user.username)
         user.last_ip = client_ip
         user.last_user_agent = user_agent
-        user.last_login = datetime.now(timezone.utc)
+        user.last_login = models.utc_now()
         user.login_method = "sms"
         await db.commit()
         return user
-    
-    # 2. Check by IP/UserAgent (72 hours)
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=72)
-    result = await db.execute(
-        select(models.AdminUser).where(
-            models.AdminUser.last_ip == client_ip,
-            models.AdminUser.last_login > cutoff,
-            models.AdminUser.is_active == True,
-            or_(models.AdminUser.phone == None, models.AdminUser.phone == "")
-        ).order_by(models.AdminUser.last_login.desc())
-    )
-    user = result.scalars().first()
-    
-    if user:
-        logger.info(f"SMS Login: Linking phone to user by IP fingerprint: {user.username}")
-        user.phone = phone
-        user.last_ip = client_ip
-        user.last_user_agent = user_agent
-        user.last_login = datetime.now(timezone.utc)
-        user.login_method = "sms"
-        await db.commit()
-        return user
-    
-    # 3. Create new user
-    import secrets
+
+    allow_auto = os.getenv("ALLOW_OTP_AUTO_REGISTER", "false").lower() == "true"
+    if not allow_auto:
+        raise HTTPException(
+            status_code=403,
+            detail="ثبت‌نام خودکار با پیامک غیرفعال است. با مدیر سیستم تماس بگیرید.",
+        )
+
     username = f"mobile_{phone[-4:]}"
     random_password = secrets.token_urlsafe(32)
-    
-    # Ensure unique username
-    result = await db.execute(
+    existing = await db.execute(
         select(models.AdminUser).where(models.AdminUser.username == username)
     )
-    if result.scalars().first():
+    if existing.scalars().first():
         username = f"mobile_{phone[-4:]}_{secrets.token_hex(2)}"
-    
+
     new_user = models.AdminUser(
         username=username,
         hashed_password=hash_password(random_password),
@@ -372,13 +329,11 @@ async def find_or_create_sms_user(
         login_method="sms",
         last_ip=client_ip,
         last_user_agent=user_agent,
-        last_login=datetime.now(timezone.utc),
-        is_active=True
+        last_login=models.utc_now(),
+        is_active=True,
     )
-    
     db.add(new_user)
     await db.commit()
     await db.refresh(new_user)
-    
-    logger.info(f"SMS Login: Created new user: {new_user.username}")
+    logger.info("SMS Login: Created new user: %s", new_user.username)
     return new_user

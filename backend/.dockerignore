@@ -1,9 +1,11 @@
-node_modules
-dist
+__pycache__
+*.pyc
+.venv
+.env
+.env.*
+!.env.example
+tests
+*.db
+data
+.sql_app.db
 .git
-# .env (Allowed for production fix)
-.DS_Store
-coverage
-# content that is not needed in docker
-docs/
-micro-python-esp32/

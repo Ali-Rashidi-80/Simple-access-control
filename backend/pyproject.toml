@@ -1,0 +1,56 @@
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+exclude = ["app/services/melipayamak", ".venv", "alembic"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+extend-exclude = "(app/services/melipayamak|tests/test_firmware_core\\.py)"
+
+[tool.isort]
+profile = "black"
+line_length = 100
+skip_glob = ["app/services/melipayamak/*", "app/services/melipayamak/**/*", "tests/test_firmware_core.py"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+exclude = ["app/services/melipayamak"]
+check_untyped_defs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["app.services.melipayamak", "app.services.melipayamak.*"]
+ignore_errors = true
+
+[tool.pylint.main]
+ignore = ["melipayamak"]
+ignore-patterns = ["^\\.#"]
+jobs = 1
+
+[tool.pylint.basic]
+good-names = ["AsyncSessionLocal", "i", "j", "k", "db", "e", "f", "r", "q", "v", "u", "t", "x", "ok"]
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-module-docstring",
+    "missing-function-docstring",
+    "missing-class-docstring",
+    "too-few-public-methods",
+    "too-many-arguments",
+    "too-many-positional-arguments",
+    "too-many-locals",
+    "too-many-branches",
+    "too-many-statements",
+    "too-many-return-statements",
+    "duplicate-code",
+    "import-outside-toplevel",
+    "global-statement",
+]
